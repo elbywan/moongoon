@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 0.33.0">
+
+<link href="../../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../js/doc.js"></script>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+
+  <meta id="repository-name" content="github.com/elbywan/moongoon">
+  <title>Moongoon::Collection::UpdateOnly - github.com/elbywan/moongoon</title>
+  <script type="text/javascript">
+    CrystalDoc.base_path = "../../";
+  </script>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="repository-links">
+      <a href="../../index.html">README</a>
+    </div>
+  </div>
+
+  <div class="search-results" class="hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="github.com/elbywan/moongoon/Moongoon" data-name="moongoon">
+      <a href="../../Moongoon.html">Moongoon</a>
+      
+        <ul>
+  
+  <li class="parent open current" data-id="github.com/elbywan/moongoon/Moongoon/Collection" data-name="moongoon::collection">
+      <a href="../../Moongoon/Collection.html">Collection</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/elbywan/moongoon/Moongoon/Collection/ReadOnly" data-name="moongoon::collection::readonly">
+      <a href="../../Moongoon/Collection/ReadOnly.html">ReadOnly</a>
+      
+    </li>
+  
+  <li class=" current" data-id="github.com/elbywan/moongoon/Moongoon/Collection/UpdateOnly" data-name="moongoon::collection::updateonly">
+      <a href="../../Moongoon/Collection/UpdateOnly.html">UpdateOnly</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/elbywan/moongoon/Moongoon/Collection/Versioning" data-name="moongoon::collection::versioning">
+      <a href="../../Moongoon/Collection/Versioning.html">Versioning</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/elbywan/moongoon/Moongoon/Collection/Versioning/Static" data-name="moongoon::collection::versioning::static">
+      <a href="../../Moongoon/Collection/Versioning/Static.html">Static</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/elbywan/moongoon/Moongoon/Database" data-name="moongoon::database">
+      <a href="../../Moongoon/Database.html">Database</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="github.com/elbywan/moongoon/Moongoon/Database/Scripts" data-name="moongoon::database::scripts">
+      <a href="../../Moongoon/Database/Scripts.html">Scripts</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/elbywan/moongoon/Moongoon/Database/Scripts/Base" data-name="moongoon::database::scripts::base">
+      <a href="../../Moongoon/Database/Scripts/Base.html">Base</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/elbywan/moongoon/Moongoon/DatabaseResponse" data-name="moongoon::databaseresponse">
+      <a href="../../Moongoon/DatabaseResponse.html">DatabaseResponse</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/elbywan/moongoon/Moongoon/Document" data-name="moongoon::document">
+      <a href="../../Moongoon/Document.html">Document</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/elbywan/moongoon/Moongoon/Error" data-name="moongoon::error">
+      <a href="../../Moongoon/Error.html">Error</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/elbywan/moongoon/Moongoon/Error/NotFound" data-name="moongoon::error::notfound">
+      <a href="../../Moongoon/Error/NotFound.html">NotFound</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">abstract class</span> Moongoon::Collection::UpdateOnly
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Moongoon/Collection/UpdateOnly.html">Moongoon::Collection::UpdateOnly</a></li><li class="superclass">Moongoon::MongoBase</li><li class="superclass"><a href="../../Moongoon/Document.html">Moongoon::Document</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>A limited model class for interacting with a MongoDB collection.</p>
+
+<p><span class="flag purple">NOTE</span>  Similar to <code><a href="../../Moongoon/Collection.html">Moongoon::Collection</a></code> but can only be used to update a MongoDB collection.</p>
+
+<pre><code><span class="k">class</span> <span class="t">Partial</span> <span class="o">&lt;</span> <span class="t">Moongoon</span><span class="t">::</span><span class="t">Collection</span><span class="t">::</span><span class="t">UpdateOnly</span>
+  collection <span class="s">&quot;my_models&quot;</span>
+
+  property name : <span class="t">String</span>?
+  property age : <span class="t">Int32</span>?
+<span class="k">end</span></code></pre>
+
+
+
+
+
+  <h2>
+    <a id="included-modules" class="anchor" href="#included-modules">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Included Modules
+  </h2>
+  <ul class="other-types-list">
+    
+      <li class="other-type">Moongoon::Traits::Database::Helpers</li>
+    
+      <li class="other-type">Moongoon::Traits::Database::Hooks</li>
+    
+      <li class="other-type">Moongoon::Traits::Database::Internal</li>
+    
+      <li class="other-type"><a href="../../Moongoon/Traits/Database/Methods/Patch.html">Moongoon::Traits::Database::Methods::Patch</a></li>
+    
+      <li class="other-type">Moongoon::Traits::Database::Update</li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="extended-modules" class="anchor" href="#extended-modules">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Extended Modules
+  </h2>
+  <ul class="other-types-list">
+    
+      <li class="other-type"><a href="../../Moongoon/Traits/Database/Helpers/Static.html">Moongoon::Traits::Database::Helpers::Static</a></li>
+    
+  </ul>
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/elbywan/moongoon/blob/0484732bc8725b415a101f175976168830de4628/src/models/models.cr#L128" target="_blank">
+        models/models.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new(pull:JSON::PullParser)-class-method" class="signature"><strong>.new</strong>(pull : JSON::PullParser)</a>
+        
+          <div class="summary"><p>A limited model class for interacting with a MongoDB collection.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#find_and_modify(query,update,fields=BSON.new,**args)-class-method" class="signature"><strong>.find_and_modify</strong>(query, update, fields = <span class="t">BSON</span>.<span class="k">new</span>, **args)</a>
+        
+          <div class="summary"><p>Modifies and returns a single document.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#find_and_modify_by_id(id,update,query=BSON.new,**args)-class-method" class="signature"><strong>.find_and_modify_by_id</strong>(id, update, query = <span class="t">BSON</span>.<span class="k">new</span>, **args)</a>
+        
+          <div class="summary"><p>Modifies and returns a single document.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#update(query,update,**args):Nil-class-method" class="signature"><strong>.update</strong>(query, update, **args) : Nil</a>
+        
+          <div class="summary"><p>Updates one or more documents in the underlying collection.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#update_by_id(id,update,query=BSON.new,**args):Nil-class-method" class="signature"><strong>.update_by_id</strong>(id, update, query = <span class="t">BSON</span>.<span class="k">new</span>, **args) : Nil</a>
+        
+          <div class="summary"><p>Updates one document by id.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#update_by_ids(ids,update,query=BSON.new,**args):Nil-class-method" class="signature"><strong>.update_by_ids</strong>(ids, update, query = <span class="t">BSON</span>.<span class="k">new</span>, **args) : Nil</a>
+        
+          <div class="summary"><p>Updates one or multiple documents by their ids.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#update(query=BSON.new,**args):self-instance-method" class="signature"><strong>#update</strong>(query = <span class="t">BSON</span>.<span class="k">new</span>, **args) : <span class="k">self</span></a>
+        
+          <div class="summary"><p>Updates a document having the same id as this model with the data stored in <code>self</code>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#update_query(query,**args):self-instance-method" class="signature"><strong>#update_query</strong>(query, **args) : <span class="k">self</span></a>
+        
+          <div class="summary"><p>Updates one or more documents with the data stored in <code>self</code>.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+  <h3>Instance methods inherited from class <code>Moongoon::MongoBase</code></h3>
+  
+  
+    <a href="../../Moongoon/MongoBase.html#_id:BSON::ObjectId?-instance-method" class="tooltip">
+      <span>_id : BSON::ObjectId?</span>
+    _id</a>, 
+    
+  
+    <a href="../../Moongoon/MongoBase.html#_id=(_id:BSON::ObjectId?)-instance-method" class="tooltip">
+      <span>_id=(_id : BSON::ObjectId?)</span>
+    _id=</a>, 
+    
+  
+    <a href="../../Moongoon/MongoBase.html#id-instance-method" class="tooltip">
+      <span>id</span>
+    id</a>, 
+    
+  
+    <a href="../../Moongoon/MongoBase.html#id=(id:String)-instance-method" class="tooltip">
+      <span>id=(id : String)</span>
+    id=</a>
+    
+  
+
+
+    
+
+
+    
+
+
+  
+    
+
+  <h3>Instance methods inherited from class <code><a href="../../Moongoon/Document.html">Moongoon::Document</a></code></h3>
+  
+  
+    <a href="../../Moongoon/Document.html#to_bson(bson=BSON.new)-instance-method" class="tooltip">
+      <span>to_bson(bson = <span class="t">BSON</span>.<span class="k">new</span>)</span>
+    to_bson</a>, 
+    
+  
+    <a href="../../Moongoon/Document.html#to_tuple-instance-method" class="tooltip">
+      <span>to_tuple</span>
+    to_tuple</a>
+    
+  
+
+
+    
+
+  <h3>Constructor methods inherited from class <code><a href="../../Moongoon/Document.html">Moongoon::Document</a></code></h3>
+  
+  
+    <a href="../../Moongoon/Document.html#new(pull:JSON::PullParser)-class-method" class="tooltip">
+      <span>new(pull : JSON::PullParser)<br/>new(bson : BSON::Field)<br/>new(**args)</span>
+    new</a>
+    
+  
+
+
+    
+
+  <h3>Class methods inherited from class <code><a href="../../Moongoon/Document.html">Moongoon::Document</a></code></h3>
+  
+  
+    <a href="../../Moongoon/Document.html#from_bson(bson:BSON::Field)-class-method" class="tooltip">
+      <span>from_bson(bson : BSON::Field)</span>
+    from_bson</a>
+    
+  
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(pull:JSON::PullParser)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(pull : JSON::PullParser)
+
+        <a class="method-permalink" href="#new(pull:JSON::PullParser)-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>A limited model class for interacting with a MongoDB collection.</p>
+
+<p><span class="flag purple">NOTE</span>  Similar to <code><a href="../../Moongoon/Collection.html">Moongoon::Collection</a></code> but can only be used to update a MongoDB collection.</p>
+
+<pre><code><span class="k">class</span> <span class="t">Partial</span> <span class="o">&lt;</span> <span class="t">Moongoon</span><span class="t">::</span><span class="t">Collection</span><span class="t">::</span><span class="t">UpdateOnly</span>
+  collection <span class="s">&quot;my_models&quot;</span>
+
+  property name : <span class="t">String</span>?
+  property age : <span class="t">Int32</span>?
+<span class="k">end</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/elbywan/moongoon/blob/0484732bc8725b415a101f175976168830de4628/src/models/models.cr#L128" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="find_and_modify(query,update,fields=BSON.new,**args)-class-method">
+      <div class="signature">
+        
+        def self.<strong>find_and_modify</strong>(query, update, fields = <span class="t">BSON</span>.<span class="k">new</span>, **args)
+
+        <a class="method-permalink" href="#find_and_modify(query,update,fields=BSON.new,**args)-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Modifies and returns a single document.</p>
+
+<p>See the <a href="https://docs.mongodb.com/v3.6/reference/command/findAndModify/" target="_blank">official documentation</a>.</p>
+
+<pre><code><span class="t">User</span>.find_and_modify({ name: <span class="s">&quot;John&quot;</span> }, { <span class="s">&quot;$set&quot;</span>: { <span class="s">&quot;name&quot;</span>: <span class="s">&quot;Igor&quot;</span> }})</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="find_and_modify_by_id(id,update,query=BSON.new,**args)-class-method">
+      <div class="signature">
+        
+        def self.<strong>find_and_modify_by_id</strong>(id, update, query = <span class="t">BSON</span>.<span class="k">new</span>, **args)
+
+        <a class="method-permalink" href="#find_and_modify_by_id(id,update,query=BSON.new,**args)-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Modifies and returns a single document.</p>
+
+<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,**args):Nil-class-method">.update</a></code>, except that a matching on the <code>_id</code>
+field will be added to the <em>query</em> argument.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="update(query,update,**args):Nil-class-method">
+      <div class="signature">
+        
+        def self.<strong>update</strong>(query, update, **args) : Nil
+
+        <a class="method-permalink" href="#update(query,update,**args):Nil-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Updates one or more documents in the underlying collection.</p>
+
+<p>Every document matching the <em>query</em> argument will be updated.
+See the <a href="https://docs.mongodb.com/v3.6/tutorial/update-documents/" target="_blank">MongoDB tutorial</a>
+for more information about the syntax.</p>
+
+<pre><code><span class="c"># Rename every person named &quot;John&quot; to &quot;Igor&quot;.</span>
+<span class="t">User</span>.update(query: { name: <span class="s">&quot;John&quot;</span> }, update: { <span class="s">&quot;$set&quot;</span>: { name: <span class="s">&quot;Igor&quot;</span> } })</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="update_by_id(id,update,query=BSON.new,**args):Nil-class-method">
+      <div class="signature">
+        
+        def self.<strong>update_by_id</strong>(id, update, query = <span class="t">BSON</span>.<span class="k">new</span>, **args) : Nil
+
+        <a class="method-permalink" href="#update_by_id(id,update,query=BSON.new,**args):Nil-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Updates one document by id.</p>
+
+<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,**args):Nil-class-method">.update</a></code>, except that a matching on the <code>_id</code>
+field will be added to the <em>query</em> argument.</p>
+
+<pre><code>id <span class="o">=</span> <span class="n">123456</span>
+<span class="t">User</span>.update_by_id(id, { <span class="s">&quot;$set&quot;</span>: { <span class="s">&quot;name&quot;</span>: <span class="s">&quot;Igor&quot;</span> }})</code></pre>
+
+<p>It is possible to add query filters to conditionally prevent an update.</p>
+
+<pre><code><span class="c"># Updates the user only if he/she is named John.</span>
+<span class="t">User</span>.update_by_id(id, query: { name: <span class="s">&quot;John&quot;</span> }, update: { <span class="s">&quot;$set&quot;</span>: { name: <span class="s">&quot;Igor&quot;</span> }})</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="update_by_ids(ids,update,query=BSON.new,**args):Nil-class-method">
+      <div class="signature">
+        
+        def self.<strong>update_by_ids</strong>(ids, update, query = <span class="t">BSON</span>.<span class="k">new</span>, **args) : Nil
+
+        <a class="method-permalink" href="#update_by_ids(ids,update,query=BSON.new,**args):Nil-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Updates one or multiple documents by their ids.</p>
+
+<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,**args):Nil-class-method">.update</a></code>, except that a matching on multiple <code>_id</code>
+fields will be added to the <em>query</em> argument.</p>
+
+<pre><code>ids <span class="o">=</span> [<span class="s">&quot;1&quot;</span>, <span class="s">&quot;2&quot;</span>, <span class="s">&quot;3&quot;</span>]
+<span class="t">User</span>.update_by_ids(ids, { <span class="s">&quot;$set&quot;</span>: { <span class="s">&quot;name&quot;</span>: <span class="s">&quot;Igor&quot;</span> }})</code></pre>
+
+<p>It is possible to add query filters.</p>
+
+<pre><code><span class="c"># Updates the users only if they are named John.</span>
+<span class="t">User</span>.update_by_ids(ids, query: { name: <span class="s">&quot;John&quot;</span> }, update: { <span class="s">&quot;$set&quot;</span>: { name: <span class="s">&quot;Igor&quot;</span> }})</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="update(query=BSON.new,**args):self-instance-method">
+      <div class="signature">
+        
+        def <strong>update</strong>(query = <span class="t">BSON</span>.<span class="k">new</span>, **args) : <span class="k">self</span>
+
+        <a class="method-permalink" href="#update(query=BSON.new,**args):self-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Updates a document having the same id as this model with the data stored in <code>self</code>.</p>
+
+<p>Tries to match on <code>self.id</code>.</p>
+
+<pre><code>user <span class="o">=</span> <span class="t">User</span>.<span class="k">new</span> name: <span class="s">&quot;John&quot;</span>, age: <span class="n">25</span>
+user.insert
+user.age <span class="o">=</span> <span class="n">26</span>
+user.update</code></pre>
+
+<p>It is possible to add query filters to conditionally prevent an update.</p>
+
+<pre><code>user <span class="o">=</span> <span class="t">User</span>.<span class="k">new</span> name: <span class="s">&quot;John&quot;</span>, locked: <span class="n">true</span>
+user.insert
+user.name <span class="o">=</span> <span class="s">&quot;Igor&quot;</span>
+<span class="c"># Prevents updating users that are locked.</span>
+user.update({ locked: <span class="n">false</span> })
+pp <span class="t">User</span>.find_by_id(user.id.not_nil!).to_json
+<span class="c"># =&gt; { &quot;id&quot;: &quot;some id&quot;, &quot;name&quot;: &quot;John&quot;, &quot;locked&quot;: true }</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="update_query(query,**args):self-instance-method">
+      <div class="signature">
+        
+        def <strong>update_query</strong>(query, **args) : <span class="k">self</span>
+
+        <a class="method-permalink" href="#update_query(query,**args):self-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Updates one or more documents with the data stored in <code>self</code>.</p>
+
+<p>Every document matching the <em>query</em> argument will be updated.</p>
+
+<pre><code>user <span class="o">=</span> <span class="t">User</span>.<span class="k">new</span> name: <span class="s">&quot;John&quot;</span>, age: <span class="n">25</span>
+user <span class="o">=</span> <span class="t">User</span>.<span class="k">new</span> name: <span class="s">&quot;Jane&quot;</span>, age: <span class="n">30</span>
+user.insert
+user.age <span class="o">=</span> <span class="n">40</span>
+<span class="c"># Updates both documents</span>
+user.update_query({ name: {<span class="s">&quot;$in&quot;</span>: [<span class="s">&quot;John&quot;</span>, <span class="s">&quot;Jane&quot;</span>]} })</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>
