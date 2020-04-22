@@ -1,3 +1,4 @@
+# :nodoc:
 module Moongoon::Traits::Database::Methods::Get
   macro included
     @@aggregation_stages : Array(BSON)? = nil

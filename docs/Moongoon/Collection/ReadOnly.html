@@ -194,27 +194,13 @@
     
       <li class="other-type">Moongoon::Traits::Database::Internal</li>
     
-      <li class="other-type"><a href="../../Moongoon/Traits/Database/Methods/Get.html">Moongoon::Traits::Database::Methods::Get</a></li>
+      <li class="other-type">Moongoon::Traits::Database::Methods::Get</li>
     
       <li class="other-type">Moongoon::Traits::Database::Read</li>
     
   </ul>
 
 
-
-  <h2>
-    <a id="extended-modules" class="anchor" href="#extended-modules">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Extended Modules
-  </h2>
-  <ul class="other-types-list">
-    
-      <li class="other-type"><a href="../../Moongoon/Traits/Database/Helpers/Static.html">Moongoon::Traits::Database::Helpers::Static</a></li>
-    
-  </ul>
 
 
 
@@ -233,7 +219,7 @@
   </h2>
   
     
-      <a href="https://github.com/elbywan/moongoon/blob/0484732bc8725b415a101f175976168830de4628/src/models/models.cr#L144" target="_blank">
+      <a href="https://github.com/elbywan/moongoon/blob/d2927647d700e83f651576b05bb6437aedd814cc/src/models/models.cr#L144" target="_blank">
         models/models.cr
       </a>
     
@@ -373,11 +359,44 @@
         
       </li>
     
+      <li class="entry-summary">
+        <a href="#index(keys:Hash(String,BSON::ValueType),collection:String=@@collection,options=Hash(String,BSON::ValueType).new,index_name:String?=nil):Nil-class-method" class="signature"><strong>.index</strong>(keys : Hash(String, BSON::ValueType), collection : String = @@collection, options = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">BSON</span><span class="t">::</span><span class="t">ValueType</span>).<span class="k">new</span>, index_name : String? = <span class="n">nil</span>) : Nil</a>
+        
+          <div class="summary"><p>Defines an index that will be applied to this Model's underlying mongo collection.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#index(collection:String=@@collection,options=NamedTuple.new,index_name:String?=nil,**keys):Nil-class-method" class="signature"><strong>.index</strong>(collection : String = @@collection, options = <span class="t">NamedTuple</span>.<span class="k">new</span>, index_name : String? = <span class="n">nil</span>, **keys) : Nil</a>
+        
+          <div class="summary"><p>Defines an index that will be applied to this Model's underlying mongo collection.</p></div>
+        
+      </li>
+    
   </ul>
 
 
 
 
+
+  <h2>
+    <a id="macro-summary" class="anchor" href="#macro-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Macro Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#reference(field,*,model,many=false,delete_cascade=false,removal_sync=false,back_reference=nil)-macro" class="signature"><strong>reference</strong>(field, *, model, many = <span class="n">false</span>, delete_cascade = <span class="n">false</span>, removal_sync = <span class="n">false</span>, back_reference = <span class="n">nil</span>)</a>
+        
+          <div class="summary"><p>References one or more documents belonging to another collection.</p></div>
+        
+      </li>
+    
+  </ul>
 
 
 
@@ -682,7 +701,7 @@ driver documentation and code.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/0484732bc8725b415a101f175976168830de4628/src/models/models.cr#L144" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/d2927647d700e83f651576b05bb6437aedd814cc/src/models/models.cr#L144" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -960,10 +979,144 @@ users <span class="o">=</span> <span class="t">User</span>.find_by_ids(ids)</cod
       </div>
     </div>
   
+    <div class="entry-detail" id="index(keys:Hash(String,BSON::ValueType),collection:String=@@collection,options=Hash(String,BSON::ValueType).new,index_name:String?=nil):Nil-class-method">
+      <div class="signature">
+        
+        def self.<strong>index</strong>(keys : Hash(String, BSON::ValueType), collection : String = @@collection, options = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">BSON</span><span class="t">::</span><span class="t">ValueType</span>).<span class="k">new</span>, index_name : String? = <span class="n">nil</span>) : Nil
+
+        <a class="method-permalink" href="#index(keys:Hash(String,BSON::ValueType),collection:String=@@collection,options=Hash(String,BSON::ValueType).new,index_name:String?=nil):Nil-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Defines an index that will be applied to this Model's underlying mongo collection.</p>
+
+<p><strong>Note that the order of fields do matter.</strong></p>
+
+<p>Name of the index is generated automatically from the collection and the field names
+to avoid conflicts on server startup.</p>
+
+<p>Please have a look at the <a href="https://docs.mongodb.com/v3.6/reference/command/createIndexes/" target="_blank">MongoDB documentation</a>
+for more details about index creation and the list of available index options.</p>
+
+<pre><code><span class="c"># Specify one or more fields with a type (ascending or descending order, text indexing…)</span>
+index field1: <span class="n">1</span>, field2: <span class="n">-1</span>
+<span class="c"># Set the unique argument to create a unique index.</span>
+index field: <span class="n">1</span>, options: {unique: <span class="n">true</span>}</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="index(collection:String=@@collection,options=NamedTuple.new,index_name:String?=nil,**keys):Nil-class-method">
+      <div class="signature">
+        
+        def self.<strong>index</strong>(collection : String = @@collection, options = <span class="t">NamedTuple</span>.<span class="k">new</span>, index_name : String? = <span class="n">nil</span>, **keys) : Nil
+
+        <a class="method-permalink" href="#index(collection:String=@@collection,options=NamedTuple.new,index_name:String?=nil,**keys):Nil-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Defines an index that will be applied to this Model's underlying mongo collection.</p>
+
+<p><strong>Note that the order of fields do matter.</strong></p>
+
+<p>Name of the index is generated automatically from the collection and the field names
+to avoid conflicts on server startup.</p>
+
+<p>Please have a look at the <a href="https://docs.mongodb.com/v3.6/reference/command/createIndexes/" target="_blank">MongoDB documentation</a>
+for more details about index creation and the list of available index options.</p>
+
+<pre><code><span class="c"># Specify one or more fields with a type (ascending or descending order, text indexing…)</span>
+index field1: <span class="n">1</span>, field2: <span class="n">-1</span>
+<span class="c"># Set the unique argument to create a unique index.</span>
+index field: <span class="n">1</span>, options: {unique: <span class="n">true</span>}</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
 
 
 
 
+
+  <h2>
+    <a id="macro-detail" class="anchor" href="#macro-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Macro Detail
+  </h2>
+  
+    <div class="entry-detail" id="reference(field,*,model,many=false,delete_cascade=false,removal_sync=false,back_reference=nil)-macro">
+      <div class="signature">
+        
+        macro <strong>reference</strong>(field, *, model, many = <span class="n">false</span>, delete_cascade = <span class="n">false</span>, removal_sync = <span class="n">false</span>, back_reference = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#reference(field,*,model,many=false,delete_cascade=false,removal_sync=false,back_reference=nil)-macro">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>References one or more documents belonging to another collection.</p>
+
+<p>Creates a model field that will reference either one or multiple
+foreign documents depending on the arguments provided.</p>
+
+<p><span class="flag purple">NOTE</span>  This macro is useful when using named arguments to keep the reference
+in sync when documents are added or removed from the other collection.</p>
+
+<pre><code><span class="k">class</span> <span class="t">MyModel</span> <span class="o">&lt;</span> <span class="t">Moongoon</span><span class="t">::</span><span class="t">Collection</span>
+  <span class="c"># The following references are not kept in sync because extra named arguments are not used.</span>
+
+  <span class="c"># Reference a single user.</span>
+  reference user_id, model: <span class="t">User</span>
+
+  <span class="c"># References multiple users.</span>
+  reference user_ids, model: <span class="t">User</span>, many: <span class="n">true</span>
+
+  reference user_ids, model: <span class="t">User</span>, many: <span class="n">true</span>
+<span class="k">end</span></code></pre>
+
+<p><strong>Named arguments</strong></p>
+
+<ul><li><em>model</em>: The referenced model class.</li><li><em>many</em>: Set to true to reference multiple documents.</li><li><em>delete_cascade</em>: If true, removes the referenced document(s) when this model is removed.</li><li><em>removal_sync</em>: If true, sets the reference to nil (if referencing a single document), or removes the id from the
+reference array (if referencing multiple documents) when the referenced document(s) are removed.</li><li><em>back_reference</em>: The name of the refence, if it exists, in the referenced model that back-references this model.
+If set, when a referenced document gets inserted, this reference will be updated to add the newly created id.</li></ul>
+
+<pre><code><span class="k">class</span> <span class="t">MyModel</span> <span class="o">&lt;</span> <span class="t">Moongoon</span><span class="t">::</span><span class="t">Collection</span>
+  <span class="c"># Now some examples that are using extra arguments.</span>
+
+  <span class="c"># References a single user from the User model class.</span>
+  <span class="c"># The user has a field that links to back to this model (best_friend_id).</span>
+  <span class="c"># Whenever a user is inserted, the reference will get updated to point to the linked user.</span>
+  reference user_id, model: <span class="t">User</span>, back_reference: best_friend_id
+
+  <span class="c"># References multiple pets. When this model is removed, all the pets</span>
+  <span class="c"># referenced will be removed as well.</span>
+  reference pet_ids, model: <span class="t">Pet</span>, many: <span class="n">true</span>, delete_cascade: <span class="n">true</span>
+
+  <span class="c"># Whenever a Pet is removed the reference will get updated and the</span>
+  <span class="c"># id of the Pet will be removed from the array.</span>
+  reference pet_id, model: <span class="t">Pet</span>, many: <span class="n">true</span>, removal_sync: <span class="n">true</span>
+<span class="k">end</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
 
 
 </div>

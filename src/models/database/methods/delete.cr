@@ -1,3 +1,4 @@
+# :nodoc:
 module Moongoon::Traits::Database::Methods::Delete
   macro included
 

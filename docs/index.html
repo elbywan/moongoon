@@ -176,6 +176,12 @@
   </svg>
 </a>Usage</h2>
 
+<h3><a id="minimal-working-example" class="anchor" href="#minimal-working-example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Minimal working example</h3>
+
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;moongoon&quot;</span>
 
 <span class="c"># A Model inherits from `Moongoon::Collection`</span>
@@ -200,7 +206,7 @@
 <span class="c"># Initialize a model from data arguments…</span>
 user <span class="o">=</span> <span class="t">User</span>.<span class="k">new</span>(name: <span class="s">&quot;Eric&quot;</span>, age: <span class="n">10</span>, pets: [
   <span class="t">User</span><span class="t">::</span><span class="t">Pet</span>.<span class="k">new</span>(pet_name: <span class="s">&quot;Mr. Kitty&quot;</span>),
-  <span class="t">User</span><span class="t">::</span><span class="t">Pet</span>.<span class="k">new</span>(pet_name: <span class="s">&quot;Fluffly&quot;</span>)
+  <span class="t">User</span><span class="t">::</span><span class="t">Pet</span>.<span class="k">new</span>(pet_name: <span class="s">&quot;Fluffy&quot;</span>)
 ])
 <span class="c"># …or JSON data…</span>
 user <span class="o">=</span> <span class="t">User</span>.from_json(<span class="s">%(
@@ -212,7 +218,7 @@ user <span class="o">=</span> <span class="t">User</span>.from_json(<span class=
   ]
 )</span>)
 <span class="c"># …or from querying the database.</span>
-user <span class="o">=</span> <span class="t">User</span>.find({ name: <span class="s">&quot;Eric&quot;</span> })
+user <span class="o">=</span> <span class="t">User</span>.find_one!({ name: <span class="s">&quot;Eric&quot;</span> })
 
 <span class="c"># Insert a model in the database.</span>
 user.insert
@@ -223,6 +229,88 @@ user.update
 
 <span class="c"># Delete it.</span>
 user.remove</code></pre>
+
+<h3><a id="connecting" class="anchor" href="#connecting">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Connecting</h3>
+
+<p><a href="https://elbywan.github.io/moongoon/Moongoon/Database.html" target="_blank"><em>API documentation</em></a></p>
+
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;moongoon&quot;</span>
+
+<span class="t">Moongoon</span>.before_connect {
+  puts <span class="s">&quot;Connecting…&quot;</span>
+}
+<span class="t">Moongoon</span>.after_connect { <span class="o">|</span>db<span class="o">|</span>
+  <span class="c"># *db* is a raw Mongo::Database instance.</span>
+  <span class="c"># Check `mongo.cr` code for more details:</span>
+  <span class="c"># https://github.com/elbywan/mongo.cr/blob/master/src/mongo/database.cr</span>
+  <span class="c"># …</span>
+}
+
+<span class="c"># … #</span>
+
+<span class="t">Moongoon</span>.connect(
+  database_url: <span class="s">&quot;mongodb://address:27017&quot;</span>,
+  database_name: <span class="s">&quot;my_database&quot;</span>
+)
+
+<span class="c"># In case you need to perform a low level query:</span>
+<span class="t">Moongoon</span>.connection { <span class="o">|</span>db<span class="o">|</span>
+  <span class="c"># Low level collection methods: https://github.com/elbywan/mongo.cr/blob/master/src/mongo/collection.cr</span>
+  cursor <span class="o">=</span> db[<span class="s">&quot;my_collection&quot;</span>].find_indexes
+  <span class="k">while</span> index <span class="o">=</span> cursor.<span class="k">next</span>
+    pp index
+  <span class="k">end</span>
+}</code></pre>
+
+<h3><a id="models" class="anchor" href="#models">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Models</h3>
+
+<p><a href="https://elbywan.github.io/moongoon/Moongoon/Collection.html" target="_blank"><em>API documentation</em></a></p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">MyModel</span> <span class="o">&lt;</span> <span class="t">Moongoon</span><span class="t">::</span><span class="t">Collection</span>
+  collection <span class="s">&quot;models&quot;</span>
+
+  <span class="c"># Define indexes</span>
+  index
+
+  <span class="c"># To use an aggregation pipeline, just us</span>
+<span class="k">end</span></code></pre>
+
+<h3><a id="running-scripts" class="anchor" href="#running-scripts">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Running scripts</h3>
+
+<p><a href="https://elbywan.github.io/moongoon/Moongoon/Database/Scripts/Base.html" target="_blank"><em>API documentation</em></a></p>
+
+<pre><code class="language-crystal"><span class="c"># A script must inherit from `Moongoon::Database::Scripts::Base`</span>
+<span class="c"># Requiring the script before connecting to the database should be all it takes to register it.</span>
+<span class="c">#</span>
+<span class="c"># Scripts are then processed automatically.</span>
+<span class="k">class</span> <span class="t">Moongoon</span><span class="t">::</span><span class="t">Database</span><span class="t">::</span><span class="t">Scripts</span><span class="t">::</span><span class="t">Test</span> <span class="o">&lt;</span> <span class="t">Moongoon</span><span class="t">::</span><span class="t">Database</span><span class="t">::</span><span class="t">Scripts</span><span class="t">::</span><span class="t">Base</span>
+  <span class="c"># Scripts run in ascending order.</span>
+  <span class="c"># Default order if not specified is 1.</span>
+  order <span class="t">Time</span>.utc(<span class="n">2020</span>, <span class="n">3</span>, <span class="n">11</span>).to_unix
+
+  <span class="k">def</span> <span class="m">process</span>(db : <span class="t">Mongo</span><span class="t">::</span><span class="t">Database</span>)
+    <span class="c"># Dummy code that will add a ban flag for users that are called &#39;John&#39;.</span>
+    <span class="c"># This code uses the `mongo.cr` driver shard syntax, but Models could</span>
+    <span class="c"># be used for convenience despite a small performance overhead.</span>
+    db[<span class="s">&quot;users&quot;</span>].update(
+      selector: {name: <span class="s">&quot;John&quot;</span>},
+      update: {<span class="s">&quot;$set&quot;</span>: {<span class="s">&quot;banned&quot;</span>: <span class="n">true</span>}},
+      flags: <span class="t">LibMongoC</span><span class="t">::</span><span class="t">UpdateFlags</span><span class="t">::</span><span class="t">MULTI_UPDATE</span>
+    )
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
 
 <h2><a id="contributing" class="anchor" href="#contributing">
   <svg class="octicon-link" aria-hidden="true">

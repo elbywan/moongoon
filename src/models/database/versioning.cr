@@ -1,3 +1,4 @@
+# :nodoc:
 module Moongoon::Traits::Database::Versioning
   macro included
   {% verbatim do %}

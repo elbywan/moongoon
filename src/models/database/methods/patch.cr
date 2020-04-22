@@ -1,3 +1,4 @@
+# :nodoc:
 module Moongoon::Traits::Database::Methods::Patch
   macro included
     # Updates a document having the same id as this model with the data stored in `self`.
