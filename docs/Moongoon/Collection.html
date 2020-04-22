@@ -212,20 +212,6 @@ underlying MongoDB collection.</p>
 
 
 
-  <h2>
-    <a id="extended-modules" class="anchor" href="#extended-modules">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Extended Modules
-  </h2>
-  <ul class="other-types-list">
-    
-      <li class="other-type"><a href="../Moongoon/Traits/Database/Helpers/Static.html">Moongoon::Traits::Database::Helpers::Static</a></li>
-    
-  </ul>
-
 
 
 
@@ -243,7 +229,7 @@ underlying MongoDB collection.</p>
   </h2>
   
     
-      <a href="https://github.com/elbywan/moongoon/blob/d2927647d700e83f651576b05bb6437aedd814cc/src/models/models.cr#L96" target="_blank">
+      <a href="https://github.com/elbywan/moongoon/blob/ddce7845042e769a728780208918bce00472a8fa/src/models/models.cr#L103" target="_blank">
         models/models.cr
       </a>
     
@@ -412,6 +398,20 @@ underlying MongoDB collection.</p>
       </li>
     
       <li class="entry-summary">
+        <a href="#index(keys:Hash(String,BSON::ValueType),collection:String=@@collection,options=Hash(String,BSON::ValueType).new,index_name:String?=nil):Nil-class-method" class="signature"><strong>.index</strong>(keys : Hash(String, BSON::ValueType), collection : String = @@collection, options = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">BSON</span><span class="t">::</span><span class="t">ValueType</span>).<span class="k">new</span>, index_name : String? = <span class="n">nil</span>) : Nil</a>
+        
+          <div class="summary"><p>Defines an index that will be applied to this Model's underlying mongo collection.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#index(collection:String=@@collection,options=NamedTuple.new,index_name:String?=nil,**keys):Nil-class-method" class="signature"><strong>.index</strong>(collection : String = @@collection, options = <span class="t">NamedTuple</span>.<span class="k">new</span>, index_name : String? = <span class="n">nil</span>, **keys) : Nil</a>
+        
+          <div class="summary"><p>Defines an index that will be applied to this Model's underlying mongo collection.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#remove(query=BSON.new,**args):Nil-class-method" class="signature"><strong>.remove</strong>(query = <span class="t">BSON</span>.<span class="k">new</span>, **args) : Nil</a>
         
           <div class="summary"><p>Removes one or more documents from the collection.</p></div>
@@ -466,20 +466,6 @@ underlying MongoDB collection.</p>
     Instance Method Summary
   </h2>
   <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#index(collection:String=@@collection,options=NamedTuple.new,index_name:String?=nil,**keys):Nil-instance-method" class="signature"><strong>#index</strong>(collection : String = @@collection, options = <span class="t">NamedTuple</span>.<span class="k">new</span>, index_name : String? = <span class="n">nil</span>, **keys) : Nil</a>
-        
-          <div class="summary"><p>Defines an index that will be applied to this Model's underlying mongo collection.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#index(keys:Hash(String,BSON::ValueType),collection:String=@@collection,options=Hash(String,BSON::ValueType).new,index_name:String?=nil):Nil-instance-method" class="signature"><strong>#index</strong>(keys : Hash(String, BSON::ValueType), collection : String = @@collection, options = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">BSON</span><span class="t">::</span><span class="t">ValueType</span>).<span class="k">new</span>, index_name : String? = <span class="n">nil</span>) : Nil</a>
-        
-          <div class="summary"><p>Defines an index that will be applied to this Model's underlying mongo collection.</p></div>
-        
-      </li>
     
       <li class="entry-summary">
         <a href="#insert(**args):self-instance-method" class="signature"><strong>#insert</strong>(**args) : <span class="k">self</span></a>
@@ -869,7 +855,7 @@ underlying MongoDB collection.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/d2927647d700e83f651576b05bb6437aedd814cc/src/models/models.cr#L96" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/ddce7845042e769a728780208918bce00472a8fa/src/models/models.cr#L103" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1240,6 +1226,70 @@ users <span class="o">=</span> <span class="t">User</span>.find_by_ids(ids)</cod
       </div>
     </div>
   
+    <div class="entry-detail" id="index(keys:Hash(String,BSON::ValueType),collection:String=@@collection,options=Hash(String,BSON::ValueType).new,index_name:String?=nil):Nil-class-method">
+      <div class="signature">
+        
+        def self.<strong>index</strong>(keys : Hash(String, BSON::ValueType), collection : String = @@collection, options = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">BSON</span><span class="t">::</span><span class="t">ValueType</span>).<span class="k">new</span>, index_name : String? = <span class="n">nil</span>) : Nil
+
+        <a class="method-permalink" href="#index(keys:Hash(String,BSON::ValueType),collection:String=@@collection,options=Hash(String,BSON::ValueType).new,index_name:String?=nil):Nil-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Defines an index that will be applied to this Model's underlying mongo collection.</p>
+
+<p><strong>Note that the order of fields do matter.</strong></p>
+
+<p>Name of the index is generated automatically from the collection and the field names
+to avoid conflicts on server startup.</p>
+
+<p>Please have a look at the <a href="https://docs.mongodb.com/v3.6/reference/command/createIndexes/" target="_blank">MongoDB documentation</a>
+for more details about index creation and the list of available index options.</p>
+
+<pre><code><span class="c"># Specify one or more fields with a type (ascending or descending order, text indexing…)</span>
+index field1: <span class="n">1</span>, field2: <span class="n">-1</span>
+<span class="c"># Set the unique argument to create a unique index.</span>
+index field: <span class="n">1</span>, options: {unique: <span class="n">true</span>}</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="index(collection:String=@@collection,options=NamedTuple.new,index_name:String?=nil,**keys):Nil-class-method">
+      <div class="signature">
+        
+        def self.<strong>index</strong>(collection : String = @@collection, options = <span class="t">NamedTuple</span>.<span class="k">new</span>, index_name : String? = <span class="n">nil</span>, **keys) : Nil
+
+        <a class="method-permalink" href="#index(collection:String=@@collection,options=NamedTuple.new,index_name:String?=nil,**keys):Nil-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Defines an index that will be applied to this Model's underlying mongo collection.</p>
+
+<p><strong>Note that the order of fields do matter.</strong></p>
+
+<p>Name of the index is generated automatically from the collection and the field names
+to avoid conflicts on server startup.</p>
+
+<p>Please have a look at the <a href="https://docs.mongodb.com/v3.6/reference/command/createIndexes/" target="_blank">MongoDB documentation</a>
+for more details about index creation and the list of available index options.</p>
+
+<pre><code><span class="c"># Specify one or more fields with a type (ascending or descending order, text indexing…)</span>
+index field1: <span class="n">1</span>, field2: <span class="n">-1</span>
+<span class="c"># Set the unique argument to create a unique index.</span>
+index field: <span class="n">1</span>, options: {unique: <span class="n">true</span>}</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="remove(query=BSON.new,**args):Nil-class-method">
       <div class="signature">
         
@@ -1412,70 +1462,6 @@ fields will be added to the <em>query</em> argument.</p>
 </a>
     Instance Method Detail
   </h2>
-  
-    <div class="entry-detail" id="index(collection:String=@@collection,options=NamedTuple.new,index_name:String?=nil,**keys):Nil-instance-method">
-      <div class="signature">
-        
-        def <strong>index</strong>(collection : String = @@collection, options = <span class="t">NamedTuple</span>.<span class="k">new</span>, index_name : String? = <span class="n">nil</span>, **keys) : Nil
-
-        <a class="method-permalink" href="#index(collection:String=@@collection,options=NamedTuple.new,index_name:String?=nil,**keys):Nil-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Defines an index that will be applied to this Model's underlying mongo collection.</p>
-
-<p><strong>Note that the order of fields do matter.</strong></p>
-
-<p>Name of the index is generated automatically from the collection and the field names
-to avoid conflicts on server startup.</p>
-
-<p>Please have a look at the <a href="https://docs.mongodb.com/v3.6/reference/command/createIndexes/" target="_blank">MongoDB documentation</a>
-for more details about index creation and the list of available index options.</p>
-
-<pre><code><span class="c"># Specify one or more fields with a type (ascending or descending order, text indexing…)</span>
-index field1: <span class="n">1</span>, field2: <span class="n">-1</span>
-<span class="c"># Set the unique argument to create a unique index.</span>
-index field: <span class="n">1</span>, options: {unique: <span class="n">true</span>}</code></pre>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="index(keys:Hash(String,BSON::ValueType),collection:String=@@collection,options=Hash(String,BSON::ValueType).new,index_name:String?=nil):Nil-instance-method">
-      <div class="signature">
-        
-        def <strong>index</strong>(keys : Hash(String, BSON::ValueType), collection : String = @@collection, options = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">BSON</span><span class="t">::</span><span class="t">ValueType</span>).<span class="k">new</span>, index_name : String? = <span class="n">nil</span>) : Nil
-
-        <a class="method-permalink" href="#index(keys:Hash(String,BSON::ValueType),collection:String=@@collection,options=Hash(String,BSON::ValueType).new,index_name:String?=nil):Nil-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Defines an index that will be applied to this Model's underlying mongo collection.</p>
-
-<p><strong>Note that the order of fields do matter.</strong></p>
-
-<p>Name of the index is generated automatically from the collection and the field names
-to avoid conflicts on server startup.</p>
-
-<p>Please have a look at the <a href="https://docs.mongodb.com/v3.6/reference/command/createIndexes/" target="_blank">MongoDB documentation</a>
-for more details about index creation and the list of available index options.</p>
-
-<pre><code><span class="c"># Specify one or more fields with a type (ascending or descending order, text indexing…)</span>
-index field1: <span class="n">1</span>, field2: <span class="n">-1</span>
-<span class="c"># Set the unique argument to create a unique index.</span>
-index field: <span class="n">1</span>, options: {unique: <span class="n">true</span>}</code></pre>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
   
     <div class="entry-detail" id="insert(**args):self-instance-method">
       <div class="signature">

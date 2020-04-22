@@ -274,14 +274,58 @@ user.remove</code></pre>
 
 <p><a href="https://elbywan.github.io/moongoon/Moongoon/Collection.html" target="_blank"><em>API documentation</em></a></p>
 
-<pre><code class="language-crystal"><span class="k">class</span> <span class="t">MyModel</span> <span class="o">&lt;</span> <span class="t">Moongoon</span><span class="t">::</span><span class="t">Collection</span>
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;moongoon&quot;</span>
+
+<span class="k">class</span> <span class="t">MyModel</span> <span class="o">&lt;</span> <span class="t">Moongoon</span><span class="t">::</span><span class="t">Collection</span>
   collection <span class="s">&quot;models&quot;</span>
 
   <span class="c"># Define indexes</span>
-  index
+  <span class="c"># See: https://elbywan.github.io/moongoon/Moongoon/Collection/Collection.html#index(keys:Hash(String,BSON::ValueType),collection:String=@@collection,options=Hash(String,BSON::ValueType).new,index_name:String?=nil):Nil-class-method</span>
+  index name: <span class="n">1</span>
 
-  <span class="c"># To use an aggregation pipeline, just us</span>
-<span class="k">end</span></code></pre>
+  <span class="c"># Specify agregation pipeline stages that will automatically be used for queries.</span>
+  <span class="c"># See: https://elbywan.github.io/moongoon/Moongoon/Collection/Collection.html#aggregation_pipeline(*args)-class-method</span>
+  aggregation_pipeline(
+    {
+      <span class="s">&quot;$addFields&quot;</span>: {
+        count: {
+          <span class="s">&quot;$size&quot;</span>: <span class="s">&quot;$array&quot;</span>
+        }
+      }
+    },
+    {
+      <span class="s">&quot;$project&quot;</span>: {
+        array: <span class="n">0</span>
+      }
+    }
+  )
+
+  property name : <span class="t">String</span>
+  property count : <span class="t">Int32</span>?
+  property array : <span class="t">Array</span>(<span class="t">Int32</span>)? <span class="o">=</span> [<span class="n">1</span>, <span class="n">2</span>, <span class="n">3</span>]
+<span class="k">end</span>
+
+<span class="c"># …assuming moongoon is connected… #</span>
+
+<span class="t">MyModel</span>.clear
+
+model <span class="o">=</span> <span class="t">MyModel</span>.<span class="k">new</span>(
+  name: <span class="s">&quot;hello&quot;</span>
+).insert
+model_id <span class="o">=</span> model.id.not_nil!
+
+puts <span class="t">MyModel</span>.find_by_id(model_id).to_json
+<span class="c"># =&gt; &quot;{\&quot;_id\&quot;:\&quot;5ea052ce85ed2a2e1d0c87a2\&quot;,\&quot;name\&quot;:\&quot;hello\&quot;,\&quot;count\&quot;:3}&quot;</span>
+
+model.name <span class="o">=</span> <span class="s">&quot;good night&quot;</span>
+model.update
+
+puts <span class="t">MyModel</span>.find_by_id(model_id).to_json
+<span class="c"># =&gt; &quot;{\&quot;_id\&quot;:\&quot;5ea052ce85ed2a2e1d0c87a2\&quot;,\&quot;name\&quot;:\&quot;good night\&quot;,\&quot;count\&quot;:3}&quot;</span>
+
+model.remove
+puts <span class="t">MyModel</span>.count
+<span class="c"># =&gt; 0</span></code></pre>
 
 <h3><a id="running-scripts" class="anchor" href="#running-scripts">
   <svg class="octicon-link" aria-hidden="true">
