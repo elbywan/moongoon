@@ -1,4 +1,4 @@
-# moongoon
+# moongoon | [![Build Status](https://travis-ci.org/elbywan/moongoon.svg?branch=master)](https://travis-ci.org/elbywan/moongoon)
 
 A MongoDB object-document mapper (ODM) library written in crystal which makes interacting with MongoDB or DocumentDB a breeze.
 
