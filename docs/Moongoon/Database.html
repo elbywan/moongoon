@@ -186,14 +186,14 @@
   </h2>
   
     
-      <a href="https://github.com/elbywan/moongoon/blob/ddce7845042e769a728780208918bce00472a8fa/src/database/scripts.cr#L2" target="_blank">
+      <a href="https://github.com/elbywan/moongoon/blob/da53ed61412d24d954e9a8e8ef4710b322cdd4ac/src/database/scripts.cr#L2" target="_blank">
         database/scripts.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/elbywan/moongoon/blob/ddce7845042e769a728780208918bce00472a8fa/src/database/database.cr#L4" target="_blank">
+      <a href="https://github.com/elbywan/moongoon/blob/da53ed61412d24d954e9a8e8ef4710b322cdd4ac/src/database/database.cr#L4" target="_blank">
         database/database.cr
       </a>
     
@@ -304,7 +304,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/ddce7845042e769a728780208918bce00472a8fa/src/database/database.cr#L168" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/da53ed61412d24d954e9a8e8ef4710b322cdd4ac/src/database/database.cr#L168" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -329,7 +329,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/ddce7845042e769a728780208918bce00472a8fa/src/database/database.cr#L157" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/da53ed61412d24d954e9a8e8ef4710b322cdd4ac/src/database/database.cr#L157" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -354,7 +354,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/ddce7845042e769a728780208918bce00472a8fa/src/database/database.cr#L146" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/da53ed61412d24d954e9a8e8ef4710b322cdd4ac/src/database/database.cr#L146" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -380,7 +380,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/ddce7845042e769a728780208918bce00472a8fa/src/database/database.cr#L88" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/da53ed61412d24d954e9a8e8ef4710b322cdd4ac/src/database/database.cr#L88" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -399,15 +399,15 @@
 
 <pre><code><span class="t">Moongoon</span>.connection { <span class="o">|</span>db<span class="o">|</span>
   collection <span class="o">=</span> db[<span class="s">&quot;some_collection&quot;</span>]
-  data <span class="o">=</span> db[@@collection].find query
-  data
+  data <span class="o">=</span> collection.find query
+  pp data
 }</code></pre>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/ddce7845042e769a728780208918bce00472a8fa/src/database/database.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/da53ed61412d24d954e9a8e8ef4710b322cdd4ac/src/database/database.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -427,16 +427,16 @@
 <pre><code><span class="c"># If another connection uses the &quot;query&quot; lock, it will wait</span>
 <span class="c"># until this block has completed before perfoming its own work.</span>
 <span class="t">Moongoon</span>.connection_with_lock <span class="s">&quot;query&quot;</span> {
-  scollection <span class="o">=</span> db[<span class="s">&quot;some_collection&quot;</span>]
-  data <span class="o">=</span> db[@@collection].find query
-  data
+  collection <span class="o">=</span> db[<span class="s">&quot;some_collection&quot;</span>]
+  data <span class="o">=</span> collection.find query
+  pp data
 }</code></pre>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/ddce7845042e769a728780208918bce00472a8fa/src/database/database.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/da53ed61412d24d954e9a8e8ef4710b322cdd4ac/src/database/database.cr#L50" target="_blank">View source</a>]
         
       </div>
     </div>

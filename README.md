@@ -1,6 +1,8 @@
 # moongoon
 
-An object-document mapper (ODM) for MongoDB.
+A MongoDB object-document mapper (ODM) library written in crystal which makes interacting with MongoDB or DocumentDB a breeze.
+
+Uses the [`mongo.cr`](https://github.com/elbywan/mongo.cr) library under the hood that relies on the official [`MongoDB C Driver`](http://mongoc.org)
 
 ## Installation
 
@@ -115,11 +117,11 @@ class MyModel < Moongoon::Collection
   collection "models"
 
   # Define indexes
-  # See: https://elbywan.github.io/moongoon/Moongoon/Collection/Collection.html#index(keys:Hash(String,BSON::ValueType),collection:String=@@collection,options=Hash(String,BSON::ValueType).new,index_name:String?=nil):Nil-class-method
+  # See: https://elbywan.github.io/moongoon/Moongoon/Collection.html#index(keys:Hash(String,BSON::ValueType),collection:String=@@collection,options=Hash(String,BSON::ValueType).new,index_name:String?=nil):Nil-class-method
   index name: 1
 
   # Specify agregation pipeline stages that will automatically be used for queries.
-  # See: https://elbywan.github.io/moongoon/Moongoon/Collection/Collection.html#aggregation_pipeline(*args)-class-method
+  # See: https://elbywan.github.io/moongoon/Moongoon/Collection.html#aggregation_pipeline(*args)-class-method
   aggregation_pipeline(
     {
       "$addFields": {

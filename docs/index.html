@@ -148,7 +148,9 @@
   </svg>
 </a>moongoon</h1>
 
-<p>An object-document mapper (ODM) for MongoDB.</p>
+<p>A MongoDB object-document mapper (ODM) library written in crystal which makes interacting with MongoDB or DocumentDB a breeze.</p>
+
+<p>Uses the <a href="https://github.com/elbywan/mongo.cr" target="_blank"><code>mongo.cr</code></a> library under the hood that relies on the official <a href="http://mongoc.org" target="_blank"><code>MongoDB C Driver</code></a></p>
 
 <h2><a id="installation" class="anchor" href="#installation">
   <svg class="octicon-link" aria-hidden="true">
@@ -280,11 +282,11 @@ user.remove</code></pre>
   collection <span class="s">&quot;models&quot;</span>
 
   <span class="c"># Define indexes</span>
-  <span class="c"># See: https://elbywan.github.io/moongoon/Moongoon/Collection/Collection.html#index(keys:Hash(String,BSON::ValueType),collection:String=@@collection,options=Hash(String,BSON::ValueType).new,index_name:String?=nil):Nil-class-method</span>
+  <span class="c"># See: https://elbywan.github.io/moongoon/Moongoon/Collection.html#index(keys:Hash(String,BSON::ValueType),collection:String=@@collection,options=Hash(String,BSON::ValueType).new,index_name:String?=nil):Nil-class-method</span>
   index name: <span class="n">1</span>
 
   <span class="c"># Specify agregation pipeline stages that will automatically be used for queries.</span>
-  <span class="c"># See: https://elbywan.github.io/moongoon/Moongoon/Collection/Collection.html#aggregation_pipeline(*args)-class-method</span>
+  <span class="c"># See: https://elbywan.github.io/moongoon/Moongoon/Collection.html#aggregation_pipeline(*args)-class-method</span>
   aggregation_pipeline(
     {
       <span class="s">&quot;$addFields&quot;</span>: {

@@ -18,8 +18,8 @@ module Moongoon::Database
   # ```
   # Moongoon.connection { |db|
   #   collection = db["some_collection"]
-  #   data = db[@@collection].find query
-  #   data
+  #   data = collection.find query
+  #   pp data
   # }
   # ```
   def connection(&block : Proc(Mongo::Database, DatabaseResponse?)) : BSON?
@@ -42,9 +42,9 @@ module Moongoon::Database
   # # If another connection uses the "query" lock, it will wait
   # # until this block has completed before perfoming its own work.
   # Moongoon.connection_with_lock "query" {
-  #   scollection = db["some_collection"]
-  #   data = db[@@collection].find query
-  #   data
+  #   collection = db["some_collection"]
+  #   data = collection.find query
+  #   pp data
   # }
   # ```
   def connection_with_lock(lock_name : String, *, delay = 0.5.seconds, abort_if_locked = false, &block : Proc(Mongo::Database, DatabaseResponse?))
