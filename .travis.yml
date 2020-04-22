@@ -1,6 +1,18 @@
-language: crystal
+os: osx
 
-# Uncomment the following if you'd like Travis to run specs and check code formatting
-# script:
-#   - crystal spec
-#   - crystal tool format --check
+language: crystal
+crystal:
+  - latest
+
+addons:
+  homebrew:
+    taps: mongodb/brew
+    packages:
+    - mongo-c
+    - mongodb-community
+
+before_script:
+  - brew services start mongodb-community
+  - sleep 1
+script:
+  - crystal spec
