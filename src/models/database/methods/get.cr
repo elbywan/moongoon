@@ -103,7 +103,7 @@ module Moongoon::Traits::Database::Methods::Get
       unless items.size > 0
         query_json = query.to_json
         ::Moongoon::Log.info { "[mongo][find!](#{@@collection}) No matches for query:\n#{query_json}" }
-        raise Errors::NotFound.new
+        raise ::Moongoon::Error::NotFound.new
       end
       items
     end
@@ -256,17 +256,18 @@ module Moongoon::Traits::Database::Methods::Get
     # ```
     # begin
     #   User.exist!({ name: "Julien" })
-    # rescue e : Errors::NotFound
+    # rescue e : Moongoon::Error::NotFound
     #   # No user named Julien found
     # end
     # ```
-    def self.exist!(query = BSON.new, **args) : Nil
+    def self.exist!(query = BSON.new, **args) : Bool
       count = self.count query, **args
       unless count > 0
         query_json = query.to_json
         ::Moongoon::Log.info { "[mongo][exists!](#{@@collection}) No matches for query:\n#{query_json}" }
         raise ::Moongoon::Error::NotFound.new
       end
+      count > 0
     end
 
     # Same as `self.exist!` but for a single document given its id.
@@ -274,11 +275,11 @@ module Moongoon::Traits::Database::Methods::Get
     # ```
     # begin
     #   User.exist_by_id!("123456")
-    # rescue e : Errors::NotFound
+    # rescue e : Moongoon::Error::NotFound
     #   # No user having _id "123456" found
     # end
     # ```
-    def self.exist_by_id!(id, query = BSON.new, **args) : Nil
+    def self.exist_by_id!(id, query = BSON.new, **args) : Bool
       query = query.to_bson.clone.concat(Moongoon::Traits::Database::Internal.build_id_filter id)
       self.exist! query, **args
     end

@@ -1,6 +1,5 @@
 module Moongoon::Traits::Database::Methods::Patch
   macro included
-
     # Updates a document having the same id as this model with the data stored in `self`.
     #
     # Tries to match on `self.id`.
@@ -9,7 +8,7 @@ module Moongoon::Traits::Database::Methods::Patch
     # user = User.new name: "John", age: 25
     # user.insert
     # user.age = 26
-    # user.update_by_id
+    # user.update
     # ```
     #
     # It is possible to add query filters to conditionally prevent an update.
@@ -19,40 +18,14 @@ module Moongoon::Traits::Database::Methods::Patch
     # user.insert
     # user.name = "Igor"
     # # Prevents updating users that are locked.
-    # user.update_by_id({ locked: false })
+    # user.update({ locked: false })
     # pp User.find_by_id(user.id.not_nil!).to_json
     # # => { "id": "some id", "name": "John", "locked": true }
     # ```
-    def update_by_id(query = BSON.new, **args) : self
+    def update(query = BSON.new, **args) : self
       id_check!
       full_query = query.to_bson.clone.concat(::Moongoon::Traits::Database::Internal.build_id_filter id.not_nil!)
-      self.update(full_query, **args)
-    end
-
-    # Updates one or more documents with the data stored in `self`.
-    #
-    # Every document matching the *query* argument will be updated.
-    #
-    # ```
-    # user = User.new name: "John", age: 25
-    # user = User.new name: "Jane", age: 30
-    # user.insert
-    # user.age = 40
-    # # Updates both documents
-    # user.update({ name: {"$in": ["John", "Jane"]} })
-    # ```
-    def update(query, **args) : self
-      @@before_update.each { |cb| cb.call(self) }
-      ::Moongoon.connection { |db|
-        db[@@collection].update(
-          query.to_bson,
-          **args,
-          update: {"$set" => self.to_bson}.to_bson,
-          flags: LibMongoC::UpdateFlags::MULTI_UPDATE
-        )
-      }
-      @@after_update.each { |cb| cb.call(self) }
-      self
+      self.update_query(full_query, **args)
     end
 
     # Updates one or more documents in the underlying collection.
@@ -71,6 +44,32 @@ module Moongoon::Traits::Database::Methods::Patch
         db[@@collection].update(query.to_bson, update.to_bson, **args, flags: LibMongoC::UpdateFlags::MULTI_UPDATE)
       }
       @@after_update_static.each { |cb| cb.call(query.to_bson, update.to_bson) }
+    end
+
+    # Updates one or more documents with the data stored in `self`.
+    #
+    # Every document matching the *query* argument will be updated.
+    #
+    # ```
+    # user = User.new name: "John", age: 25
+    # user = User.new name: "Jane", age: 30
+    # user.insert
+    # user.age = 40
+    # # Updates both documents
+    # user.update_query({ name: {"$in": ["John", "Jane"]} })
+    # ```
+    def update_query(query, **args) : self
+      @@before_update.each { |cb| cb.call(self) }
+      ::Moongoon.connection { |db|
+        db[@@collection].update(
+          query.to_bson,
+          **args,
+          update: {"$set" => self.to_bson}.to_bson,
+          flags: LibMongoC::UpdateFlags::MULTI_UPDATE
+        )
+      }
+      @@after_update.each { |cb| cb.call(self) }
+      self
     end
 
     # Updates one document by id.
