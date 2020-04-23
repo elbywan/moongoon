@@ -2,7 +2,7 @@
 
 A MongoDB object-document mapper (ODM) library written in crystal which makes interacting with MongoDB or DocumentDB a breeze.
 
-Uses the [`mongo.cr`](https://github.com/elbywan/mongo.cr) library under the hood that relies on the official [`MongoDB C Driver`](http://mongoc.org)
+Uses the [`mongo.cr`](https://github.com/elbywan/mongo.cr) library under the hood that relies on the official [`MongoDB C Driver`](http://mongoc.org).
 
 ## Installation
 
@@ -44,7 +44,7 @@ end
 # Connect to the mongodb instance.
 Moongoon.connect("mongodb://localhost:27017", database_name: "my_database")
 
-# Initialize a model from data arguments…
+# Initialize a model from arguments…
 user = User.new(name: "Eric", age: 10, pets: [
   User::Pet.new(pet_name: "Mr. Kitty"),
   User::Pet.new(pet_name: "Fluffy")
@@ -74,7 +74,11 @@ user.remove
 
 ### Connecting
 
-[*API documentation*](https://elbywan.github.io/moongoon/Moongoon/Database.html)
+[**API documentation**](https://elbywan.github.io/moongoon/Moongoon/Database.html)
+
+- [Initial connection](https://elbywan.github.io/moongoon/Moongoon/Database.html#connect(database_url:String=&quot;mongodb://localhost:27017&quot;,database_name:String=&quot;database&quot;,*,pool_size=5,reconnection_delay=5.seconds)-instance-method)
+- [Hooks](https://elbywan.github.io/moongoon/Moongoon/Database.html#after_connect(&block:Proc(Mongo::Database,Nil))-instance-method)
+- [Low-level](https://elbywan.github.io/moongoon/Moongoon/Database.html#connection(&block:Proc(Mongo::Database,DatabaseResponse?)):BSON?-instance-method)
 
 ```crystal
 require "moongoon"
@@ -108,7 +112,12 @@ Moongoon.connection { |db|
 
 ### Models
 
-[*API documentation*](https://elbywan.github.io/moongoon/Moongoon/Collection.html)
+[**API documentation**](https://elbywan.github.io/moongoon/Moongoon/Collection.html)
+
+- [Indexes](https://elbywan.github.io/moongoon/Moongoon/Collection.html#index(keys:Hash(String,BSON::ValueType),collection:String=@@collection,options=Hash(String,BSON::ValueType).new,index_name:String?=nil):Nil-class-method)
+- [Relationships](https://elbywan.github.io/moongoon/Moongoon/Collection.html#reference(field,*,model,many=false,delete_cascade=false,removal_sync=false,back_reference=nil)-macro)
+- [Aggregations](https://elbywan.github.io/moongoon/Moongoon/Collection.html#aggregation_pipeline(*args)-class-method)
+- [Versioning](https://elbywan.github.io/moongoon/Moongoon/Collection/Versioning.html#versioning(id_field=nil,auto=false)-macro)
 
 ```crystal
 require "moongoon"
@@ -117,11 +126,9 @@ class MyModel < Moongoon::Collection
   collection "models"
 
   # Define indexes
-  # See: https://elbywan.github.io/moongoon/Moongoon/Collection.html#index(keys:Hash(String,BSON::ValueType),collection:String=@@collection,options=Hash(String,BSON::ValueType).new,index_name:String?=nil):Nil-class-method
   index name: 1
 
   # Specify agregation pipeline stages that will automatically be used for queries.
-  # See: https://elbywan.github.io/moongoon/Moongoon/Collection.html#aggregation_pipeline(*args)-class-method
   aggregation_pipeline(
     {
       "$addFields": {
@@ -137,6 +144,7 @@ class MyModel < Moongoon::Collection
     }
   )
 
+  # Collection fields
   property name : String
   property count : Int32?
   property array : Array(Int32)? = [1, 2, 3]
@@ -167,7 +175,7 @@ puts MyModel.count
 
 ### Running scripts
 
-[*API documentation*](https://elbywan.github.io/moongoon/Moongoon/Database/Scripts/Base.html)
+[**API documentation**](https://elbywan.github.io/moongoon/Moongoon/Database/Scripts/Base.html)
 
 ```crystal
 # A script must inherit from `Moongoon::Database::Scripts::Base`

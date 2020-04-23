@@ -2,7 +2,7 @@
 module Moongoon::Database::Scripts
   SCRIPT_CLASSES = [] of Class
 
-  # Base database script class.
+  # Scripts inherit from this class.
   #
   # ### Example
   #
@@ -27,11 +27,16 @@ module Moongoon::Database::Scripts
   #
   # ### Usage
   #
-  # Any class that inherits from `Moongoon::Database::Scripts::Base` will be registered as a script.
+  # **Any class that inherits from `Moongoon::Database::Scripts::Base` will be registered as a script.**
   #
-  # Calling `Moongoon::Database::Scripts.process` will attempt to run scripts once and write the status in the `scripts` collection of the database.
-  # If multiple servers are launched at the same time they will wait until all the scripts are processed and resume execution once it's done.
+  # Scripts are run when calling `Moongoon::Database.connect` and after a successful database connection.
+  # They are run a single time and the outcome is be written in the `scripts` collection.
+  #
+  # If multiple instances of the server are started simultaneously they will wait until all the scripts
+  # are processed before resuming execution.
   abstract class Base
+    # Will be executed once after a successful database connection and
+    # if it has never been run against the target database before.
     abstract def process(db : Mongo::Database)
 
     macro inherited
@@ -63,6 +68,7 @@ module Moongoon::Database::Scripts
     end
   end
 
+  # :nodoc:
   # Process every registered script.
   #
   # For each registered script the following steps will be executed:

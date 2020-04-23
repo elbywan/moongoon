@@ -38,6 +38,9 @@ module Moongoon::Database
 
   # NOTE: Similar to `self.connection` but also acquires a lock.
   #
+  # Will acquire a lock named *lock_name*, polling the DB every *delay* to check the lock status.
+  # If *abort_if_locked* is true the block will not be executed and this method will return if the lock is acquired already.
+  #
   # ```
   # # If another connection uses the "query" lock, it will wait
   # # until this block has completed before perfoming its own work.
@@ -79,7 +82,7 @@ module Moongoon::Database
 
   # Connects to a MongoDB database.
   #
-  # Moongoon handles a pool of connections and will reconnect if the connection is lost after a delay.
+  # Moongoon handles a pool of *pool_size* connections and will reconnect if the connection is lost after *reconnection_delay*.
   #
   # ```
   # # Arguments are all optional, their default values are the ones below:

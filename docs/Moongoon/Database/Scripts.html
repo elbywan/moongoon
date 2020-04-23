@@ -186,7 +186,7 @@
   </h2>
   
     
-      <a href="https://github.com/elbywan/moongoon/blob/da53ed61412d24d954e9a8e8ef4710b322cdd4ac/src/database/scripts.cr#L2" target="_blank">
+      <a href="https://github.com/elbywan/moongoon/blob/637f2f14813194e0023dad0bf7dba7d4aecf3abd/src/database/scripts.cr#L2" target="_blank">
         database/scripts.cr
       </a>
     
@@ -218,25 +218,6 @@
 
 
 
-  <h2>
-    <a id="class-method-summary" class="anchor" href="#class-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#process(_db:Mongo::Database)-class-method" class="signature"><strong>.process</strong>(_db : Mongo::Database)</a>
-        
-          <div class="summary"><p>Process every registered script.</p></div>
-        
-      </li>
-    
-  </ul>
-
 
 
 
@@ -249,41 +230,6 @@
 
 
 
-
-  <h2>
-    <a id="class-method-detail" class="anchor" href="#class-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="process(_db:Mongo::Database)-class-method">
-      <div class="signature">
-        
-        def self.<strong>process</strong>(_db : Mongo::Database)
-
-        <a class="method-permalink" href="#process(_db:Mongo::Database)-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Process every registered script.</p>
-
-<p>For each registered script the following steps will be executed:</p>
-
-<ul><li>Perform a lookup in the <code>scripts</code> collection to check whether the script has already been executed.</li><li>If not, then attempt to run it.</li><li>If another process is running the script already, will wait for completion and resume execution.</li><li>Log the result of the script in the database and go on.</li></ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/elbywan/moongoon/blob/da53ed61412d24d954e9a8e8ef4710b322cdd4ac/src/database/scripts.cr#L74" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
 
 
 
