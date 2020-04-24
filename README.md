@@ -86,11 +86,8 @@ require "moongoon"
 Moongoon.before_connect {
   puts "Connecting…"
 }
-Moongoon.after_connect { |db|
-  # *db* is a raw Mongo::Database instance.
-  # Check `mongo.cr` code for more details:
-  # https://github.com/elbywan/mongo.cr/blob/master/src/mongo/database.cr
-  # …
+Moongoon.after_connect {
+  puts "Connected!"
 }
 
 # … #
@@ -102,7 +99,10 @@ Moongoon.connect(
 
 # In case you need to perform a low level query:
 Moongoon.connection { |db|
-  # Low level collection methods: https://github.com/elbywan/mongo.cr/blob/master/src/mongo/collection.cr
+  # "db" is a raw Mongo::Database instance.
+  # Check `mongo.cr` code for more details:
+  # https://github.com/elbywan/mongo.cr/blob/master/src/mongo/database.cr
+  # https://github.com/elbywan/mongo.cr/blob/master/src/mongo/collection.cr
   cursor = db["my_collection"].find_indexes
   while index = cursor.next
     pp index

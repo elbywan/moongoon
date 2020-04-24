@@ -22,7 +22,7 @@ module Moongoon::Traits::Database::Helpers
       end
     end
 
-    ::Moongoon.after_connect do |_|
+    ::Moongoon.after_connect do
       @@indexes.each { |collection, indexes|
         begin
           ::Moongoon.connection_with_lock "indexes_#{collection}", abort_if_locked: true { |db|
