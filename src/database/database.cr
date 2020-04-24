@@ -119,11 +119,9 @@ module Moongoon::Database
 
     pool.push client
 
-    connection { |db|
-      @@after_connect_blocks.each &.call
-      Scripts.process db
-      @@after_scripts_blocks.each &.call
-    }
+    @@after_connect_blocks.each &.call
+    Scripts.process
+    @@after_scripts_blocks.each &.call
   end
 
   # Pass a block that will get executed before the server tries to connect to the database.

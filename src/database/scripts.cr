@@ -77,7 +77,7 @@ module Moongoon::Database::Scripts
   # - If not, then attempt to run it.
   # - If another process is running the script already, will wait for completion and resume execution.
   # - Log the result of the script in the database and go on.
-  def self.process(_db : Mongo::Database)
+  def self.process
     ::Moongoon::Log.info { "Processing database scripts…" }
     callbacks = [] of {Int64, Proc(Mongo::Database, Nil)}
     {% for script in SCRIPT_CLASSES %}
