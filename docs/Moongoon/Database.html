@@ -186,14 +186,14 @@
   </h2>
   
     
-      <a href="https://github.com/elbywan/moongoon/blob/637f2f14813194e0023dad0bf7dba7d4aecf3abd/src/database/scripts.cr#L2" target="_blank">
+      <a href="https://github.com/elbywan/moongoon/blob/8203770a1f7155e9aa257bdf579a5669e3183ee9/src/database/scripts.cr#L2" target="_blank">
         database/scripts.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/elbywan/moongoon/blob/637f2f14813194e0023dad0bf7dba7d4aecf3abd/src/database/database.cr#L4" target="_blank">
+      <a href="https://github.com/elbywan/moongoon/blob/8203770a1f7155e9aa257bdf579a5669e3183ee9/src/database/database.cr#L4" target="_blank">
         database/database.cr
       </a>
     
@@ -219,28 +219,28 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#after_connect(&block:Proc(Mongo::Database,Nil))-instance-method" class="signature"><strong>#after_connect</strong>(&block : Proc(Mongo::Database, Nil))</a>
+        <a href="#after_connect(&block:Proc(Nil))-instance-method" class="signature"><strong>#after_connect</strong>(&block : Proc(Nil))</a>
         
           <div class="summary"><p>Pass a block that will get executed after the database has been successfully connected and after the scripts are run.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#after_connect_before_scripts(&block:Proc(Mongo::Database,Nil))-instance-method" class="signature"><strong>#after_connect_before_scripts</strong>(&block : Proc(Mongo::Database, Nil))</a>
+        <a href="#after_connect_before_scripts(&block:Proc(Nil))-instance-method" class="signature"><strong>#after_connect_before_scripts</strong>(&block : Proc(Nil))</a>
         
           <div class="summary"><p>Pass a block that will get executed after the database has been successfully connected but before the scripts are run.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#before_connect(&block:Proc(Void))-instance-method" class="signature"><strong>#before_connect</strong>(&block : Proc(Void))</a>
+        <a href="#before_connect(&block:Proc(Nil))-instance-method" class="signature"><strong>#before_connect</strong>(&block : Proc(Nil))</a>
         
           <div class="summary"><p>Pass a block that will get executed before the server tries to connect to the database.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#connect(database_url:String=&quot;mongodb://localhost:27017&quot;,database_name:String=&quot;database&quot;,*,pool_size=5,reconnection_delay=5.seconds)-instance-method" class="signature"><strong>#connect</strong>(database_url : String = <span class="s">&quot;mongodb://localhost:27017&quot;</span>, database_name : String = <span class="s">&quot;database&quot;</span>, *, pool_size = <span class="n">5</span>, reconnection_delay = <span class="n">5</span>.seconds)</a>
+        <a href="#connect(database_url:String=&quot;mongodb://localhost:27017&quot;,database_name:String=&quot;database&quot;,*,max_pool_size=100,reconnection_delay=5.seconds)-instance-method" class="signature"><strong>#connect</strong>(database_url : String = <span class="s">&quot;mongodb://localhost:27017&quot;</span>, database_name : String = <span class="s">&quot;database&quot;</span>, *, max_pool_size = <span class="n">100</span>, reconnection_delay = <span class="n">5</span>.seconds)</a>
         
           <div class="summary"><p>Connects to a MongoDB database.</p></div>
         
@@ -284,19 +284,19 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="after_connect(&amp;block:Proc(Mongo::Database,Nil))-instance-method">
+    <div class="entry-detail" id="after_connect(&amp;block:Proc(Nil))-instance-method">
       <div class="signature">
         
-        def <strong>after_connect</strong>(&block : Proc(Mongo::Database, Nil))
+        def <strong>after_connect</strong>(&block : Proc(Nil))
 
-        <a class="method-permalink" href="#after_connect(&block:Proc(Mongo::Database,Nil))-instance-method">#</a>
+        <a class="method-permalink" href="#after_connect(&block:Proc(Nil))-instance-method">#</a>
       </div>
       
         <div class="doc">
           
           <p>Pass a block that will get executed after the database has been successfully connected and after the scripts are run.</p>
 
-<pre><code><span class="t">Moongoon</span><span class="t">::</span><span class="t">Database</span>.after_connect { <span class="o">|</span>db<span class="o">|</span>
+<pre><code><span class="t">Moongoon</span><span class="t">::</span><span class="t">Database</span>.after_connect {
   <span class="c"># ... #</span>
 }</code></pre>
         </div>
@@ -304,24 +304,24 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/637f2f14813194e0023dad0bf7dba7d4aecf3abd/src/database/database.cr#L171" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/8203770a1f7155e9aa257bdf579a5669e3183ee9/src/database/database.cr#L156" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="after_connect_before_scripts(&amp;block:Proc(Mongo::Database,Nil))-instance-method">
+    <div class="entry-detail" id="after_connect_before_scripts(&amp;block:Proc(Nil))-instance-method">
       <div class="signature">
         
-        def <strong>after_connect_before_scripts</strong>(&block : Proc(Mongo::Database, Nil))
+        def <strong>after_connect_before_scripts</strong>(&block : Proc(Nil))
 
-        <a class="method-permalink" href="#after_connect_before_scripts(&block:Proc(Mongo::Database,Nil))-instance-method">#</a>
+        <a class="method-permalink" href="#after_connect_before_scripts(&block:Proc(Nil))-instance-method">#</a>
       </div>
       
         <div class="doc">
           
           <p>Pass a block that will get executed after the database has been successfully connected but before the scripts are run.</p>
 
-<pre><code><span class="t">Moongoon</span><span class="t">::</span><span class="t">Database</span>.after_connect_before_scripts { <span class="o">|</span>db<span class="o">|</span>
+<pre><code><span class="t">Moongoon</span><span class="t">::</span><span class="t">Database</span>.after_connect_before_scripts {
   <span class="c"># ... #</span>
 }</code></pre>
         </div>
@@ -329,17 +329,17 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/637f2f14813194e0023dad0bf7dba7d4aecf3abd/src/database/database.cr#L160" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/8203770a1f7155e9aa257bdf579a5669e3183ee9/src/database/database.cr#L145" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="before_connect(&amp;block:Proc(Void))-instance-method">
+    <div class="entry-detail" id="before_connect(&amp;block:Proc(Nil))-instance-method">
       <div class="signature">
         
-        def <strong>before_connect</strong>(&block : Proc(Void))
+        def <strong>before_connect</strong>(&block : Proc(Nil))
 
-        <a class="method-permalink" href="#before_connect(&block:Proc(Void))-instance-method">#</a>
+        <a class="method-permalink" href="#before_connect(&block:Proc(Nil))-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -354,33 +354,33 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/637f2f14813194e0023dad0bf7dba7d4aecf3abd/src/database/database.cr#L149" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/8203770a1f7155e9aa257bdf579a5669e3183ee9/src/database/database.cr#L134" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="connect(database_url:String=&amp;quot;mongodb://localhost:27017&amp;quot;,database_name:String=&amp;quot;database&amp;quot;,*,pool_size=5,reconnection_delay=5.seconds)-instance-method">
+    <div class="entry-detail" id="connect(database_url:String=&amp;quot;mongodb://localhost:27017&amp;quot;,database_name:String=&amp;quot;database&amp;quot;,*,max_pool_size=100,reconnection_delay=5.seconds)-instance-method">
       <div class="signature">
         
-        def <strong>connect</strong>(database_url : String = <span class="s">&quot;mongodb://localhost:27017&quot;</span>, database_name : String = <span class="s">&quot;database&quot;</span>, *, pool_size = <span class="n">5</span>, reconnection_delay = <span class="n">5</span>.seconds)
+        def <strong>connect</strong>(database_url : String = <span class="s">&quot;mongodb://localhost:27017&quot;</span>, database_name : String = <span class="s">&quot;database&quot;</span>, *, max_pool_size = <span class="n">100</span>, reconnection_delay = <span class="n">5</span>.seconds)
 
-        <a class="method-permalink" href="#connect(database_url:String=&quot;mongodb://localhost:27017&quot;,database_name:String=&quot;database&quot;,*,pool_size=5,reconnection_delay=5.seconds)-instance-method">#</a>
+        <a class="method-permalink" href="#connect(database_url:String=&quot;mongodb://localhost:27017&quot;,database_name:String=&quot;database&quot;,*,max_pool_size=100,reconnection_delay=5.seconds)-instance-method">#</a>
       </div>
       
         <div class="doc">
           
           <p>Connects to a MongoDB database.</p>
 
-<p>Moongoon handles a pool of <em>pool_size</em> connections and will reconnect if the connection is lost after <em>reconnection_delay</em>.</p>
+<p>Moongoon handles a pool of <em>max_pool_size</em> connections and will reconnect if the connection is lost after <em>reconnection_delay</em>.</p>
 
 <pre><code><span class="c"># Arguments are all optional, their default values are the ones below:</span>
-<span class="t">Moongoon</span>.connect(<span class="s">&quot;mongodb://localhost:27017&quot;</span>, <span class="s">&quot;database&quot;</span>, pool_size: <span class="n">5</span>, reconnection_delay: <span class="n">5</span>.seconds)</code></pre>
+<span class="t">Moongoon</span>.connect(<span class="s">&quot;mongodb://localhost:27017&quot;</span>, <span class="s">&quot;database&quot;</span>, max_pool_size: <span class="n">100</span>, reconnection_delay: <span class="n">5</span>.seconds)</code></pre>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/637f2f14813194e0023dad0bf7dba7d4aecf3abd/src/database/database.cr#L91" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/8203770a1f7155e9aa257bdf579a5669e3183ee9/src/database/database.cr#L93" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -407,7 +407,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/637f2f14813194e0023dad0bf7dba7d4aecf3abd/src/database/database.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/8203770a1f7155e9aa257bdf579a5669e3183ee9/src/database/database.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -439,7 +439,7 @@ If <em>abort_if_locked</em> is true the block will not be executed and this meth
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/637f2f14813194e0023dad0bf7dba7d4aecf3abd/src/database/database.cr#L53" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/8203770a1f7155e9aa257bdf579a5669e3183ee9/src/database/database.cr#L55" target="_blank">View source</a>]
         
       </div>
     </div>

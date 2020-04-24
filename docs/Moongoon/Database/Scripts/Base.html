@@ -196,7 +196,7 @@
 
 <p><strong>Any class that inherits from <code><a href="../../../Moongoon/Database/Scripts/Base.html">Moongoon::Database::Scripts::Base</a></code> will be registered as a script.</strong></p>
 
-<p>Scripts are run when calling <code><a href="../../../Moongoon/Database.html#connect(database_url:String=&quot;mongodb://localhost:27017&quot;,database_name:String=&quot;database&quot;,*,pool_size=5,reconnection_delay=5.seconds)-instance-method">Moongoon::Database.connect</a></code> and after a successful database connection.
+<p>Scripts are run when calling <code><a href="../../../Moongoon/Database.html#connect(database_url:String=&quot;mongodb://localhost:27017&quot;,database_name:String=&quot;database&quot;,*,max_pool_size=100,reconnection_delay=5.seconds)-instance-method">Moongoon::Database.connect</a></code> and after a successful database connection.
 They are run a single time and the outcome is be written in the <code>scripts</code> collection.</p>
 
 <p>If multiple instances of the server are started simultaneously they will wait until all the scripts
@@ -225,7 +225,7 @@ are processed before resuming execution.</p>
   </h2>
   
     
-      <a href="https://github.com/elbywan/moongoon/blob/637f2f14813194e0023dad0bf7dba7d4aecf3abd/src/database/scripts.cr#L37" target="_blank">
+      <a href="https://github.com/elbywan/moongoon/blob/8203770a1f7155e9aa257bdf579a5669e3183ee9/src/database/scripts.cr#L37" target="_blank">
         database/scripts.cr
       </a>
     
@@ -318,7 +318,7 @@ if it has never been run against the target database before.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/637f2f14813194e0023dad0bf7dba7d4aecf3abd/src/database/scripts.cr#L40" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/8203770a1f7155e9aa257bdf579a5669e3183ee9/src/database/scripts.cr#L40" target="_blank">View source</a>]
         
       </div>
     </div>

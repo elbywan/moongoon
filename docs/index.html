@@ -247,11 +247,8 @@ user.remove</code></pre>
 <span class="t">Moongoon</span>.before_connect {
   puts <span class="s">&quot;Connecting…&quot;</span>
 }
-<span class="t">Moongoon</span>.after_connect { <span class="o">|</span>db<span class="o">|</span>
-  <span class="c"># *db* is a raw Mongo::Database instance.</span>
-  <span class="c"># Check `mongo.cr` code for more details:</span>
-  <span class="c"># https://github.com/elbywan/mongo.cr/blob/master/src/mongo/database.cr</span>
-  <span class="c"># …</span>
+<span class="t">Moongoon</span>.after_connect {
+  puts <span class="s">&quot;Connected!&quot;</span>
 }
 
 <span class="c"># … #</span>
@@ -263,7 +260,10 @@ user.remove</code></pre>
 
 <span class="c"># In case you need to perform a low level query:</span>
 <span class="t">Moongoon</span>.connection { <span class="o">|</span>db<span class="o">|</span>
-  <span class="c"># Low level collection methods: https://github.com/elbywan/mongo.cr/blob/master/src/mongo/collection.cr</span>
+  <span class="c"># &quot;db&quot; is a raw Mongo::Database instance.</span>
+  <span class="c"># Check `mongo.cr` code for more details:</span>
+  <span class="c"># https://github.com/elbywan/mongo.cr/blob/master/src/mongo/database.cr</span>
+  <span class="c"># https://github.com/elbywan/mongo.cr/blob/master/src/mongo/collection.cr</span>
   cursor <span class="o">=</span> db[<span class="s">&quot;my_collection&quot;</span>].find_indexes
   <span class="k">while</span> index <span class="o">=</span> cursor.<span class="k">next</span>
     pp index

@@ -76,8 +76,8 @@ user.remove
 
 [**API documentation**](https://elbywan.github.io/moongoon/Moongoon/Database.html)
 
-- [Initial connection](https://elbywan.github.io/moongoon/Moongoon/Database.html#connect(database_url:String=&quot;mongodb://localhost:27017&quot;,database_name:String=&quot;database&quot;,*,pool_size=5,reconnection_delay=5.seconds)-instance-method)
-- [Hooks](https://elbywan.github.io/moongoon/Moongoon/Database.html#after_connect(&block:Proc(Mongo::Database,Nil))-instance-method)
+- [Initial connection](https://elbywan.github.io/moongoon/Moongoon/Database.html#connect(database_url:String=&quot;mongodb://localhost:27017&quot;,database_name:String=&quot;database&quot;,*,max_pool_size=100,reconnection_delay=5.seconds)-instance-method)
+- [Hooks](https://elbywan.github.io/moongoon/Moongoon/Database.html#after_connect(&block:Proc(Nil))-instance-method)
 - [Low-level](https://elbywan.github.io/moongoon/Moongoon/Database.html#connection(&block:Proc(Mongo::Database,DatabaseResponse?)):BSON?-instance-method)
 
 ```crystal
