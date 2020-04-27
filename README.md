@@ -76,7 +76,7 @@ user.remove
 
 [**API documentation**](https://elbywan.github.io/moongoon/Moongoon/Database.html)
 
-- [Initial connection](https://elbywan.github.io/moongoon/Moongoon/Database.html#connect(database_url:String=&quot;mongodb://localhost:27017&quot;,database_name:String=&quot;database&quot;,*,max_pool_size=100,reconnection_delay=5.seconds)-instance-method)
+- [Initial connection](https://elbywan.github.io/moongoon/Moongoon/Database.html#connect(database_url%3AString%3D%26quot%3Bmongodb%3A%2F%2Flocalhost%3A27017%26quot%3B%2Cdatabase_name%3AString%3D%26quot%3Bdatabase%26quot%3B%2C*%2Cmax_pool_size%3D100%2Creconnection_delay%3D5.seconds)-instance-method)
 - [Hooks](https://elbywan.github.io/moongoon/Moongoon/Database.html#after_connect(&block:Proc(Nil))-instance-method)
 - [Low-level](https://elbywan.github.io/moongoon/Moongoon/Database.html#connection(&block:Proc(Mongo::Database,DatabaseResponse?)):BSON?-instance-method)
 
