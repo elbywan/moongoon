@@ -15,13 +15,13 @@ module Moongoon::Traits::Database::Versioning
     # **Arguments**
     #
     # - *id_field*: The name of the back reference field. By default, the name
-    # of the Class in pascal_case and with an "_id" suffix appended.
+    # of the struct in pascal_case and with an "_id" suffix appended.
     # - *auto*: if the auto flag is true, every insertion and update will be recorded.
     # Without the auto flag, a version will only be created programatically when calling
     # the `create_version` methods.
     #
     # ```
-    # class MyModel < Moongoon::Collection
+    # struct MyModel < Moongoon::Collection
     #   include Versioning
     #
     #   collection "my_model"
@@ -51,6 +51,7 @@ module Moongoon::Traits::Database::Versioning
             db["#{@@collection}_history"].insert(updated_data)
           end
         }
+        model
       }
 
       # After an update, copy the updated document in the history collection.
@@ -70,6 +71,7 @@ module Moongoon::Traits::Database::Versioning
             db["#{@@collection}_history"].insert(updated_data)
           end
         }
+        model
       }
 
       # After a static update, copy the document(s) in the history collection.

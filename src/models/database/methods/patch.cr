@@ -60,17 +60,18 @@ module Moongoon::Traits::Database::Methods::Patch
     # user.update_query({ name: {"$in": ["John", "Jane"]} })
     # ```
     def update_query(query, **args) : self
-      @@before_update.each { |cb| cb.call(self) }
+      model = self
+      @@before_update.each { |cb| cb.call(model).try{|m| model = m}  }
       ::Moongoon.connection { |db|
         db[@@collection].update(
           query.to_bson,
           **args,
-          update: {"$set" => self.to_bson}.to_bson,
+          update: {"$set" => model.to_bson}.to_bson,
           flags: LibMongoC::UpdateFlags::MULTI_UPDATE
         )
       }
-      @@after_update.each { |cb| cb.call(self) }
-      self
+      @@after_update.each { |cb| cb.call(model).try{|m| model = m} }
+      model
     end
 
     # Updates one document by id.

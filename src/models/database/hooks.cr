@@ -5,7 +5,7 @@ module Moongoon::Traits::Database::Hooks
   {% verbatim do %}
   macro inherited
     # :nodoc:
-    alias SelfCallback = Proc(self, Nil)
+    alias SelfCallback = Proc(self, self | Nil)
     # :nodoc:
     alias ClassCallback = Proc(BSON, Nil)
     # :nodoc:

@@ -1,6 +1,6 @@
 require "./spec_helper.cr"
 
-private class AggregatedModel < Moongoon::Collection
+private struct AggregatedModel < Moongoon::Collection
   collection "aggregated_models"
 
   property array : Array(Int32)?
@@ -28,10 +28,9 @@ private class AggregatedModel < Moongoon::Collection
   end
 
   def format
-    self.dup.tap { |copy|
-      copy.size = self.array.try(&.size)
-      copy.array = nil
-    }
+    self.size = self.array.try(&.size)
+    self.array = nil
+    self
   end
 end
 

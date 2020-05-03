@@ -2,23 +2,23 @@ require "json"
 
 require "./database"
 
-# Models are classes used to store data and interact with the database.
+# Models are structs used to store data and interact with the database.
 module Moongoon
-  # Base model class.
+  # Base model struct.
   #
   # Contains helpers to (de)serialize data to json format and bson format.
   #
   # ```
-  # class Models::MyModel < Moongoon::Document
+  # struct Models::MyModel < Moongoon::Document
   #   property name : String
   #   property age : Int32
   # end
   # ```
-  abstract class Document
+  abstract struct Document
     include JSON::Serializable
     include BSON::Serializable
 
-    # Creates a new instance of the class from variadic arguments.
+    # Creates a new instance of the struct from variadic arguments.
     #
     # ```
     # User.new first_name: "John", last_name: "Doe"
@@ -64,7 +64,7 @@ module Moongoon
   end
 
   # :nodoc:
-  abstract class MongoBase < Document
+  abstract struct MongoBase < Document
     # Sets the underlying MongoDB collection name.
     private macro collection(value)
       class_property collection : String = {{ value }}
@@ -84,14 +84,14 @@ module Moongoon
     end
   end
 
-  # Base model class for interacting with a MongoDB collection.
+  # Base model struct for interacting with a MongoDB collection.
   #
-  # This abstract class extends the `Moongoon::Base` class and enhances it with
+  # This abstract struct extends the `Moongoon::Base` struct and enhances it with
   # utility methods and macros used to query, update and configure an
   # underlying MongoDB collection.
   #
   # ```
-  # class MyModel < Moongoon::Collection
+  # struct MyModel < Moongoon::Collection
   #   collection "my_models"
   #
   #   index name: 1, options: {unique: true}
@@ -100,7 +100,7 @@ module Moongoon
   #   property age : Int32
   # end
   # ```
-  abstract class Collection < MongoBase
+  abstract struct Collection < MongoBase
     include ::Moongoon::Traits::Database::Full
 
     # Include this module to enable resource versioning.
@@ -120,35 +120,35 @@ module Moongoon
     end
   end
 
-  # A limited model class for interacting with a MongoDB collection.
+  # A limited model for interacting with a MongoDB collection.
   #
   # NOTE: Similar to `Moongoon::Collection` but can only be used to update a MongoDB collection.
   #
   # ```
-  # class Partial < Moongoon::Collection::UpdateOnly
+  # struct Partial < Moongoon::Collection::UpdateOnly
   #   collection "my_models"
   #
   #   property name : String?
   #   property age : Int32?
   # end
   # ```
-  abstract class Collection::UpdateOnly < MongoBase
+  abstract struct Collection::UpdateOnly < MongoBase
     include ::Moongoon::Traits::Database::Update
   end
 
-  # A limited model class for interacting with a MongoDB collection.
+  # A limited model for interacting with a MongoDB collection.
   #
   # NOTE: Similar to `Moongoon::Collection` but can only be used to query a MongoDB collection.
   #
   # ```
-  # class ReadOnly < Models::Collection::ReadOnly
+  # struct ReadOnly < Models::Collection::ReadOnly
   #   collection "my_models"
   #
   #   property name : String?
   #   property age : Int32?
   # end
   # ```
-  abstract class Collection::ReadOnly < MongoBase
+  abstract struct Collection::ReadOnly < MongoBase
     include ::Moongoon::Traits::Database::Read
   end
 end

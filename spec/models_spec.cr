@@ -1,6 +1,6 @@
 require "./spec_helper"
 
-private class Model < Moongoon::Collection
+private struct Model < Moongoon::Collection
   collection "models"
 
   property name : String

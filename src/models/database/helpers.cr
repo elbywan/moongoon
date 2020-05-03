@@ -51,7 +51,7 @@ module Moongoon::Traits::Database::Helpers
     # in sync when documents are added or removed from the other collection.
     #
     # ```
-    # class MyModel < Moongoon::Collection
+    # struct MyModel < Moongoon::Collection
     #   # The following references are not kept in sync because extra named arguments are not used.
     #
     #   # Reference a single user.
@@ -66,7 +66,7 @@ module Moongoon::Traits::Database::Helpers
     #
     # **Named arguments**
     #
-    # - *model*: The referenced model class.
+    # - *model*: The referenced model struct.
     # - *many*: Set to true to reference multiple documents.
     # - *delete_cascade*: If true, removes the referenced document(s) when this model is removed.
     # - *removal_sync*: If true, sets the reference to nil (if referencing a single document), or removes the id from the
@@ -75,10 +75,10 @@ module Moongoon::Traits::Database::Helpers
     # If set, when a referenced document gets inserted, this reference will be updated to add the newly created id.
     #
     # ```
-    # class MyModel < Moongoon::Collection
+    # struct MyModel < Moongoon::Collection
     #   # Now some examples that are using extra arguments.
     #
-    #   # References a single user from the User model class.
+    #   # References a single user from the User model structure.
     #   # The user has a field that links to back to this model (best_friend_id).
     #   # Whenever a user is inserted, the reference will get updated to point to the linked user.
     #   reference user_id, model: User, back_reference: best_friend_id

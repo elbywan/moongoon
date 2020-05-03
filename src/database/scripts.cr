@@ -1,13 +1,13 @@
 # This module handles database migration scripts.
 module Moongoon::Database::Scripts
-  SCRIPT_CLASSES = [] of Class
+  SCRIPT_STRUCTS = [] of Class
 
   # Scripts inherit from this class.
   #
   # ### Example
   #
   # ```
-  # class Moongoon::Database::Scripts::Test < Moongoon::Database::Scripts::Base
+  # struct Moongoon::Database::Scripts::Test < Moongoon::Database::Scripts::Base
   #   # Scripts run in ascending order.
   #   # Default order if not specified is 1.
   #   order Time.utc(2020, 3, 11).to_unix
@@ -27,21 +27,21 @@ module Moongoon::Database::Scripts
   #
   # ### Usage
   #
-  # **Any class that inherits from `Moongoon::Database::Scripts::Base` will be registered as a script.**
+  # **Any struct that inherits from `Moongoon::Database::Scripts::Base` will be registered as a script.**
   #
   # Scripts are run when calling `Moongoon::Database.connect` and after a successful database connection.
   # They are run a single time and the outcome is be written in the `scripts` collection.
   #
   # If multiple instances of the server are started simultaneously they will wait until all the scripts
   # are processed before resuming execution.
-  abstract class Base
+  abstract struct Base
     # Will be executed once after a successful database connection and
     # if it has never been run against the target database before.
     abstract def process(db : Mongo::Database)
 
     macro inherited
       {% verbatim do %}
-        {% Moongoon::Database::Scripts::SCRIPT_CLASSES << @type %}
+        {% Moongoon::Database::Scripts::SCRIPT_STRUCTS << @type %}
 
         class_property order : Int64 = 1
 
@@ -80,7 +80,7 @@ module Moongoon::Database::Scripts
   def self.process
     ::Moongoon::Log.info { "Processing database scripts…" }
     callbacks = [] of {Int64, Proc(Mongo::Database, Nil)}
-    {% for script in SCRIPT_CLASSES %}
+    {% for script in SCRIPT_STRUCTS %}
       callbacks << { {{script}}.order, ->{{script}}.process(Mongo::Database) }
     {% end %}
     callbacks.sort! { |a, b| a[0] <=> b[0] }

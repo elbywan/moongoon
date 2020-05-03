@@ -19,12 +19,13 @@ module Moongoon::Traits::Database::Methods::Delete
     # ```
     def remove(query = BSON.new, **args) : Nil
       id_check!
+      model = self
       full_query = query.to_bson.clone.concat(::Moongoon::Traits::Database::Internal.build_id_filter id.not_nil!)
-      @@before_remove.each { |cb| cb.call(self) }
+      @@before_remove.each { |cb| cb.call(model).try{|m| model = m} }
       ::Moongoon.connection { |db|
         db[@@collection].remove(full_query.to_bson, **args)
       }
-      @@after_remove.each { |cb| cb.call(self) }
+      @@after_remove.each { |cb| cb.call(model).try{|m| model = m} }
     end
 
     # Removes one or more documents from the collection.

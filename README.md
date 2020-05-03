@@ -26,7 +26,7 @@ Uses the [`mongo.cr`](https://github.com/elbywan/mongo.cr) library under the hoo
 require "moongoon"
 
 # A Model inherits from `Moongoon::Collection`
-class User < Moongoon::Collection
+struct User < Moongoon::Collection
   collection "users"
 
   index name: 1, age: 1, options: { unique: true }
@@ -36,7 +36,7 @@ class User < Moongoon::Collection
   property pets : Array(Pet)
 
   # Nested models inherit from `Moongoon::Document`
-  class Pet < Moongoon::Document
+  struct Pet < Moongoon::Document
     property pet_name : String
   end
 end
@@ -122,7 +122,7 @@ Moongoon.connection { |db|
 ```crystal
 require "moongoon"
 
-class MyModel < Moongoon::Collection
+struct MyModel < Moongoon::Collection
   collection "models"
 
   # Define indexes
@@ -182,7 +182,7 @@ puts MyModel.count
 # Requiring the script before connecting to the database should be all it takes to register it.
 #
 # Scripts are then processed automatically.
-class Moongoon::Database::Scripts::Test < Moongoon::Database::Scripts::Base
+struct Moongoon::Database::Scripts::Test < Moongoon::Database::Scripts::Base
   # Scripts run in ascending order.
   # Default order if not specified is 1.
   order Time.utc(2020, 3, 11).to_unix

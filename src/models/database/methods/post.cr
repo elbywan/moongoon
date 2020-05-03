@@ -11,13 +11,14 @@ module Moongoon::Traits::Database::Methods::Post
     # user.insert
     # ```
     def insert(**args) : self
-      self._id = BSON::ObjectId.new
-      @@before_insert.each { |cb| cb.call(self) }
+      model = self
+      model._id = BSON::ObjectId.new
+      @@before_insert.each { |cb| cb.call(model).try{|m| model = m} }
       ::Moongoon.connection { |db|
-        db[@@collection].insert(self.to_bson, **args)
+        db[@@collection].insert(model.to_bson, **args)
       }
-      @@after_insert.each { |cb| cb.call(self) }
-      self
+      @@after_insert.each { |cb| cb.call(model).try{|m| model = m} }
+      model
     end
 
     # Inserts multiple model instances in the database.
@@ -33,15 +34,18 @@ module Moongoon::Traits::Database::Methods::Post
       ::Moongoon.connection { |db|
         collection = db[@@collection]
         bo = collection.create_bulk_operation(**args)
-        self_array.each { |model|
+        self_array.map! { |model|
           model._id = BSON::ObjectId.new
-          @@before_insert.each { |cb| cb.call(model) }
+          @@before_insert.each { |cb| cb.call(model).try{|m| model = m} }
           bo.insert(model.to_bson)
+          model
         }
         bo.execute
-        self_array.each { |model|
-          @@after_insert.each { |cb| cb.call(model) }
+        self_array.map! { |model|
+          @@after_insert.each { |cb| cb.call(model).try{|m| model = m} }
+          model
         }
+        nil
       }
       self_array
     end
