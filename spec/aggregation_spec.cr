@@ -10,14 +10,14 @@ private class AggregatedModel < Moongoon::Collection
     {
       "$addFields": {
         size: {
-          "$size": "$array"
-        }
-      }
+          "$size": "$array",
+        },
+      },
     },
     {
       "$project": {
-        array: 0
-      }
+        array: 0,
+      },
     }
   )
 
@@ -38,8 +38,8 @@ end
 describe Moongoon::Collection do
   raw_models = [
     {array: [] of Int32},
-    {array: [1,2,3]},
-    {array: [1,2,3]},
+    {array: [1, 2, 3]},
+    {array: [1, 2, 3]},
     {array: [1]},
   ]
 
@@ -54,7 +54,7 @@ describe Moongoon::Collection do
       results = AggregatedModel.find({array: [] of Int32})
       results.size.should eq 1
 
-      results = AggregatedModel.find({array: [1,2,3]}, order_by: {"_id": 1})
+      results = AggregatedModel.find({array: [1, 2, 3]}, order_by: {"_id": 1})
       results.size.should eq 2
       results.to_json.should eq [models[1], models[2]].map(&.format).to_json
     end
@@ -65,14 +65,14 @@ describe Moongoon::Collection do
       expect_raises(Moongoon::Error::NotFound) {
         AggregatedModel.find!({name: "invalid name"})
       }
-      results = AggregatedModel.find!({array: [1,2,3]}, order_by: {"_id": 1})
+      results = AggregatedModel.find!({array: [1, 2, 3]}, order_by: {"_id": 1})
       results.to_json.should eq [models[1], models[2]].map(&.format).to_json
     end
 
     it "#self.find_one" do
       models = AggregatedModel.insert_models raw_models
 
-      result = AggregatedModel.find_one({array: [1,2,3]}, order_by: {"_id": 1})
+      result = AggregatedModel.find_one({array: [1, 2, 3]}, order_by: {"_id": 1})
       result.to_json.should eq models[1].format.to_json
     end
 
@@ -83,7 +83,7 @@ describe Moongoon::Collection do
         AggregatedModel.find_one!({name: "invalid name"})
       }
 
-      result = AggregatedModel.find_one!({array: [1,2,3]}, order_by: {"_id": -1})
+      result = AggregatedModel.find_one!({array: [1, 2, 3]}, order_by: {"_id": -1})
       result.to_json.should eq models[2].format.to_json
     end
 
@@ -126,7 +126,7 @@ describe Moongoon::Collection do
     it "#self.count" do
       AggregatedModel.insert_models raw_models
 
-      count = AggregatedModel.count({array: [1,2,3]})
+      count = AggregatedModel.count({array: [1, 2, 3]})
       count.should eq 2
     end
 

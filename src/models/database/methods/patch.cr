@@ -39,12 +39,12 @@ module Moongoon::Traits::Database::Methods::Patch
     # # Rename every person named "John" to "Igor".
     # User.update(query: { name: "John" }, update: { "$set": { name: "Igor" } })
     # ```
-    def self.update(query, update, flags : LibMongoC::UpdateFlags = LibMongoC::UpdateFlags::MULTI_UPDATE, **args) : Nil
-      @@before_update_static.each { |cb| cb.call(query.to_bson, update.to_bson) }
+    def self.update(query, update, flags : LibMongoC::UpdateFlags = LibMongoC::UpdateFlags::MULTI_UPDATE, no_hooks = false, **args) : Nil
+      self.before_update_static_call(query.to_bson, update.to_bson) unless no_hooks
       ::Moongoon.connection { |db|
         db[@@collection].update(query.to_bson, update.to_bson, flags, **args)
       }
-      @@after_update_static.each { |cb| cb.call(query.to_bson, update.to_bson) }
+      self.after_update_static_call(query.to_bson, update.to_bson) unless no_hooks
     end
 
     # Updates one or more documents with the data stored in `self`.
@@ -59,8 +59,8 @@ module Moongoon::Traits::Database::Methods::Patch
     # # Updates both documents
     # user.update_query({ name: {"$in": ["John", "Jane"]} })
     # ```
-    def update_query(query, flags : LibMongoC::UpdateFlags = LibMongoC::UpdateFlags::MULTI_UPDATE, **args) : self
-      @@before_update.each { |cb| cb.call(self) }
+    def update_query(query, flags : LibMongoC::UpdateFlags = LibMongoC::UpdateFlags::MULTI_UPDATE, no_hooks = false, **args) : self
+      self.class.before_update_call(self) unless no_hooks
       ::Moongoon.connection { |db|
         db[@@collection].update(
           query.to_bson,
@@ -69,7 +69,7 @@ module Moongoon::Traits::Database::Methods::Patch
           flags: flags
         )
       }
-      @@after_update.each { |cb| cb.call(self) }
+      self.class.after_update_call(self) unless no_hooks
       self
     end
 

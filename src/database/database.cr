@@ -15,7 +15,6 @@ module Moongoon::Database
     @@pool_size_lock : Channel(Nil) = Channel(Nil).new
   end
 
-
   # Retrieves a dabatase object that owns one of the connections in the pool.
   #
   # ```
