@@ -17,14 +17,14 @@ module Moongoon::Traits::Database::Methods::Delete
     # # Remove the user only if he/she is named John
     # user.remove({ name: "John" })
     # ```
-    def remove(query = BSON.new, **args) : Nil
+    def remove(query = BSON.new, no_hooks = false, **args) : Nil
       id_check!
       full_query = query.to_bson.clone.concat(::Moongoon::Traits::Database::Internal.build_id_filter id.not_nil!)
-      @@before_remove.each { |cb| cb.call(self) }
+      self.class.before_remove_call(self) unless no_hooks
       ::Moongoon.connection { |db|
         db[@@collection].remove(full_query.to_bson, **args)
       }
-      @@after_remove.each { |cb| cb.call(self) }
+      self.class.after_remove_call(self) unless no_hooks
     end
 
     # Removes one or more documents from the collection.
@@ -32,12 +32,12 @@ module Moongoon::Traits::Database::Methods::Delete
     # ```
     # User.remove({ name: { "$in": ["John", "Jane"] }})
     # ```
-    def self.remove(query = BSON.new, **args) : Nil
-      @@before_remove_static.each { |cb| cb.call(query.to_bson) }
+    def self.remove(query = BSON.new, no_hooks = false, **args) : Nil
+      self.before_remove_static_call(query.to_bson) unless no_hooks
       ::Moongoon.connection { |db|
         db[@@collection].remove(query.to_bson, **args)
       }
-      @@after_remove_static.each { |cb| cb.call(query.to_bson) }
+      self.after_remove_static_call(query.to_bson) unless no_hooks
     end
 
     # Removes one document by id.

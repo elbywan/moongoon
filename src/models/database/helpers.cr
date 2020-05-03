@@ -3,7 +3,6 @@ require "../../errors"
 # :nodoc:
 # A collection of helper methods and macros.
 module Moongoon::Traits::Database::Helpers
-
   module Indexes
     extend self
 
@@ -113,7 +112,7 @@ module Moongoon::Traits::Database::Helpers
 
         {% if delete_cascade %}
           # Cascades on deletion
-          @@before_remove << ->(model : self) {
+          BEFORE_REMOVE << ->(model : self) {
             model = find_by_id model.id.not_nil!
             ids_to_remove = model.try &.{{ field_key }}
             if ids_to_remove.try(&.size) || 0 > 0
@@ -121,7 +120,7 @@ module Moongoon::Traits::Database::Helpers
             end
           }
 
-          @@before_remove_static << ->(query : BSON) {
+          BEFORE_REMOVE_STATIC << ->(query : BSON) {
             models = find query
             ids_to_remove = [] of String
             models.each { |model|
@@ -141,7 +140,7 @@ module Moongoon::Traits::Database::Helpers
 
         {% if delete_cascade %}
           # Cascades on deletion
-          @@before_remove << ->(model : self) {
+          BEFORE_REMOVE << ->(model : self) {
             model = find_by_id model.id.not_nil!
             link = model.try &.{{ field_key }}
             if link
@@ -149,7 +148,7 @@ module Moongoon::Traits::Database::Helpers
             end
           }
 
-          @@before_remove_static << ->(query : BSON) {
+          BEFORE_REMOVE_STATIC << ->(query : BSON) {
             models = find query
             ids_to_remove = [] of String
             models.each { |model|

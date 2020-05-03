@@ -28,7 +28,7 @@ module Moongoon::Traits::Database::Hooks
             {% end %}
           {% end %}
 
-          @@{{ identifier.id }} = [] of {{ callback_type.id }}
+          {{ identifier.upcase.id }} = [] of {{ callback_type.id }}
 
           # Registers a hook that will be called **{{prefix.id}}** an **{{event.id}}** operation is performed on a `{{@type}}` instance.
           #
@@ -37,7 +37,13 @@ module Moongoon::Traits::Database::Hooks
           # {% if !suffix %}NOTE: This hook will trigger when the `Models::Collection#{{event.id}}` method is called.{% end %}
           # {% if suffix == "static" %}NOTE: This hook will trigger when the `Models::Collection.{{event.id}}` method is called.{% end %}
           def self.{{identifier.id}}(&cb : {{ callback_type.id }})
-            @@{{ identifier.id }}.unshift cb
+            {{ identifier.upcase.id }}.unshift cb
+          end
+
+          protected def self.{{identifier.id}}_call(*args)
+            {{ identifier.upcase.id }}.each { |cb|
+              cb.call(*args)
+            }
           end
         {% end %}
       {% end %}
