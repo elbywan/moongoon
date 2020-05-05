@@ -12,6 +12,9 @@ module Moongoon::Database::Scripts
   #   # Default order if not specified is 1.
   #   order Time.utc(2020, 3, 11).to_unix
   #
+  #   # Use :retry to retry the script next time moongoon connects if the script raises.
+  #   on_error :discard
+  #
   #   def process(db : Mongo::Database)
   #     # Dummy code that will add a ban flag for users that are called 'John'.
   #     # This code uses the `mongo.cr` driver shard syntax, but Models could
@@ -35,6 +38,18 @@ module Moongoon::Database::Scripts
   # If multiple instances of the server are started simultaneously they will wait until all the scripts
   # are processed before resuming execution.
   abstract class Base
+
+    # The order in which the scripts are run.
+    class_property order : Int64 = 1
+    # The action to perform on failure.
+    class_property on_error : OnError = :discard
+
+    # Action to perform when a script fails.
+    enum OnError
+      Discard
+      Retry
+    end
+
     # Will be executed once after a successful database connection and
     # if it has never been run against the target database before.
     abstract def process(db : Mongo::Database)
@@ -43,17 +58,23 @@ module Moongoon::Database::Scripts
       {% verbatim do %}
         {% Moongoon::Database::Scripts::SCRIPT_CLASSES << @type %}
 
-        class_property order : Int64 = 1
-
         private macro order(nb)
-          @@order = {{nb}}
+          @@order : Int64 = {{nb}}
+        end
+
+        private macro on_error(action)
+          @@on_error : OnError = {{action}}
         end
 
         # Process a registered script.
         def self.process(db : Mongo::Database)
           script_class_name = {{ @type.stringify }}
 
-          return if db["scripts"].find_one({ name: script_class_name }.to_bson)
+          script = db["scripts"].find_one({ name: script_class_name }.to_bson, fields: { retry: 1 }.to_bson)
+          if script
+            return unless script.try &.["retry"]?
+            db["scripts"].remove({ name: script_class_name }.to_bson)
+          end
 
           ::Moongoon::Log.info { "Running script '#{script_class_name}'" }
 
@@ -62,7 +83,10 @@ module Moongoon::Database::Scripts
           db["scripts"].update({ name: script_class_name }.to_bson, { "$set": { status: "done" }}.to_bson)
         rescue e
           ::Moongoon::Log.error { "Error while running script '#{script_class_name}'\n#{e.message.to_s}" }
-          db["scripts"].update({ name: script_class_name }.to_bson, { "$set": { status: "error", error: e.message.to_s }}.to_bson)
+          db["scripts"].update(
+            { name: script_class_name }.to_bson,
+            { "$set": { status: "error", error: e.message.to_s, retry: @@on_error == OnError::Retry }}.to_bson
+          )
         end
       {% end %}
     end
