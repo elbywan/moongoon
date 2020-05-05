@@ -39,10 +39,10 @@ module Moongoon::Traits::Database::Methods::Patch
     # # Rename every person named "John" to "Igor".
     # User.update(query: { name: "John" }, update: { "$set": { name: "Igor" } })
     # ```
-    def self.update(query, update, **args) : Nil
+    def self.update(query, update, flags : LibMongoC::UpdateFlags = LibMongoC::UpdateFlags::MULTI_UPDATE, **args) : Nil
       @@before_update_static.each { |cb| cb.call(query.to_bson, update.to_bson) }
       ::Moongoon.connection { |db|
-        db[@@collection].update(query.to_bson, update.to_bson, **args, flags: LibMongoC::UpdateFlags::MULTI_UPDATE)
+        db[@@collection].update(query.to_bson, update.to_bson, flags, **args)
       }
       @@after_update_static.each { |cb| cb.call(query.to_bson, update.to_bson) }
     end
@@ -59,14 +59,14 @@ module Moongoon::Traits::Database::Methods::Patch
     # # Updates both documents
     # user.update_query({ name: {"$in": ["John", "Jane"]} })
     # ```
-    def update_query(query, **args) : self
+    def update_query(query, flags : LibMongoC::UpdateFlags = LibMongoC::UpdateFlags::MULTI_UPDATE, **args) : self
       @@before_update.each { |cb| cb.call(self) }
       ::Moongoon.connection { |db|
         db[@@collection].update(
           query.to_bson,
           **args,
           update: {"$set" => self.to_bson}.to_bson,
-          flags: LibMongoC::UpdateFlags::MULTI_UPDATE
+          flags: flags
         )
       }
       @@after_update.each { |cb| cb.call(self) }
@@ -122,7 +122,7 @@ module Moongoon::Traits::Database::Methods::Patch
     # ```
     # User.find_and_modify({ name: "John" }, { "$set": { "name": "Igor" }})
     # ```
-    def self.find_and_modify(query, update, fields = BSON.new, **args)
+    def self.find_and_modify(query = BSON.new, update = nil, fields = BSON.new, **args)
       item = ::Moongoon.connection { |db|
         db[@@collection].find_and_modify(query.to_bson, update.to_bson, **args, fields: fields.to_bson)
       }
