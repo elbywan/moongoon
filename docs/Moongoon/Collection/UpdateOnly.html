@@ -219,7 +219,7 @@
   </h2>
   
     
-      <a href="https://github.com/elbywan/moongoon/blob/8203770a1f7155e9aa257bdf579a5669e3183ee9/src/models/models.cr#L135" target="_blank">
+      <a href="https://github.com/elbywan/moongoon/blob/df4da410b4089dfd67b9cb0103e6fee32c83ef36/src/models/models.cr#L135" target="_blank">
         models/models.cr
       </a>
     
@@ -262,7 +262,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#find_and_modify(query,update,fields=BSON.new,**args)-class-method" class="signature"><strong>.find_and_modify</strong>(query, update, fields = <span class="t">BSON</span>.<span class="k">new</span>, **args)</a>
+        <a href="#find_and_modify(query=BSON.new,update=nil,fields=BSON.new,**args)-class-method" class="signature"><strong>.find_and_modify</strong>(query = <span class="t">BSON</span>.<span class="k">new</span>, update = <span class="n">nil</span>, fields = <span class="t">BSON</span>.<span class="k">new</span>, **args)</a>
         
           <div class="summary"><p>Modifies and returns a single document.</p></div>
         
@@ -290,7 +290,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#update(query,update,**args):Nil-class-method" class="signature"><strong>.update</strong>(query, update, **args) : Nil</a>
+        <a href="#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):Nil-class-method" class="signature"><strong>.update</strong>(query, update, flags : LibMongoC::UpdateFlags = <span class="t">LibMongoC</span><span class="t">::</span><span class="t">UpdateFlags</span><span class="t">::</span><span class="t">MULTI_UPDATE</span>, **args) : Nil</a>
         
           <div class="summary"><p>Updates one or more documents in the underlying collection.</p></div>
         
@@ -332,7 +332,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#update_query(query,**args):self-instance-method" class="signature"><strong>#update_query</strong>(query, **args) : <span class="k">self</span></a>
+        <a href="#update_query(query,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):self-instance-method" class="signature"><strong>#update_query</strong>(query, flags : LibMongoC::UpdateFlags = <span class="t">LibMongoC</span><span class="t">::</span><span class="t">UpdateFlags</span><span class="t">::</span><span class="t">MULTI_UPDATE</span>, **args) : <span class="k">self</span></a>
         
           <div class="summary"><p>Updates one or more documents with the data stored in <code>self</code>.</p></div>
         
@@ -568,7 +568,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/8203770a1f7155e9aa257bdf579a5669e3183ee9/src/models/models.cr#L135" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/df4da410b4089dfd67b9cb0103e6fee32c83ef36/src/models/models.cr#L135" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -585,12 +585,12 @@
     Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="find_and_modify(query,update,fields=BSON.new,**args)-class-method">
+    <div class="entry-detail" id="find_and_modify(query=BSON.new,update=nil,fields=BSON.new,**args)-class-method">
       <div class="signature">
         
-        def self.<strong>find_and_modify</strong>(query, update, fields = <span class="t">BSON</span>.<span class="k">new</span>, **args)
+        def self.<strong>find_and_modify</strong>(query = <span class="t">BSON</span>.<span class="k">new</span>, update = <span class="n">nil</span>, fields = <span class="t">BSON</span>.<span class="k">new</span>, **args)
 
-        <a class="method-permalink" href="#find_and_modify(query,update,fields=BSON.new,**args)-class-method">#</a>
+        <a class="method-permalink" href="#find_and_modify(query=BSON.new,update=nil,fields=BSON.new,**args)-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -620,7 +620,7 @@
           
           <p>Modifies and returns a single document.</p>
 
-<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,**args):Nil-class-method">.update</a></code>, except that a matching on the <code>_id</code>
+<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):Nil-class-method">.update</a></code>, except that a matching on the <code>_id</code>
 field will be added to the <em>query</em> argument.</p>
         </div>
       
@@ -694,12 +694,12 @@ index field: <span class="n">1</span>, options: {unique: <span class="n">true</s
       </div>
     </div>
   
-    <div class="entry-detail" id="update(query,update,**args):Nil-class-method">
+    <div class="entry-detail" id="update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):Nil-class-method">
       <div class="signature">
         
-        def self.<strong>update</strong>(query, update, **args) : Nil
+        def self.<strong>update</strong>(query, update, flags : LibMongoC::UpdateFlags = <span class="t">LibMongoC</span><span class="t">::</span><span class="t">UpdateFlags</span><span class="t">::</span><span class="t">MULTI_UPDATE</span>, **args) : Nil
 
-        <a class="method-permalink" href="#update(query,update,**args):Nil-class-method">#</a>
+        <a class="method-permalink" href="#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):Nil-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -732,7 +732,7 @@ for more information about the syntax.</p>
           
           <p>Updates one document by id.</p>
 
-<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,**args):Nil-class-method">.update</a></code>, except that a matching on the <code>_id</code>
+<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):Nil-class-method">.update</a></code>, except that a matching on the <code>_id</code>
 field will be added to the <em>query</em> argument.</p>
 
 <pre><code>id <span class="o">=</span> <span class="n">123456</span>
@@ -762,7 +762,7 @@ field will be added to the <em>query</em> argument.</p>
           
           <p>Updates one or multiple documents by their ids.</p>
 
-<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,**args):Nil-class-method">.update</a></code>, except that a matching on multiple <code>_id</code>
+<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):Nil-class-method">.update</a></code>, except that a matching on multiple <code>_id</code>
 fields will be added to the <em>query</em> argument.</p>
 
 <pre><code>ids <span class="o">=</span> [<span class="s">&quot;1&quot;</span>, <span class="s">&quot;2&quot;</span>, <span class="s">&quot;3&quot;</span>]
@@ -828,12 +828,12 @@ pp <span class="t">User</span>.find_by_id(user.id.not_nil!).to_json
       </div>
     </div>
   
-    <div class="entry-detail" id="update_query(query,**args):self-instance-method">
+    <div class="entry-detail" id="update_query(query,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):self-instance-method">
       <div class="signature">
         
-        def <strong>update_query</strong>(query, **args) : <span class="k">self</span>
+        def <strong>update_query</strong>(query, flags : LibMongoC::UpdateFlags = <span class="t">LibMongoC</span><span class="t">::</span><span class="t">UpdateFlags</span><span class="t">::</span><span class="t">MULTI_UPDATE</span>, **args) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#update_query(query,**args):self-instance-method">#</a>
+        <a class="method-permalink" href="#update_query(query,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):self-instance-method">#</a>
       </div>
       
         <div class="doc">
