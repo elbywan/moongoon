@@ -19,6 +19,7 @@ module Moongoon::Traits::Database::Versioning
     # - *auto*: if the auto flag is true, every insertion and update will be recorded.
     # Without the auto flag, a version will only be created programatically when calling
     # the `create_version` methods.
+    # - *transform*: a block that will be executed to transform the BSON document before insertion.
     #
     # ```
     # class MyModel < Moongoon::Collection
@@ -28,16 +29,21 @@ module Moongoon::Traits::Database::Versioning
     #   versioning auto: true
     # end
     # ```
-    macro versioning(id_field = nil, auto = false)
+    macro versioning(id_field = nil, auto = false, &transform)
       {% if id_field %}
         @@versioning_id_field = {{id_field.stringify}}
+      {% end %}
+
+      {% if transform %}
+        @@versioning_transform = Proc(BSON, BSON, BSON).new {{transform}}
       {% end %}
 
       {% if auto %}
       # After an insertion, copy the document in the history collection.
       after_insert { |model|
-        ::Moongoon.connection { |db|
-          data = db[@@collection].find_one({_id: model._id.not_nil!}.to_bson)
+        data = ::Moongoon.connection { |db|
+          db[@@collection].find_one({_id: model._id.not_nil!}.to_bson)
+        }
           if data
             updated_data = BSON.new
             data.each_key { |k|
@@ -47,16 +53,19 @@ module Moongoon::Traits::Database::Versioning
                 updated_data[k] = data[k]
               end
             }
+          @@versioning_transform.try { |cb| updated_data = cb.call(updated_data, data) }
             updated_data[@@versioning_id_field] = data["_id"].to_s
+          ::Moongoon.connection { |db|
             db["#{@@collection}_history"].insert(updated_data)
-          end
         }
+        end
       }
 
       # After an update, copy the updated document in the history collection.
       after_update { |model|
-        ::Moongoon.connection { |db|
-          data = db[@@collection].find_one({_id: model._id.not_nil!}.to_bson)
+        data = ::Moongoon.connection { |db|
+         db[@@collection].find_one({_id: model._id.not_nil!}.to_bson)
+        }
           if data
             updated_data = BSON.new
             data.each_key { |k|
@@ -66,10 +75,12 @@ module Moongoon::Traits::Database::Versioning
                 updated_data[k] = data[k]
               end
             }
+          @@versioning_transform.try { |cb| cb.call(updated_data, data) }
             updated_data[@@versioning_id_field] = data["_id"].to_s
+          ::Moongoon.connection { |db|
             db["#{@@collection}_history"].insert(updated_data)
-          end
         }
+        end
       }
 
       # After a static update, copy the document(s) in the history collection.
@@ -89,6 +100,7 @@ module Moongoon::Traits::Database::Versioning
                 updated_datum[k] = datum[k]
               end
             }
+            @@versioning_transform.try { |cb| cb.call(updated_datum, data) }
             updated_datum[@@versioning_id_field] = datum["_id"].to_s
             bo.insert(updated_datum)
           end
@@ -350,14 +362,16 @@ module Moongoon::Traits::Database::Versioning
 
         if original
           oid = BSON::ObjectId.new
+          original_bson = original.to_bson
           original_oid = original._id
           version_id = oid.to_s
           original._id = oid
           original = yield original
-          bson_data = original.to_bson
-          bson_data[@@versioning_id_field] = original_oid.to_s
+          version_bson = original.to_bson
+          @@versioning_transform.try { |cb| version_bson = cb.call(version_bson, original_bson) }
+          version_bson[@@versioning_id_field] = original_oid.to_s
           ::Moongoon.connection { |db|
-            db["#{@@collection}_history"].insert(bson_data)
+            db["#{@@collection}_history"].insert(version_bson)
           }
         end
 
