@@ -20,7 +20,7 @@ module Moongoon::Traits::Database::Methods::Patch
     # user.name = "Igor"
     # # Prevents updating users that are locked.
     # user.update({ locked: false })
-    # pp User.find_by_id(user.id.not_nil!).to_json
+    # pp User.find_by_id(user.id!).to_json
     # # => { "id": "some id", "name": "John", "locked": true }
     # ```
     def update(query = BSON.new, **args) : self

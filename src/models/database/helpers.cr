@@ -113,7 +113,7 @@ module Moongoon::Traits::Database::Helpers
         {% if delete_cascade %}
           # Cascades on deletion
           BEFORE_REMOVE << ->(model : self) {
-            model = find_by_id model.id.not_nil!
+            model = find_by_id model.id!
             ids_to_remove = model.try &.{{ field_key }}
             if ids_to_remove.try(&.size) || 0 > 0
               {{ model_class }}.remove_by_ids ids_to_remove.not_nil!
@@ -141,7 +141,7 @@ module Moongoon::Traits::Database::Helpers
         {% if delete_cascade %}
           # Cascades on deletion
           BEFORE_REMOVE << ->(model : self) {
-            model = find_by_id model.id.not_nil!
+            model = find_by_id model.id!
             link = model.try &.{{ field_key }}
             if link
               {{ model_class }}.remove_by_id link
@@ -177,7 +177,7 @@ module Moongoon::Traits::Database::Helpers
             {{ field_key }}: removed_model.id
           })
           if items.size > 0
-            ids = items.map &.id.not_nil!
+            ids = items.map &.id!
             self.update_by_ids(ids, {
               {{ mongo_op }}: {
                 {{ field_key }}: removed_model.id
@@ -187,14 +187,14 @@ module Moongoon::Traits::Database::Helpers
         }
         {{ model_class }}.before_remove_static { |query|
           removed_models = {{ model_class }}.find query
-          removed_models_ids = removed_models.map &.id.not_nil!
+          removed_models_ids = removed_models.map &.id!
           items = self.find({
             {{ field_key }}: {
               "$in": removed_models_ids
             }
           })
           if items.size > 0
-            ids = items.map &.id.not_nil!
+            ids = items.map &.id!
             self.update_by_ids(ids, {
               {{ mongo_op }}: {
                 {{ field_key }}: {
@@ -229,8 +229,8 @@ module Moongoon::Traits::Database::Helpers
     #
     # **Note that the order of fields do matter.**
     #
-    # Name of the index is generated automatically from the collection and the field names
-    # to avoid conflicts on server startup.
+    # The name of the index is generated automatically from the collection and keys name
+    # to avoid conflicts.
     #
     # Please have a look at the [MongoDB documentation](https://docs.mongodb.com/v3.6/reference/command/createIndexes/)
     # for more details about index creation and the list of available index options.

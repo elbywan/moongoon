@@ -157,7 +157,7 @@ MyModel.clear
 model = MyModel.new(
   name: "hello"
 ).insert
-model_id = model.id.not_nil!
+model_id = model.id!
 
 puts MyModel.find_by_id(model_id).to_json
 # => "{\"_id\":\"5ea052ce85ed2a2e1d0c87a2\",\"name\":\"hello\",\"count\":3}"

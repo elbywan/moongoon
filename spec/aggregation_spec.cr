@@ -90,7 +90,7 @@ describe Moongoon::Collection do
     it "#self.find_by_id" do
       models = AggregatedModel.insert_models raw_models
 
-      result = AggregatedModel.find_by_id(models[2].id.not_nil!)
+      result = AggregatedModel.find_by_id(models[2].id!)
       result.to_json.should eq models[2].format.to_json
     end
 
@@ -101,14 +101,14 @@ describe Moongoon::Collection do
         AggregatedModel.find_by_id!("invalid id")
       }
 
-      result = AggregatedModel.find_by_id!(models[2].id.not_nil!)
+      result = AggregatedModel.find_by_id!(models[2].id!)
       result.to_json.should eq models[2].format.to_json
     end
 
     it "#self.find_by_ids" do
       models = AggregatedModel.insert_models raw_models
 
-      results = AggregatedModel.find_by_ids([models[1], models[2]].map(&.id.not_nil!), order_by: {_id: 1})
+      results = AggregatedModel.find_by_ids([models[1], models[2]].map(&.id!), order_by: {_id: 1})
       results.to_json.should eq [models[1], models[2]].map(&.format).to_json
     end
 
@@ -119,7 +119,7 @@ describe Moongoon::Collection do
         AggregatedModel.find_by_ids!(["invalid id"])
       }
 
-      results = AggregatedModel.find_by_ids!([models[1], models[2]].map(&.id.not_nil!), order_by: {_id: 1})
+      results = AggregatedModel.find_by_ids!([models[1], models[2]].map(&.id!), order_by: {_id: 1})
       results.to_json.should eq [models[1], models[2]].map(&.format).to_json
     end
 
@@ -147,7 +147,7 @@ describe Moongoon::Collection do
         AggregatedModel.exist_by_id!("invalid id")
       }
 
-      AggregatedModel.exist_by_id!(models[0].id.not_nil!).should be_true
+      AggregatedModel.exist_by_id!(models[0].id!).should be_true
     end
   end
 end

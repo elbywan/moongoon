@@ -82,6 +82,13 @@ module Moongoon
     def id
       self._id.to_s if self._id
     end
+
+    # Converts the MongoDB bson _id to a String representation.
+    #
+    # Will raise if _id is nil.
+    def id!
+      self._id.to_s.not_nil!
+    end
   end
 
   # Base model class for interacting with a MongoDB collection.
@@ -112,6 +119,7 @@ module Moongoon
 
         {% base_versioning_name = @type.stringify.split("::")[-1].underscore %}
         @@versioning_id_field = {{(base_versioning_name + "_id")}}
+        @@versioning_transform : Proc(BSON, BSON, BSON)? = nil
 
         index({
           @@versioning_id_field => 1

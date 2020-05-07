@@ -44,20 +44,20 @@ module Moongoon::Traits::Database::Versioning
         data = ::Moongoon.connection { |db|
           db[@@collection].find_one({_id: model._id.not_nil!}.to_bson)
         }
-          if data
-            updated_data = BSON.new
-            data.each_key { |k|
-              if k == "_id"
-                updated_data[k] = BSON::ObjectId.new
-              else
-                updated_data[k] = data[k]
-              end
-            }
+        if data
+          updated_data = BSON.new
+          data.each_key { |k|
+            if k == "_id"
+              updated_data[k] = BSON::ObjectId.new
+            else
+              updated_data[k] = data[k]
+            end
+          }
           @@versioning_transform.try { |cb| updated_data = cb.call(updated_data, data) }
-            updated_data[@@versioning_id_field] = data["_id"].to_s
+          updated_data[@@versioning_id_field] = data["_id"].to_s
           ::Moongoon.connection { |db|
             db["#{@@collection}_history"].insert(updated_data)
-        }
+          }
         end
       }
 
@@ -66,20 +66,20 @@ module Moongoon::Traits::Database::Versioning
         data = ::Moongoon.connection { |db|
          db[@@collection].find_one({_id: model._id.not_nil!}.to_bson)
         }
-          if data
-            updated_data = BSON.new
-            data.each_key { |k|
-              if k == "_id"
-                updated_data[k] = BSON::ObjectId.new
-              else
-                updated_data[k] = data[k]
-              end
-            }
+        if data
+          updated_data = BSON.new
+          data.each_key { |k|
+            if k == "_id"
+              updated_data[k] = BSON::ObjectId.new
+            else
+              updated_data[k] = data[k]
+            end
+          }
           @@versioning_transform.try { |cb| cb.call(updated_data, data) }
-            updated_data[@@versioning_id_field] = data["_id"].to_s
+          updated_data[@@versioning_id_field] = data["_id"].to_s
           ::Moongoon.connection { |db|
             db["#{@@collection}_history"].insert(updated_data)
-        }
+          }
         end
       }
 
@@ -161,7 +161,7 @@ module Moongoon::Traits::Database::Versioning
     # user.create_version
     # ```
     def create_version : String?
-      {{@type}}.create_version_by_id(self.id.not_nil!)
+      {{@type}}.create_version_by_id(self.id!)
     end
 
     # Saves a copy with changes of the model in the history collection and
@@ -178,7 +178,7 @@ module Moongoon::Traits::Database::Versioning
     # }
     # ```
     def create_version(&block : self -> self) : String?
-      {{@type}}.create_version_by_id self.id.not_nil!, &block
+      {{@type}}.create_version_by_id self.id!, &block
     end
 
     module Static
