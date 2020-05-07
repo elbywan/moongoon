@@ -229,7 +229,7 @@
   </h2>
   
     
-      <a href="https://github.com/elbywan/moongoon/blob/3847b557e1291064a274b3336404f69adc4cda68/src/models/models.cr#L135" target="_blank">
+      <a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L145" target="_blank">
         models/models.cr
       </a>
     
@@ -300,7 +300,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):Nil-class-method" class="signature"><strong>.update</strong>(query, update, flags : LibMongoC::UpdateFlags = <span class="t">LibMongoC</span><span class="t">::</span><span class="t">UpdateFlags</span><span class="t">::</span><span class="t">MULTI_UPDATE</span>, **args) : Nil</a>
+        <a href="#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,no_hooks=false,**args):Nil-class-method" class="signature"><strong>.update</strong>(query, update, flags : LibMongoC::UpdateFlags = <span class="t">LibMongoC</span><span class="t">::</span><span class="t">UpdateFlags</span><span class="t">::</span><span class="t">MULTI_UPDATE</span>, no_hooks = <span class="n">false</span>, **args) : Nil</a>
         
           <div class="summary"><p>Updates one or more documents in the underlying collection.</p></div>
         
@@ -335,6 +335,41 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
+        <a href="#_id:BSON::ObjectId?-instance-method" class="signature"><strong>#_id</strong> : BSON::ObjectId?</a>
+        
+          <div class="summary"><p>The MongoDB internal id representation.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#_id=(_id:BSON::ObjectId?)-instance-method" class="signature"><strong>#_id=</strong>(_id : BSON::ObjectId?)</a>
+        
+          <div class="summary"><p>The MongoDB internal id representation.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#id-instance-method" class="signature"><strong>#id</strong></a>
+        
+          <div class="summary"><p>Converts the MongoDB bson _id to a String representation.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#id!-instance-method" class="signature"><strong>#id!</strong></a>
+        
+          <div class="summary"><p>Converts the MongoDB bson _id to a String representation.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#id=(id:String)-instance-method" class="signature"><strong>#id=</strong>(id : String)</a>
+        
+          <div class="summary"><p>Set a MongoDB bson _id from a String.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#update(query=BSON.new,**args):self-instance-method" class="signature"><strong>#update</strong>(query = <span class="t">BSON</span>.<span class="k">new</span>, **args) : <span class="k">self</span></a>
         
           <div class="summary"><p>Updates a document having the same id as this model with the data stored in <code>self</code>.</p></div>
@@ -342,7 +377,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#update_query(query,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):self-instance-method" class="signature"><strong>#update_query</strong>(query, flags : LibMongoC::UpdateFlags = <span class="t">LibMongoC</span><span class="t">::</span><span class="t">UpdateFlags</span><span class="t">::</span><span class="t">MULTI_UPDATE</span>, **args) : <span class="k">self</span></a>
+        <a href="#update_query(query,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,no_hooks=false,**args):self-instance-method" class="signature"><strong>#update_query</strong>(query, flags : LibMongoC::UpdateFlags = <span class="t">LibMongoC</span><span class="t">::</span><span class="t">UpdateFlags</span><span class="t">::</span><span class="t">MULTI_UPDATE</span>, no_hooks = <span class="n">false</span>, **args) : <span class="k">self</span></a>
         
           <div class="summary"><p>Updates one or more documents with the data stored in <code>self</code>.</p></div>
         
@@ -426,30 +461,6 @@
 
   
     
-
-  <h3>Instance methods inherited from class <code>Moongoon::MongoBase</code></h3>
-  
-  
-    <a href="../../Moongoon/MongoBase.html#_id:BSON::ObjectId?-instance-method" class="tooltip">
-      <span>_id : BSON::ObjectId?</span>
-    _id</a>, 
-    
-  
-    <a href="../../Moongoon/MongoBase.html#_id=(_id:BSON::ObjectId?)-instance-method" class="tooltip">
-      <span>_id=(_id : BSON::ObjectId?)</span>
-    _id=</a>, 
-    
-  
-    <a href="../../Moongoon/MongoBase.html#id-instance-method" class="tooltip">
-      <span>id</span>
-    id</a>, 
-    
-  
-    <a href="../../Moongoon/MongoBase.html#id=(id:String)-instance-method" class="tooltip">
-      <span>id=(id : String)</span>
-    id=</a>
-    
-  
 
 
     
@@ -578,7 +589,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/3847b557e1291064a274b3336404f69adc4cda68/src/models/models.cr#L135" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L145" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -630,7 +641,7 @@
           
           <p>Modifies and returns a single document.</p>
 
-<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):Nil-class-method">.update</a></code>, except that a matching on the <code>_id</code>
+<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,no_hooks=false,**args):Nil-class-method">.update</a></code>, except that a matching on the <code><a href="../../Moongoon/Collection/UpdateOnly.html#_id:BSON::ObjectId?-instance-method">#_id</a></code>
 field will be added to the <em>query</em> argument.</p>
         </div>
       
@@ -654,8 +665,8 @@ field will be added to the <em>query</em> argument.</p>
 
 <p><strong>Note that the order of fields do matter.</strong></p>
 
-<p>Name of the index is generated automatically from the collection and the field names
-to avoid conflicts on server startup.</p>
+<p>The name of the index is generated automatically from the collection and keys name
+to avoid conflicts.</p>
 
 <p>Please have a look at the <a href="https://docs.mongodb.com/v3.6/reference/command/createIndexes/" target="_blank">MongoDB documentation</a>
 for more details about index creation and the list of available index options.</p>
@@ -686,8 +697,8 @@ index field: <span class="n">1</span>, options: {unique: <span class="n">true</s
 
 <p><strong>Note that the order of fields do matter.</strong></p>
 
-<p>Name of the index is generated automatically from the collection and the field names
-to avoid conflicts on server startup.</p>
+<p>The name of the index is generated automatically from the collection and keys name
+to avoid conflicts.</p>
 
 <p>Please have a look at the <a href="https://docs.mongodb.com/v3.6/reference/command/createIndexes/" target="_blank">MongoDB documentation</a>
 for more details about index creation and the list of available index options.</p>
@@ -704,12 +715,12 @@ index field: <span class="n">1</span>, options: {unique: <span class="n">true</s
       </div>
     </div>
   
-    <div class="entry-detail" id="update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):Nil-class-method">
+    <div class="entry-detail" id="update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,no_hooks=false,**args):Nil-class-method">
       <div class="signature">
         
-        def self.<strong>update</strong>(query, update, flags : LibMongoC::UpdateFlags = <span class="t">LibMongoC</span><span class="t">::</span><span class="t">UpdateFlags</span><span class="t">::</span><span class="t">MULTI_UPDATE</span>, **args) : Nil
+        def self.<strong>update</strong>(query, update, flags : LibMongoC::UpdateFlags = <span class="t">LibMongoC</span><span class="t">::</span><span class="t">UpdateFlags</span><span class="t">::</span><span class="t">MULTI_UPDATE</span>, no_hooks = <span class="n">false</span>, **args) : Nil
 
-        <a class="method-permalink" href="#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):Nil-class-method">#</a>
+        <a class="method-permalink" href="#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,no_hooks=false,**args):Nil-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -742,7 +753,7 @@ for more information about the syntax.</p>
           
           <p>Updates one document by id.</p>
 
-<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):Nil-class-method">.update</a></code>, except that a matching on the <code>_id</code>
+<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,no_hooks=false,**args):Nil-class-method">.update</a></code>, except that a matching on the <code><a href="../../Moongoon/Collection/UpdateOnly.html#_id:BSON::ObjectId?-instance-method">#_id</a></code>
 field will be added to the <em>query</em> argument.</p>
 
 <pre><code>id <span class="o">=</span> <span class="n">123456</span>
@@ -772,7 +783,7 @@ field will be added to the <em>query</em> argument.</p>
           
           <p>Updates one or multiple documents by their ids.</p>
 
-<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):Nil-class-method">.update</a></code>, except that a matching on multiple <code>_id</code>
+<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,no_hooks=false,**args):Nil-class-method">.update</a></code>, except that a matching on multiple <code><a href="../../Moongoon/Collection/UpdateOnly.html#_id:BSON::ObjectId?-instance-method">#_id</a></code>
 fields will be added to the <em>query</em> argument.</p>
 
 <pre><code>ids <span class="o">=</span> [<span class="s">&quot;1&quot;</span>, <span class="s">&quot;2&quot;</span>, <span class="s">&quot;3&quot;</span>]
@@ -802,6 +813,109 @@ fields will be added to the <em>query</em> argument.</p>
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="_id:BSON::ObjectId?-instance-method">
+      <div class="signature">
+        
+        def <strong>_id</strong> : BSON::ObjectId?
+
+        <a class="method-permalink" href="#_id:BSON::ObjectId?-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>The MongoDB internal id representation.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="_id=(_id:BSON::ObjectId?)-instance-method">
+      <div class="signature">
+        
+        def <strong>_id=</strong>(_id : BSON::ObjectId?)
+
+        <a class="method-permalink" href="#_id=(_id:BSON::ObjectId?)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>The MongoDB internal id representation.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="id-instance-method">
+      <div class="signature">
+        
+        def <strong>id</strong>
+
+        <a class="method-permalink" href="#id-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Converts the MongoDB bson _id to a String representation.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L145" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="id!-instance-method">
+      <div class="signature">
+        
+        def <strong>id!</strong>
+
+        <a class="method-permalink" href="#id!-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Converts the MongoDB bson _id to a String representation.</p>
+
+<p>Will raise if _id is nil.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L145" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="id=(id:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>id=</strong>(id : String)
+
+        <a class="method-permalink" href="#id=(id:String)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Set a MongoDB bson _id from a String.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L145" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="update(query=BSON.new,**args):self-instance-method">
       <div class="signature">
         
@@ -814,7 +928,7 @@ fields will be added to the <em>query</em> argument.</p>
           
           <p>Updates a document having the same id as this model with the data stored in <code>self</code>.</p>
 
-<p>Tries to match on <code>self.id</code>.</p>
+<p>Tries to match on <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#id-instance-method">.id</a></code>.</p>
 
 <pre><code>user <span class="o">=</span> <span class="t">User</span>.<span class="k">new</span> name: <span class="s">&quot;John&quot;</span>, age: <span class="n">25</span>
 user.insert
@@ -828,7 +942,7 @@ user.insert
 user.name <span class="o">=</span> <span class="s">&quot;Igor&quot;</span>
 <span class="c"># Prevents updating users that are locked.</span>
 user.update({ locked: <span class="n">false</span> })
-pp <span class="t">User</span>.find_by_id(user.id.not_nil!).to_json
+pp <span class="t">User</span>.find_by_id(user.id!).to_json
 <span class="c"># =&gt; { &quot;id&quot;: &quot;some id&quot;, &quot;name&quot;: &quot;John&quot;, &quot;locked&quot;: true }</span></code></pre>
         </div>
       
@@ -838,12 +952,12 @@ pp <span class="t">User</span>.find_by_id(user.id.not_nil!).to_json
       </div>
     </div>
   
-    <div class="entry-detail" id="update_query(query,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):self-instance-method">
+    <div class="entry-detail" id="update_query(query,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,no_hooks=false,**args):self-instance-method">
       <div class="signature">
         
-        def <strong>update_query</strong>(query, flags : LibMongoC::UpdateFlags = <span class="t">LibMongoC</span><span class="t">::</span><span class="t">UpdateFlags</span><span class="t">::</span><span class="t">MULTI_UPDATE</span>, **args) : <span class="k">self</span>
+        def <strong>update_query</strong>(query, flags : LibMongoC::UpdateFlags = <span class="t">LibMongoC</span><span class="t">::</span><span class="t">UpdateFlags</span><span class="t">::</span><span class="t">MULTI_UPDATE</span>, no_hooks = <span class="n">false</span>, **args) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#update_query(query,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,**args):self-instance-method">#</a>
+        <a class="method-permalink" href="#update_query(query,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,no_hooks=false,**args):self-instance-method">#</a>
       </div>
       
         <div class="doc">

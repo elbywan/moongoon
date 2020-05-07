@@ -65,29 +65,31 @@ module Moongoon
 
   # :nodoc:
   abstract class MongoBase < Document
-    # Sets the underlying MongoDB collection name.
-    private macro collection(value)
-      class_property collection : String = {{ value }}
-    end
+    macro inherited
+      # Sets the underlying MongoDB collection name.
+      private macro collection(value)
+        class_property collection : String = \{{ value }}
+      end
 
-    # The MongoDB internal id representation.
-    property _id : BSON::ObjectId?
+      # The MongoDB internal id representation.
+      property _id : BSON::ObjectId?
 
-    # Set a MongoDB bson _id from a String.
-    def id=(id : String)
-      self._id = BSON::ObjectId.new id
-    end
+      # Set a MongoDB bson _id from a String.
+      def id=(id : String)
+        self._id = BSON::ObjectId.new id
+      end
 
-    # Converts the MongoDB bson _id to a String representation.
-    def id
-      self._id.to_s if self._id
-    end
+      # Converts the MongoDB bson _id to a String representation.
+      def id
+        self._id.to_s if self._id
+      end
 
-    # Converts the MongoDB bson _id to a String representation.
-    #
-    # Will raise if _id is nil.
-    def id!
-      self._id.to_s.not_nil!
+      # Converts the MongoDB bson _id to a String representation.
+      #
+      # Will raise if _id is nil.
+      def id!
+        self._id.to_s.not_nil!
+      end
     end
   end
 

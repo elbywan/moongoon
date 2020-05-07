@@ -229,7 +229,7 @@
   </h2>
   
     
-      <a href="https://github.com/elbywan/moongoon/blob/3847b557e1291064a274b3336404f69adc4cda68/src/models/models.cr#L151" target="_blank">
+      <a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L161" target="_blank">
         models/models.cr
       </a>
     
@@ -387,6 +387,53 @@
 
 
 
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#_id:BSON::ObjectId?-instance-method" class="signature"><strong>#_id</strong> : BSON::ObjectId?</a>
+        
+          <div class="summary"><p>The MongoDB internal id representation.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#_id=(_id:BSON::ObjectId?)-instance-method" class="signature"><strong>#_id=</strong>(_id : BSON::ObjectId?)</a>
+        
+          <div class="summary"><p>The MongoDB internal id representation.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#id-instance-method" class="signature"><strong>#id</strong></a>
+        
+          <div class="summary"><p>Converts the MongoDB bson _id to a String representation.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#id!-instance-method" class="signature"><strong>#id!</strong></a>
+        
+          <div class="summary"><p>Converts the MongoDB bson _id to a String representation.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#id=(id:String)-instance-method" class="signature"><strong>#id=</strong>(id : String)</a>
+        
+          <div class="summary"><p>Set a MongoDB bson _id from a String.</p></div>
+        
+      </li>
+    
+  </ul>
+
 
 
   <h2>
@@ -463,30 +510,6 @@
 
   
     
-
-  <h3>Instance methods inherited from class <code>Moongoon::MongoBase</code></h3>
-  
-  
-    <a href="../../Moongoon/MongoBase.html#_id:BSON::ObjectId?-instance-method" class="tooltip">
-      <span>_id : BSON::ObjectId?</span>
-    _id</a>, 
-    
-  
-    <a href="../../Moongoon/MongoBase.html#_id=(_id:BSON::ObjectId?)-instance-method" class="tooltip">
-      <span>_id=(_id : BSON::ObjectId?)</span>
-    _id=</a>, 
-    
-  
-    <a href="../../Moongoon/MongoBase.html#id-instance-method" class="tooltip">
-      <span>id</span>
-    id</a>, 
-    
-  
-    <a href="../../Moongoon/MongoBase.html#id=(id:String)-instance-method" class="tooltip">
-      <span>id=(id : String)</span>
-    id=</a>
-    
-  
 
 
     
@@ -711,7 +734,7 @@ driver documentation and code.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/3847b557e1291064a274b3336404f69adc4cda68/src/models/models.cr#L151" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L161" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1003,8 +1026,8 @@ users <span class="o">=</span> <span class="t">User</span>.find_by_ids(ids)</cod
 
 <p><strong>Note that the order of fields do matter.</strong></p>
 
-<p>Name of the index is generated automatically from the collection and the field names
-to avoid conflicts on server startup.</p>
+<p>The name of the index is generated automatically from the collection and keys name
+to avoid conflicts.</p>
 
 <p>Please have a look at the <a href="https://docs.mongodb.com/v3.6/reference/command/createIndexes/" target="_blank">MongoDB documentation</a>
 for more details about index creation and the list of available index options.</p>
@@ -1035,8 +1058,8 @@ index field: <span class="n">1</span>, options: {unique: <span class="n">true</s
 
 <p><strong>Note that the order of fields do matter.</strong></p>
 
-<p>Name of the index is generated automatically from the collection and the field names
-to avoid conflicts on server startup.</p>
+<p>The name of the index is generated automatically from the collection and keys name
+to avoid conflicts.</p>
 
 <p>Please have a look at the <a href="https://docs.mongodb.com/v3.6/reference/command/createIndexes/" target="_blank">MongoDB documentation</a>
 for more details about index creation and the list of available index options.</p>
@@ -1055,6 +1078,119 @@ index field: <span class="n">1</span>, options: {unique: <span class="n">true</s
   
 
 
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="_id:BSON::ObjectId?-instance-method">
+      <div class="signature">
+        
+        def <strong>_id</strong> : BSON::ObjectId?
+
+        <a class="method-permalink" href="#_id:BSON::ObjectId?-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>The MongoDB internal id representation.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="_id=(_id:BSON::ObjectId?)-instance-method">
+      <div class="signature">
+        
+        def <strong>_id=</strong>(_id : BSON::ObjectId?)
+
+        <a class="method-permalink" href="#_id=(_id:BSON::ObjectId?)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>The MongoDB internal id representation.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="id-instance-method">
+      <div class="signature">
+        
+        def <strong>id</strong>
+
+        <a class="method-permalink" href="#id-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Converts the MongoDB bson _id to a String representation.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L161" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="id!-instance-method">
+      <div class="signature">
+        
+        def <strong>id!</strong>
+
+        <a class="method-permalink" href="#id!-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Converts the MongoDB bson _id to a String representation.</p>
+
+<p>Will raise if _id is nil.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L161" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="id=(id:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>id=</strong>(id : String)
+
+        <a class="method-permalink" href="#id=(id:String)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Set a MongoDB bson _id from a String.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L161" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
 
 
 

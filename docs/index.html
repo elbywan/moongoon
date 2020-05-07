@@ -327,7 +327,7 @@ user.remove</code></pre>
 model <span class="o">=</span> <span class="t">MyModel</span>.<span class="k">new</span>(
   name: <span class="s">&quot;hello&quot;</span>
 ).insert
-model_id <span class="o">=</span> model.id.not_nil!
+model_id <span class="o">=</span> model.id!
 
 puts <span class="t">MyModel</span>.find_by_id(model_id).to_json
 <span class="c"># =&gt; &quot;{\&quot;_id\&quot;:\&quot;5ea052ce85ed2a2e1d0c87a2\&quot;,\&quot;name\&quot;:\&quot;hello\&quot;,\&quot;count\&quot;:3}&quot;</span>

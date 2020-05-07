@@ -210,7 +210,7 @@
   </h2>
   
     
-      <a href="https://github.com/elbywan/moongoon/blob/3847b557e1291064a274b3336404f69adc4cda68/src/models/models.cr#L107" target="_blank">
+      <a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L116" target="_blank">
         models/models.cr
       </a>
     
@@ -285,7 +285,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#versioning(id_field=nil,auto=false)-macro" class="signature"><strong>versioning</strong>(id_field = <span class="n">nil</span>, auto = <span class="n">false</span>)</a>
+        <a href="#versioning(id_field=nil,auto=false,&transform)-macro" class="signature"><strong>versioning</strong>(id_field = <span class="n">nil</span>, auto = <span class="n">false</span>, &transform)</a>
         
           <div class="summary"><p>Enable versioning for this collection.</p></div>
         
@@ -344,7 +344,7 @@ nb_of_versions <span class="o">=</span> <span class="t">User</span>.count_versio
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/3847b557e1291064a274b3336404f69adc4cda68/src/models/models.cr#L108" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L117" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -371,7 +371,7 @@ user.create_version</code></pre>
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/3847b557e1291064a274b3336404f69adc4cda68/src/models/models.cr#L108" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L117" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -402,7 +402,7 @@ user.create_version <span class="o">&amp;</span>.tap { <span class="o">|</span>d
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/3847b557e1291064a274b3336404f69adc4cda68/src/models/models.cr#L108" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L117" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -430,7 +430,7 @@ versions <span class="o">=</span> user.find_all_versions</code></pre>
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/3847b557e1291064a274b3336404f69adc4cda68/src/models/models.cr#L108" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L117" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -457,7 +457,7 @@ user_version <span class="o">=</span> user.find_latest_version</code></pre>
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/3847b557e1291064a274b3336404f69adc4cda68/src/models/models.cr#L108" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L117" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -474,12 +474,12 @@ user_version <span class="o">=</span> user.find_latest_version</code></pre>
     Macro Detail
   </h2>
   
-    <div class="entry-detail" id="versioning(id_field=nil,auto=false)-macro">
+    <div class="entry-detail" id="versioning(id_field=nil,auto=false,&amp;transform)-macro">
       <div class="signature">
         
-        macro <strong>versioning</strong>(id_field = <span class="n">nil</span>, auto = <span class="n">false</span>)
+        macro <strong>versioning</strong>(id_field = <span class="n">nil</span>, auto = <span class="n">false</span>, &transform)
 
-        <a class="method-permalink" href="#versioning(id_field=nil,auto=false)-macro">#</a>
+        <a class="method-permalink" href="#versioning(id_field=nil,auto=false,&transform)-macro">#</a>
       </div>
       
         <div class="doc">
@@ -499,7 +499,7 @@ reference to the base document id.</p>
 <ul><li><em>id_field</em>: The name of the back reference field. By default, the name
 of the Class in pascal_case and with an "_id" suffix appended.</li><li><em>auto</em>: if the auto flag is true, every insertion and update will be recorded.
 Without the auto flag, a version will only be created programatically when calling
-the <code><a href="../../Moongoon/Collection/Versioning.html#create_version:String?-instance-method">#create_version</a></code> methods.</li></ul>
+the <code><a href="../../Moongoon/Collection/Versioning.html#create_version:String?-instance-method">#create_version</a></code> methods.</li><li><em>transform</em>: a block that will be executed to transform the BSON document before insertion.</li></ul>
 
 <pre><code><span class="k">class</span> <span class="t">MyModel</span> <span class="o">&lt;</span> <span class="t">Moongoon</span><span class="t">::</span><span class="t">Collection</span>
   <span class="k">include</span> <span class="t">Versioning</span>
@@ -512,7 +512,7 @@ the <code><a href="../../Moongoon/Collection/Versioning.html#create_version:Stri
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/3847b557e1291064a274b3336404f69adc4cda68/src/models/models.cr#L108" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L117" target="_blank">View source</a>]
         
       </div>
     </div>
