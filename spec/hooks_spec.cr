@@ -152,11 +152,27 @@ describe Moongoon::Collection do
         last_query.should eq query.to_bson
         HooksAfter.find_by_id!(model.id!).index.should eq 1
       end
+      it "before_remove_static (find_and_modify)" do
+        model = HooksAfter.new(index: 0)
+        model.insert(no_hooks: true)
+        query = {index: 0}
+        HooksBefore.find_and_modify(query, remove: true)
+        last_query.should eq query.to_bson
+        HooksAfter.find_by_id!(model.id!).index.should eq 1
+      end
       it "after_remove_static" do
         model = HooksAfter.new(index: 0)
         model.insert(no_hooks: true)
         query = {index: 1}
         HooksAfter.remove(query)
+        last_query.should eq query.to_bson
+        HooksAfter.find_by_id!(model.id!).index.should eq 1
+      end
+      it "after_remove_static" do
+        model = HooksAfter.new(index: 0)
+        model.insert(no_hooks: true)
+        query = {index: 1}
+        HooksAfter.find_and_modify(query, remove: true)
         last_query.should eq query.to_bson
         HooksAfter.find_by_id!(model.id!).index.should eq 1
       end

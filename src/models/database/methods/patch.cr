@@ -121,12 +121,14 @@ module Moongoon::Traits::Database::Methods::Patch
     # ```
     # User.find_and_modify({ name: "John" }, { "$set": { "name": "Igor" }})
     # ```
-    def self.find_and_modify(query = BSON.new, update = nil, fields = BSON.new, no_hooks = false, **args)
-      self.before_update_static_call(query.to_bson, update.to_bson) unless no_hooks
+    def self.find_and_modify(query = BSON.new, update = nil, fields = BSON.new, no_hooks = false, remove = false, **args)
+      self.before_update_static_call(query.to_bson, update.to_bson) if update unless no_hooks
+      self.before_remove_static_call(query.to_bson) if remove unless no_hooks
       item = ::Moongoon.connection { |db|
-        db[@@collection].find_and_modify(query.to_bson, update.to_bson, **args, fields: fields.to_bson)
+        db[@@collection].find_and_modify(query.to_bson, update.to_bson, **args, remove: remove, fields: fields.to_bson)
       }
-      self.after_update_static_call(query.to_bson, update.to_bson) unless no_hooks
+      self.after_update_static_call(query.to_bson, update.to_bson) if update unless no_hooks
+      self.after_remove_static_call(query.to_bson) if remove unless no_hooks
       self.new item if item
     end
 
