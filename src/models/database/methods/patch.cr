@@ -40,11 +40,12 @@ module Moongoon::Traits::Database::Methods::Patch
     # User.update(query: { name: "John" }, update: { "$set": { name: "Igor" } })
     # ```
     def self.update(query, update, flags : LibMongoC::UpdateFlags = LibMongoC::UpdateFlags::MULTI_UPDATE, no_hooks = false, **args) : Nil
-      self.before_update_static_call(query.to_bson, update.to_bson) unless no_hooks
+      bson_query, update_query = query.to_bson, update.to_bson
+      self.before_update_static_call(bson_query, update_query) unless no_hooks
       ::Moongoon.connection { |db|
-        db[@@collection].update(query.to_bson, update.to_bson, flags, **args)
+        db[@@collection].update(bson_query, update_query, flags, **args)
       }
-      self.after_update_static_call(query.to_bson, update.to_bson) unless no_hooks
+      self.after_update_static_call(bson_query, update_query) unless no_hooks
     end
 
     # Updates one or more documents with the data stored in `self`.
@@ -122,13 +123,14 @@ module Moongoon::Traits::Database::Methods::Patch
     # User.find_and_modify({ name: "John" }, { "$set": { "name": "Igor" }})
     # ```
     def self.find_and_modify(query = BSON.new, update = nil, fields = BSON.new, no_hooks = false, remove = false, **args)
-      self.before_update_static_call(query.to_bson, update.to_bson) if update unless no_hooks
-      self.before_remove_static_call(query.to_bson) if remove unless no_hooks
+      bson_query, update_query = query.to_bson, update.to_bson
+      self.before_update_static_call(bson_query, update_query) if update_query unless no_hooks
+      self.before_remove_static_call(bson_query) if remove unless no_hooks
       item = ::Moongoon.connection { |db|
-        db[@@collection].find_and_modify(query.to_bson, update.to_bson, **args, remove: remove, fields: fields.to_bson)
+        db[@@collection].find_and_modify(bson_query, update_query, **args, remove: remove, fields: fields.to_bson)
       }
-      self.after_update_static_call(query.to_bson, update.to_bson) if update unless no_hooks
-      self.after_remove_static_call(query.to_bson) if remove unless no_hooks
+      self.after_update_static_call(bson_query, update_query) if update_query unless no_hooks
+      self.after_remove_static_call(bson_query) if remove unless no_hooks
       self.new item if item
     end
 
