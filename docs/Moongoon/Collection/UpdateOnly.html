@@ -229,7 +229,7 @@
   </h2>
   
     
-      <a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L145" target="_blank">
+      <a href="https://github.com/elbywan/moongoon/blob/093f15d3c781d33ca2d39606a9c4ff1f73545af5/src/models/models.cr#L145" target="_blank">
         models/models.cr
       </a>
     
@@ -272,14 +272,14 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#find_and_modify(query=BSON.new,update=nil,fields=BSON.new,**args)-class-method" class="signature"><strong>.find_and_modify</strong>(query = <span class="t">BSON</span>.<span class="k">new</span>, update = <span class="n">nil</span>, fields = <span class="t">BSON</span>.<span class="k">new</span>, **args)</a>
+        <a href="#find_and_modify(query=BSON.new,update=nil,fields=BSON.new,no_hooks=false,**args)-class-method" class="signature"><strong>.find_and_modify</strong>(query = <span class="t">BSON</span>.<span class="k">new</span>, update = <span class="n">nil</span>, fields = <span class="t">BSON</span>.<span class="k">new</span>, no_hooks = <span class="n">false</span>, **args)</a>
         
           <div class="summary"><p>Modifies and returns a single document.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#find_and_modify_by_id(id,update,query=BSON.new,**args)-class-method" class="signature"><strong>.find_and_modify_by_id</strong>(id, update, query = <span class="t">BSON</span>.<span class="k">new</span>, **args)</a>
+        <a href="#find_and_modify_by_id(id,update,query=BSON.new,no_hooks=false,**args)-class-method" class="signature"><strong>.find_and_modify_by_id</strong>(id, update, query = <span class="t">BSON</span>.<span class="k">new</span>, no_hooks = <span class="n">false</span>, **args)</a>
         
           <div class="summary"><p>Modifies and returns a single document.</p></div>
         
@@ -589,7 +589,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L145" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/093f15d3c781d33ca2d39606a9c4ff1f73545af5/src/models/models.cr#L145" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -606,12 +606,12 @@
     Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="find_and_modify(query=BSON.new,update=nil,fields=BSON.new,**args)-class-method">
+    <div class="entry-detail" id="find_and_modify(query=BSON.new,update=nil,fields=BSON.new,no_hooks=false,**args)-class-method">
       <div class="signature">
         
-        def self.<strong>find_and_modify</strong>(query = <span class="t">BSON</span>.<span class="k">new</span>, update = <span class="n">nil</span>, fields = <span class="t">BSON</span>.<span class="k">new</span>, **args)
+        def self.<strong>find_and_modify</strong>(query = <span class="t">BSON</span>.<span class="k">new</span>, update = <span class="n">nil</span>, fields = <span class="t">BSON</span>.<span class="k">new</span>, no_hooks = <span class="n">false</span>, **args)
 
-        <a class="method-permalink" href="#find_and_modify(query=BSON.new,update=nil,fields=BSON.new,**args)-class-method">#</a>
+        <a class="method-permalink" href="#find_and_modify(query=BSON.new,update=nil,fields=BSON.new,no_hooks=false,**args)-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -629,20 +629,19 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="find_and_modify_by_id(id,update,query=BSON.new,**args)-class-method">
+    <div class="entry-detail" id="find_and_modify_by_id(id,update,query=BSON.new,no_hooks=false,**args)-class-method">
       <div class="signature">
         
-        def self.<strong>find_and_modify_by_id</strong>(id, update, query = <span class="t">BSON</span>.<span class="k">new</span>, **args)
+        def self.<strong>find_and_modify_by_id</strong>(id, update, query = <span class="t">BSON</span>.<span class="k">new</span>, no_hooks = <span class="n">false</span>, **args)
 
-        <a class="method-permalink" href="#find_and_modify_by_id(id,update,query=BSON.new,**args)-class-method">#</a>
+        <a class="method-permalink" href="#find_and_modify_by_id(id,update,query=BSON.new,no_hooks=false,**args)-class-method">#</a>
       </div>
       
         <div class="doc">
           
           <p>Modifies and returns a single document.</p>
 
-<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,no_hooks=false,**args):Nil-class-method">.update</a></code>, except that a matching on the <code><a href="../../Moongoon/Collection/UpdateOnly.html#_id:BSON::ObjectId?-instance-method">#_id</a></code>
-field will be added to the <em>query</em> argument.</p>
+<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#find_and_modify(query=BSON.new,update=nil,fields=BSON.new,no_hooks=false,**args)-class-method">.find_and_modify</a></code>, except that a matching on the <code><a href="../../Moongoon/Collection/UpdateOnly.html#_id:BSON::ObjectId?-instance-method">#_id</a></code> field will be added to the <em>query</em> argument.</p>
         </div>
       
       <br/>
@@ -753,8 +752,7 @@ for more information about the syntax.</p>
           
           <p>Updates one document by id.</p>
 
-<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,no_hooks=false,**args):Nil-class-method">.update</a></code>, except that a matching on the <code><a href="../../Moongoon/Collection/UpdateOnly.html#_id:BSON::ObjectId?-instance-method">#_id</a></code>
-field will be added to the <em>query</em> argument.</p>
+<p>Similar to <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#update(query,update,flags:LibMongoC::UpdateFlags=LibMongoC::UpdateFlags::MULTI_UPDATE,no_hooks=false,**args):Nil-class-method">.update</a></code>, except that a matching on the <code><a href="../../Moongoon/Collection/UpdateOnly.html#_id:BSON::ObjectId?-instance-method">#_id</a></code> field will be added to the <em>query</em> argument.</p>
 
 <pre><code>id <span class="o">=</span> <span class="n">123456</span>
 <span class="t">User</span>.update_by_id(id, { <span class="s">&quot;$set&quot;</span>: { <span class="s">&quot;name&quot;</span>: <span class="s">&quot;Igor&quot;</span> }})</code></pre>
@@ -867,7 +865,7 @@ fields will be added to the <em>query</em> argument.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L145" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/093f15d3c781d33ca2d39606a9c4ff1f73545af5/src/models/models.cr#L145" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -890,7 +888,7 @@ fields will be added to the <em>query</em> argument.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L145" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/093f15d3c781d33ca2d39606a9c4ff1f73545af5/src/models/models.cr#L145" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -911,7 +909,7 @@ fields will be added to the <em>query</em> argument.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/elbywan/moongoon/blob/8ac243582ed817dc4c99ddd16b584e1f81ce282f/src/models/models.cr#L145" target="_blank">View source</a>]
+          [<a href="https://github.com/elbywan/moongoon/blob/093f15d3c781d33ca2d39606a9c4ff1f73545af5/src/models/models.cr#L145" target="_blank">View source</a>]
         
       </div>
     </div>
