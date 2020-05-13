@@ -75,8 +75,7 @@ module Moongoon::Traits::Database::Methods::Patch
 
     # Updates one document by id.
     #
-    # Similar to `self.update`, except that a matching on the `_id`
-    # field will be added to the *query* argument.
+    # Similar to `self.update`, except that a matching on the `_id` field will be added to the *query* argument.
     #
     # ```
     # id = 123456
@@ -122,18 +121,19 @@ module Moongoon::Traits::Database::Methods::Patch
     # ```
     # User.find_and_modify({ name: "John" }, { "$set": { "name": "Igor" }})
     # ```
-    def self.find_and_modify(query = BSON.new, update = nil, fields = BSON.new, **args)
+    def self.find_and_modify(query = BSON.new, update = nil, fields = BSON.new, no_hooks = false, **args)
+      self.before_update_static_call(query.to_bson, update.to_bson) unless no_hooks
       item = ::Moongoon.connection { |db|
         db[@@collection].find_and_modify(query.to_bson, update.to_bson, **args, fields: fields.to_bson)
       }
+      self.after_update_static_call(query.to_bson, update.to_bson) unless no_hooks
       self.new item if item
     end
 
     # Modifies and returns a single document.
     #
-    # Similar to `self.update`, except that a matching on the `_id`
-    # field will be added to the *query* argument.
-    def self.find_and_modify_by_id(id, update, query = BSON.new, **args)
+    # Similar to `self.find_and_modify`, except that a matching on the `_id` field will be added to the *query* argument.
+    def self.find_and_modify_by_id(id, update, query = BSON.new, no_hooks = false, **args)
       full_query = query.to_bson.clone.concat(::Moongoon::Traits::Database::Internal.build_id_filter id)
       find_and_modify(full_query, update, **args)
     end
