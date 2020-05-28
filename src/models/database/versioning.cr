@@ -292,9 +292,9 @@ module Moongoon::Traits::Database::Versioning
       # user_id = "123456"
       # versions = User.find_all_versions user_id
       # ```
-      def find_all_versions(id, fields = nil, skip = 0, limit = 0, **args) : Array(self)
+      def find_all_versions(id, query = BSON.new, fields = nil, skip = 0, limit = 0, **args) : Array(self)
         items = [] of self
-        query = {@@versioning_id_field => id}
+        query = query.to_bson.clone.concat({@@versioning_id_field => id}.to_bson)
         order_by = {_id: -1}
         if stages = @@aggregation_stages
           pipeline = ::Moongoon::Traits::Database::Internal.format_aggregation(query, stages, fields, order_by, skip, limit)
