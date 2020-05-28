@@ -323,10 +323,10 @@ module Moongoon::Traits::Database::Versioning
       # user_id = "123456"
       # User.count_versions user_id
       # ```
-      def count_versions(id, **args) : Int32 | Int64
+      def count_versions(id, query = BSON.new, **args) : Int32 | Int64
         count = 0
         ::Moongoon.connection { |db|
-          query = {@@versioning_id_field => id}
+          query = query.to_bson.clone.concat({@@versioning_id_field => id}.to_bson)
           count = db["#{@@collection}_history"].count(query.to_bson, **args)
           nil
         }
