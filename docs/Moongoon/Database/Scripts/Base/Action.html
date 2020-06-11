@@ -5,8 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.33.0">
 
-<link href="../../css/style.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="../../js/doc.js"></script>
+<link href="../../../../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../../../js/doc.js"></script>
 
 <svg class="hidden">
   <symbol id="octicon-link" viewBox="0 0 16 16">
@@ -15,9 +15,9 @@
 </svg>
 
   <meta id="repository-name" content="">
-  <title>Moongoon::Database::Scripts - </title>
+  <title>Moongoon::Database::Scripts::Base::Action - </title>
   <script type="text/javascript">
-    CrystalDoc.base_path = "../../";
+    CrystalDoc.base_path = "../../../../";
   </script>
 </head>
 <body>
@@ -29,7 +29,7 @@
     </div>
 
     <div class="repository-links">
-      <a href="../../index.html">README</a>
+      <a href="../../../../index.html">README</a>
     </div>
   </div>
 
@@ -41,32 +41,32 @@
     <ul>
   
   <li class="parent open current" data-id="/Moongoon" data-name="moongoon">
-      <a href="../../Moongoon.html">Moongoon</a>
+      <a href="../../../../Moongoon.html">Moongoon</a>
       
         <ul>
   
   <li class="parent " data-id="/Moongoon/Collection" data-name="moongoon::collection">
-      <a href="../../Moongoon/Collection.html">Collection</a>
+      <a href="../../../../Moongoon/Collection.html">Collection</a>
       
         <ul>
   
   <li class=" " data-id="/Moongoon/Collection/ReadOnly" data-name="moongoon::collection::readonly">
-      <a href="../../Moongoon/Collection/ReadOnly.html">ReadOnly</a>
+      <a href="../../../../Moongoon/Collection/ReadOnly.html">ReadOnly</a>
       
     </li>
   
   <li class=" " data-id="/Moongoon/Collection/UpdateOnly" data-name="moongoon::collection::updateonly">
-      <a href="../../Moongoon/Collection/UpdateOnly.html">UpdateOnly</a>
+      <a href="../../../../Moongoon/Collection/UpdateOnly.html">UpdateOnly</a>
       
     </li>
   
   <li class="parent " data-id="/Moongoon/Collection/Versioning" data-name="moongoon::collection::versioning">
-      <a href="../../Moongoon/Collection/Versioning.html">Versioning</a>
+      <a href="../../../../Moongoon/Collection/Versioning.html">Versioning</a>
       
         <ul>
   
   <li class=" " data-id="/Moongoon/Collection/Versioning/Static" data-name="moongoon::collection::versioning::static">
-      <a href="../../Moongoon/Collection/Versioning/Static.html">Static</a>
+      <a href="../../../../Moongoon/Collection/Versioning/Static.html">Static</a>
       
     </li>
   
@@ -81,22 +81,22 @@
     </li>
   
   <li class="parent open current" data-id="/Moongoon/Database" data-name="moongoon::database">
-      <a href="../../Moongoon/Database.html">Database</a>
+      <a href="../../../../Moongoon/Database.html">Database</a>
       
         <ul>
   
   <li class="parent open current" data-id="/Moongoon/Database/Scripts" data-name="moongoon::database::scripts">
-      <a href="../../Moongoon/Database/Scripts.html">Scripts</a>
+      <a href="../../../../Moongoon/Database/Scripts.html">Scripts</a>
       
         <ul>
   
-  <li class="parent " data-id="/Moongoon/Database/Scripts/Base" data-name="moongoon::database::scripts::base">
-      <a href="../../Moongoon/Database/Scripts/Base.html">Base</a>
+  <li class="parent open current" data-id="/Moongoon/Database/Scripts/Base" data-name="moongoon::database::scripts::base">
+      <a href="../../../../Moongoon/Database/Scripts/Base.html">Base</a>
       
         <ul>
   
-  <li class=" " data-id="/Moongoon/Database/Scripts/Base/Action" data-name="moongoon::database::scripts::base::action">
-      <a href="../../Moongoon/Database/Scripts/Base/Action.html">Action</a>
+  <li class=" current" data-id="/Moongoon/Database/Scripts/Base/Action" data-name="moongoon::database::scripts::base::action">
+      <a href="../../../../Moongoon/Database/Scripts/Base/Action.html">Action</a>
       
     </li>
   
@@ -116,22 +116,22 @@
     </li>
   
   <li class=" " data-id="/Moongoon/DatabaseResponse" data-name="moongoon::databaseresponse">
-      <a href="../../Moongoon/DatabaseResponse.html">DatabaseResponse</a>
+      <a href="../../../../Moongoon/DatabaseResponse.html">DatabaseResponse</a>
       
     </li>
   
   <li class=" " data-id="/Moongoon/Document" data-name="moongoon::document">
-      <a href="../../Moongoon/Document.html">Document</a>
+      <a href="../../../../Moongoon/Document.html">Document</a>
       
     </li>
   
   <li class="parent " data-id="/Moongoon/Error" data-name="moongoon::error">
-      <a href="../../Moongoon/Error.html">Error</a>
+      <a href="../../../../Moongoon/Error.html">Error</a>
       
         <ul>
   
   <li class=" " data-id="/Moongoon/Error/NotFound" data-name="moongoon::error::notfound">
-      <a href="../../Moongoon/Error/NotFound.html">NotFound</a>
+      <a href="../../../../Moongoon/Error/NotFound.html">NotFound</a>
       
     </li>
   
@@ -154,7 +154,7 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">module</span> Moongoon::Database::Scripts
+  <span class="kind">enum</span> Moongoon::Database::Scripts::Base::Action
 
 </h1>
 
@@ -171,7 +171,7 @@
     Overview
   </h2>
 
-  <p>This module handles database migration scripts.</p>
+  <p>Action to perform when a script fails.</p>
 
 
 
@@ -200,18 +200,23 @@
 
   
     <h2>
-      <a id="constant-summary" class="anchor" href="#constant-summary">
+      <a id="enum-members" class="anchor" href="#enum-members">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-      Constant Summary
+      Enum Members
     </h2>
   
   <dl>
     
-      <dt class="entry-const" id="SCRIPT_CLASSES">
-        <strong>SCRIPT_CLASSES</strong> = <code><span class="o">[]</span> <span class="k">of</span> <span class="t">Class</span></code>
+      <dt class="entry-const" id="Discard">
+        <strong>Discard</strong> = <code><span class="n">0</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Retry">
+        <strong>Retry</strong> = <code><span class="n">1</span></code>
       </dt>
       
     
@@ -223,11 +228,73 @@
 
 
 
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#discard?-instance-method" class="signature"><strong>#discard?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#retry?-instance-method" class="signature"><strong>#retry?</strong></a>
+        
+      </li>
+    
+  </ul>
+
 
 
 
 
 <div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
   
 </div>
 
@@ -235,6 +302,44 @@
 
 
 
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="discard?-instance-method">
+      <div class="signature">
+        
+        def <strong>discard?</strong>
+
+        <a class="method-permalink" href="#discard?-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="retry?-instance-method">
+      <div class="signature">
+        
+        def <strong>retry?</strong>
+
+        <a class="method-permalink" href="#retry?-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
 
 
 
