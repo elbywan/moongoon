@@ -42,10 +42,14 @@ module Moongoon::Database::Scripts
     # The order in which the scripts are run.
     class_property order : Int64 = 1
     # The action to perform on failure.
-    class_property on_error : OnError = :discard
+    # Set to *:retry* to run the script again the next time the program starts.
+    class_property on_error : Action = :discard
+    # The action to perform on success.
+    # Set to *:retry* to run the script again the next time the program starts.
+    class_property on_success : Action = :discard
 
     # Action to perform when a script fails.
-    enum OnError
+    enum Action
       Discard
       Retry
     end
@@ -63,7 +67,11 @@ module Moongoon::Database::Scripts
         end
 
         private macro on_error(action)
-          @@on_error : OnError = {{action}}
+          @@on_error : Action = {{action}}
+        end
+
+        private macro on_success(action)
+          @@on_success : Action = {{action}}
         end
 
         # Process a registered script.
@@ -80,12 +88,12 @@ module Moongoon::Database::Scripts
 
           db["scripts"].insert({ name: script_class_name, date: Time.utc.to_rfc3339, status: "running" }.to_bson)
           {{ @type }}.new.process(db)
-          db["scripts"].update({ name: script_class_name }.to_bson, { "$set": { status: "done" }}.to_bson)
+          db["scripts"].update({ name: script_class_name }.to_bson, { "$set": { status: "done", retry: @@on_success == Action::Retry } }.to_bson)
         rescue e
           ::Moongoon::Log.error { "Error while running script '#{script_class_name}'\n#{e.message.to_s}" }
           db["scripts"].update(
             { name: script_class_name }.to_bson,
-            { "$set": { status: "error", error: e.message.to_s, retry: @@on_error == OnError::Retry }}.to_bson
+            { "$set": { status: "error", error: e.message.to_s, retry: @@on_error == Action::Retry }}.to_bson
           )
         end
       {% end %}
