@@ -2,7 +2,7 @@
 
 A MongoDB object-document mapper (ODM) library written in crystal which makes interacting with MongoDB or DocumentDB a breeze.
 
-Uses the [`mongo.cr`](https://github.com/elbywan/mongo.cr) library under the hood that relies on the official [`MongoDB C Driver`](http://mongoc.org).
+Uses the [`cryomongo`](https://github.com/elbywan/cryomongo) library which is a pure crystal MongoDB driver.
 
 ## Installation
 
@@ -14,9 +14,9 @@ Uses the [`mongo.cr`](https://github.com/elbywan/mongo.cr) library under the hoo
        github: elbywan/moongoon
    ```
 
-2. **Important:** Install the official [`MongoDB C Driver`](http://mongoc.org/libmongoc/current/installing.html) shared library *(>= 1.15.1)*.
+2. Run `shards install`
 
-3. Run `shards install`
+3. Profit!
 
 ## Usage
 
@@ -98,16 +98,10 @@ Moongoon.connect(
 )
 
 # In case you need to perform a low level query:
-Moongoon.connection { |db|
-  # "db" is a raw Mongo::Database instance.
-  # Check `mongo.cr` code for more details:
-  # https://github.com/elbywan/mongo.cr/blob/master/src/mongo/database.cr
-  # https://github.com/elbywan/mongo.cr/blob/master/src/mongo/collection.cr
-  cursor = db["my_collection"].find_indexes
-  while index = cursor.next
-    pp index
-  end
-}
+db = Moongoon.database
+# "db" is a raw Mongo::Database instance. (see: `cryomongo` documentation)
+cursor = db["my_collection"].list_indexes
+puts cursor.to_a.to_json
 ```
 
 ### Models
