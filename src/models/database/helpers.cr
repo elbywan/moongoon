@@ -6,34 +6,31 @@ module Moongoon::Traits::Database::Helpers
   module Indexes
     extend self
 
-    @@indexes = Hash(String, Array(BSON)).new
-    @@index_keys = Hash(String, Set(String)).new
+    @@indexes = Hash(String, Hash(String, Array(BSON))).new
 
     # :nodoc:
-    def add_index(collection, index_name, index)
-      unless @@indexes[collection]?
-        @@indexes[collection] = [] of BSON
-        @@index_keys[collection] = Set(String).new
+    def add_index(collection, database, index)
+      unless @@indexes[database]?
+        @@indexes[database] = [] of Hash(String, Array(BSON))
       end
-      unless @@index_keys[collection].includes? index_name
-        @@index_keys[collection].add index_name
-        @@indexes[collection] << index
+      unless @@indexes[database][collection]?
+        @@indexes[database][collection] = [] of BSON
       end
+      @@indexes[database][collection] << index
     end
 
     ::Moongoon.after_connect do
-      @@indexes.each { |collection, indexes|
-        begin
-          ::Moongoon.connection_with_lock "indexes_#{collection}", abort_if_locked: true { |db|
-            ::Moongoon::Log.info { "Creating indexes for collection #{collection}." }
-            db[collection].command_simple({
-              createIndexes: collection,
-              indexes:       indexes,
-            })
-          }
-        rescue e
-          ::Moongoon::Log.error { "Error while creating indexes for collection #{collection}.\n#{e}\n#{indexes}" }
-        end
+      @@indexes.each { |database, collections_hash|
+        collections_hash.each { |collection, indexes|
+          begin
+            ::Moongoon.connection_with_lock "indexes_#{database}_#{collection}", abort_if_locked: true { |client|
+              ::Moongoon::Log.info { "Creating indexes for collection #{collection} (db: #{database})." }
+              client[database][collection].create_indexes(models: indexes)
+            }
+          rescue e
+            ::Moongoon::Log.error { "Error while creating indexes for collection #{collection}.\n#{e}\n#{indexes}" }
+          end
+        }
       }
     end
   end
@@ -229,10 +226,10 @@ module Moongoon::Traits::Database::Helpers
     #
     # **Note that the order of fields do matter.**
     #
-    # The name of the index is generated automatically from the collection and keys name
+    # The name of the index is generated automatically from the keys names and order
     # to avoid conflicts.
     #
-    # Please have a look at the [MongoDB documentation](https://docs.mongodb.com/v3.6/reference/command/createIndexes/)
+    # Please have a look at the [MongoDB documentation](https://docs.mongodb.com/manual/reference/command/createIndexes/)
     # for more details about index creation and the list of available index options.
     #
     # ```
@@ -242,36 +239,38 @@ module Moongoon::Traits::Database::Helpers
     # index field: 1, options: {unique: true}
     # ```
     def self.index(
-      collection : String = @@collection,
+      collection : String = self.collection_name,
+      database : String = self.database_name,
       options = NamedTuple.new,
       index_name : String? = nil,
       **keys
     ) : Nil
-      index_name ||= "#{keys.map { |k, _| k }.join("_")}"
-
       bson = {
         key:  keys,
-        name: index_name.not_nil!,
-      }.merge(options).to_bson
+        options: index_name ? options.merge({
+          name: index_name
+        }) : options
+      }.to_bson
 
-      ::Moongoon::Traits::Database::Helpers::Indexes.add_index(collection, index_name, bson)
+      ::Moongoon::Traits::Database::Helpers::Indexes.add_index(database, collection, bson)
     end
 
     # :ditto:
     def self.index(
-      keys : Hash(String, BSON::ValueType),
-      collection : String = @@collection,
-      options = Hash(String, BSON::ValueType).new,
+      keys : Hash(String, BSON::Value),
+      collection : String = self.collection_name,
+      database : String = self.database_name,
+      options = Hash(String, BSON::Value).new,
       index_name : String? = nil
     ) : Nil
-      index_name ||= "#{keys.map { |k, _| k }.join("_")}"
-
       bson = {
         "key"  => keys,
-        "name" => index_name.not_nil!,
-      }.merge(options).to_bson
+        "options" => index_name ? options.merge({
+          "name" => index_name,
+        }) : options
+      }.to_bson
 
-      ::Moongoon::Traits::Database::Helpers::Indexes.add_index(collection, index_name, bson)
+      ::Moongoon::Traits::Database::Helpers::Indexes.add_index(database, collection, bson)
     end
   {% end %}
   end

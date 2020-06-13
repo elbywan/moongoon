@@ -117,7 +117,7 @@ module Moongoon::Database::Scripts
     {% end %}
     callbacks.sort! { |a, b| a[0] <=> b[0] }
     callbacks.each { |_, cb|
-      ::Moongoon.connection_with_lock "scripts" { |db|
+      ::Moongoon.connection_with_lock "scripts" { |_, db|
         cb.call(db)
       }
     }

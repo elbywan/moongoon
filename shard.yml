@@ -4,14 +4,16 @@ version: 0.3.0
 authors:
   - elbywan <elbywan@hotmail.com>
 
-crystal: 0.34.0
+crystal: 0.35.0
 
 description: |
   An object-document mapper (ODM) for MongoDB.
 
 dependencies:
-  mongo:
-    github: elbywan/mongo.cr
-    version: ~> 0.2.4
+  # mongo:
+  #   github: elbywan/mongo.cr
+  #   version: ~> 0.2.4
+  cryomongo:
+    path: /Users/elbywan/Programmation/cryomongo
 
 license: MIT

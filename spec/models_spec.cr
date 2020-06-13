@@ -74,7 +74,7 @@ describe Moongoon::Collection do
       models = Model.insert_models raw_models
 
       expect_raises(Moongoon::Error::NotFound) {
-        Model.find_by_id!("invalid id")
+        Model.find_by_id!("507f1f77bcf86cd799439011")
       }
 
       result = Model.find_by_id!(models[2].id!)
@@ -92,7 +92,7 @@ describe Moongoon::Collection do
       models = Model.insert_models raw_models
 
       expect_raises(Moongoon::Error::NotFound) {
-        Model.find_by_ids!(["invalid id"])
+        Model.find_by_ids!(["507f1f77bcf86cd799439011"])
       }
 
       results = Model.find_by_ids!([models[1], models[2]].map(&.id!), order_by: {_id: 1})
@@ -120,7 +120,7 @@ describe Moongoon::Collection do
       models = Model.insert_models raw_models
 
       expect_raises(Moongoon::Error::NotFound) {
-        Model.exist_by_id!("invalid id")
+        Model.exist_by_id!("507f1f77bcf86cd799439011")
       }
 
       Model.exist_by_id!(models[0].id!).should be_true

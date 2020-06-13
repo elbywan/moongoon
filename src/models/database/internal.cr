@@ -4,47 +4,41 @@ module Moongoon::Traits::Database::Internal
 
   # Query builders #
 
-  protected def self.format_query(query, order_by)
-    {
-      "$query"   => query.to_bson,
-      "$orderby" => order_by.to_bson,
-    }
-  end
-
   protected def self.format_aggregation(query, stages, fields = nil, order_by = nil, skip = 0, limit = 0)
-    pipeline = [
-      {"$match" => query}.to_bson,
-    ]
+    pipeline = query && !query.empty? ? [
+      BSON.new({"$match": BSON.new(query) }),
+    ] : [] of BSON
+
     stages.each { |stage|
-      pipeline << stage.to_bson
+      pipeline << BSON.new(stage)
     }
     if fields
-      pipeline << {"$project": fields}.to_bson
+      pipeline << BSON.new({"$project": BSON.new(fields) })
     end
     if order_by
-      pipeline << {"$sort": order_by}.to_bson
+      pipeline << BSON.new({"$sort": BSON.new(order_by) })
     end
     if skip > 0
-      pipeline << {"$skip": skip.to_i32}.to_bson
+      pipeline << BSON.new({"$skip": skip.to_i32})
     end
     if limit > 0
-      pipeline << {"$limit": limit.to_i32}.to_bson
+      pipeline << BSON.new({"$limit": limit.to_i32})
     end
     pipeline
   end
 
-  protected def self.build_id_filter(id)
-    {"_id" => BSON::ObjectId.new id}.to_bson
+  protected def self.concat_id_filter(query, id)
+    BSON.new({"_id": BSON::ObjectId.new(id.not_nil!)}).append(BSON.new(query))
   end
 
-  protected def self.build_ids_filter(ids)
-    {
+  protected def self.concat_ids_filter(query,ids)
+    BSON.new({
       "_id" => {
         "$in" => ids.map { |id|
           BSON::ObjectId.new id
         },
       },
-    }.to_bson
+    }).append(BSON.new(query))
   end
 
   # Validation helpers #
