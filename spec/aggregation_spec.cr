@@ -22,9 +22,7 @@ private class AggregatedModel < Moongoon::Collection
   )
 
   def self.insert_models(models)
-    models.map_with_index { |model|
-      from_json(model.to_json).insert
-    }
+    bulk_insert(models.map{ |model| from_json(model.to_json) })
   end
 
   def format
