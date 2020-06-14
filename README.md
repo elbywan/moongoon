@@ -4,7 +4,7 @@ A MongoDB object-document mapper (ODM) library written in Crystal which makes in
 
 This library relies on:
 - [`cryomongo`](https://github.com/elbywan/cryomongo) as the underlying MongoDB driver.
-- [`bson.cr`](https://github.com/elbywan/cryomongo) as the BSON implementation.
+- [`bson.cr`](https://github.com/elbywan/bson.cr) as the BSON implementation.
 
 ## Installation
 
