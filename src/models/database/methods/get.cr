@@ -38,7 +38,7 @@ module Moongoon::Traits::Database::Methods::Get
     # default_fields({ ignored_field: 0 })
     # ```
     def self.default_fields(fields)
-      @@default_fields = fields.to_bson
+      @@default_fields = BSON.new(fields)
     end
 
     # Finds one or multiple documents and returns an array of `Moongoon::Collection` instances.
@@ -65,8 +65,7 @@ module Moongoon::Traits::Database::Methods::Get
     # ```
     #
     # NOTE: Other arguments are available but will not be documented here.
-    # For more details check out the underlying [`mongo.cr`](https://github.com/elbywan/mongo.cr)
-    # driver documentation and code.
+    # For more details check out the underlying [`cryomongo`](https://github.com/elbywan/cryomongo) driver documentation and code.
     def self.find(query = BSON.new, order_by = { _id: -1 }, fields = @@default_fields, skip = 0, limit = 0, **args) : Array(self)
       items = [] of self
 
@@ -121,8 +120,7 @@ module Moongoon::Traits::Database::Methods::Get
     # ```
     #
     # NOTE: Other arguments are available but will not be documented here.
-    # For more details check out the underlying [`mongo.cr`](https://github.com/elbywan/mongo.cr)
-    # driver documentation and code.
+    # For more details check out the underlying [`cryomongo`](https://github.com/elbywan/cryomongo) driver documentation and code.
     def self.find_one(query = BSON.new, fields = @@default_fields, order_by = { _id: -1 }, skip = 0, **args) : self?
       item = if stages = @@aggregation_stages
         pipeline = ::Moongoon::Traits::Database::Internal.format_aggregation(query, stages, fields, order_by, skip)

@@ -9,7 +9,7 @@ module Moongoon::Database
 
     # Retrieves the mongodb driver client that can be used to perform low level queries
     #
-    # See: https://github.com/elbywan/cryomongo
+    # See: [https://github.com/elbywan/cryomongo](https://github.com/elbywan/cryomongo)
     #
     # ```
     # cursor = Moongoon.client["database"]["collection"].find({ "key": value })
@@ -21,6 +21,8 @@ module Moongoon::Database
     class_getter! database_name : String
 
     # The default database instance that can be used to perform low level queries.
+    #
+    # See: [https://github.com/elbywan/cryomongo](https://github.com/elbywan/cryomongo)
     #
     # ```
     # db = Moongoon.database
@@ -80,8 +82,8 @@ module Moongoon::Database
   # Connects to MongoDB.
   #
   # ```
-  # # Arguments are all optional, their default values are the ones below:
-  # Moongoon.connect("mongodb://localhost:27017", "database")
+  # # Arguments are all optional, their default values are the ones defined below:
+  # Moongoon.connect("mongodb://localhost:27017", "database", reconnection_delay: 5.seconds)
   # ```
   def connect(database_url : String = "mongodb://localhost:27017",  database_name : String = "database", *, reconnection_delay = 5.seconds)
     @@database_name = database_name

@@ -67,7 +67,11 @@ module Moongoon::Traits::Database::Indexes
       ::Moongoon::Traits::Database::Indexes.add_index(index, cb)
     end
 
-    # :ditto:
+    # Same as `self.index` but with hash arguments.
+    #
+    # ```
+    # index ({ "a" => 1 }), name: "index_name", options: { "unique" => true }
+    # ```
     def self.index(
       keys : Hash(String, BSON::Value),
       collection : String? = nil,
