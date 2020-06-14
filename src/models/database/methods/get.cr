@@ -256,5 +256,20 @@ module Moongoon::Traits::Database::Methods::Get
       query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, id)
       self.exist! query, **args
     end
+
+    # Returns a fresh copy of this object that is fetched from the database.
+    #
+    # ```
+    # user = User.new(name: "John", age: 10)
+    # User.update({ name: "John", age: 11 })
+    # puts user.age
+    # # => 10
+    # puts user.fetch.age
+    # # => 11
+    # ```
+    def fetch
+      id_check!
+      fresh_model = self.class.find_by_id! id!
+    end
   end
 end

@@ -29,7 +29,7 @@ module Moongoon::Traits::Database::Relationships
     # - *model*: The referenced model class.
     # - *many*: Set to true to reference multiple documents.
     # - *delete_cascade*: If true, removes the referenced document(s) when this model is removed.
-    # - *removal_sync*: If true, sets the reference to nil (if referencing a single document), or removes the id from the
+    # - *clear_reference*: If true, sets the reference to nil (if referencing a single document), or removes the id from the
     # reference array (if referencing multiple documents) when the referenced document(s) are removed.
     # - *back_reference*: The name of the refence, if it exists, in the referenced model that back-references this model.
     # If set, when a referenced document gets inserted, this reference will be updated to add the newly created id.
@@ -49,7 +49,7 @@ module Moongoon::Traits::Database::Relationships
     #
     #   # Whenever a Pet is removed the reference will get updated and the
     #   # id of the Pet will be removed from the array.
-    #   reference pet_id, model: Pet, many: true, removal_sync: true
+    #   reference pet_id, model: Pet, many: true, clear_reference: true
     # end
     # ```
     macro reference(
@@ -59,7 +59,7 @@ module Moongoon::Traits::Database::Relationships
       model,
       many = false,
       delete_cascade = false,
-      removal_sync = false,
+      clear_reference = false,
       # Set with the target collection field name (back-reference) to update when the referenced model gets inserted.
       # Field name must be equal to the instance variable referencing this model from the target model.
       back_reference = nil
@@ -73,15 +73,16 @@ module Moongoon::Traits::Database::Relationships
 
         {% if delete_cascade %}
           # Cascades on deletion
-          BEFORE_REMOVE << ->(model : self) {
-            model = find_by_id model.id!
+
+          self.before_remove { |model|
+            model = model.fetch
             ids_to_remove = model.try &.{{ field_key }}
             if ids_to_remove.try(&.size) || 0 > 0
               {{ model_class }}.remove_by_ids ids_to_remove.not_nil!
             end
           }
 
-          BEFORE_REMOVE_STATIC << ->(query : BSON) {
+          self.before_remove_static { |query|
             models = find query
             ids_to_remove = [] of String
             models.each { |model|
@@ -101,21 +102,22 @@ module Moongoon::Traits::Database::Relationships
 
         {% if delete_cascade %}
           # Cascades on deletion
-          BEFORE_REMOVE << ->(model : self) {
-            model = find_by_id model.id!
+
+          self.before_remove { |model|
+            model = model.fetch
             link = model.try &.{{ field_key }}
             if link
               {{ model_class }}.remove_by_id link
             end
           }
 
-          BEFORE_REMOVE_STATIC << ->(query : BSON) {
+          self.before_remove_static { |query|
             models = find query
             ids_to_remove = [] of String
             models.each { |model|
               if id_to_remove = model.{{ field_key }}
                 ids_to_remove <<  id_to_remove
-              }
+              end
             }
             if ids_to_remove.size > 0
               {{ model_class }}.remove_by_ids ids_to_remove
@@ -125,7 +127,7 @@ module Moongoon::Traits::Database::Relationships
 
       {% end %}
 
-      {% if removal_sync %}
+      {% if clear_reference %}
         # Updates the reference when the target gets deleted.
         {% if many %}
           {% mongo_op = "$pull" %}
@@ -178,7 +180,9 @@ module Moongoon::Traits::Database::Relationships
                   {{ field_key }}: inserted_model.id
                 }
               {% else %}
-                {{ field_key }}: inserted_model.id
+                "$set": {
+                  {{ field_key }}: inserted_model.id
+                }
               {% end %}
             })
           end

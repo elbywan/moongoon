@@ -1,6 +1,6 @@
 require "./spec_helper.cr"
 
-class AutoVersionModel < Moongoon::Collection
+private class AutoVersionModel < Moongoon::Collection
   include Versioning
 
   collection "model_autoversions"
@@ -20,7 +20,7 @@ class AutoVersionModel < Moongoon::Collection
   end
 end
 
-class VersionModel < Moongoon::Collection
+private class VersionModel < Moongoon::Collection
   include Versioning
   collection "model_versions"
   versioning
