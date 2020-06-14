@@ -75,25 +75,25 @@ module Moongoon::Database::Scripts
         end
 
         # Process a registered script.
-        def self.process(db : Mongo::Database)
+        def self.process(db : Mongo::Database) : Nil
           script_class_name = {{ @type.stringify }}
 
-          script = db["scripts"].find_one({ name: script_class_name }.to_bson, fields: { retry: 1 }.to_bson)
+          script = db["scripts"].find_one({ name: script_class_name }, projection: { retry: 1 })
           if script
             return unless script.try &.["retry"]?
-            db["scripts"].remove({ name: script_class_name }.to_bson)
+            db["scripts"].delete_one({ name: script_class_name })
           end
 
           ::Moongoon::Log.info { "Running script '#{script_class_name}'" }
 
-          db["scripts"].insert({ name: script_class_name, date: Time.utc.to_rfc3339, status: "running" }.to_bson)
+          db["scripts"].insert_one({ name: script_class_name, date: Time.utc.to_rfc3339, status: "running" })
           {{ @type }}.new.process(db)
-          db["scripts"].update({ name: script_class_name }.to_bson, { "$set": { status: "done", retry: @@on_success == Action::Retry } }.to_bson)
+          db["scripts"].update_one({ name: script_class_name }, { "$set": { status: "done", retry: @@on_success.retry? } })
         rescue e
           ::Moongoon::Log.error { "Error while running script '#{script_class_name}'\n#{e.message.to_s}" }
-          db["scripts"].update(
-            { name: script_class_name }.to_bson,
-            { "$set": { status: "error", error: e.message.to_s, retry: @@on_error == Action::Retry }}.to_bson
+          db["scripts"].update_one(
+            { name: script_class_name },
+            { "$set": { status: "error", error: e.message.to_s, retry: @@on_error.retry? }}
           )
         end
       {% end %}

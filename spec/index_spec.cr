@@ -1,17 +1,3 @@
-require "../src/moongoon"
-
-private class IndexModel < Moongoon::Collection
-  collection "index_models"
-
-  property a : String
-  property b : Int32
-
-  index a: -1, name: "a_desc"
-  index _id: 1, a: 1, options: { unique: true }
-  index ({ "_id" => 1, "$**" => "text" })
-  index ({ "b" => 1 }), name: "index_name", options: { "unique" => true }
-end
-
 require "./spec_helper"
 
 describe Moongoon::Collection do

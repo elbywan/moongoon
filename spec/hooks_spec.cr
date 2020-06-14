@@ -56,7 +56,7 @@ private class HooksAfter < HooksModel
   }
 end
 
-describe Moongoon::Collection do
+describe Moongoon::Traits::Database::Hooks do
   before_each {
     HooksBefore.clear
     HooksAfter.clear

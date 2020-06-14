@@ -10,10 +10,8 @@ description: |
   An object-document mapper (ODM) for MongoDB.
 
 dependencies:
-  # mongo:
-  #   github: elbywan/mongo.cr
-  #   version: ~> 0.2.4
   cryomongo:
-    path: /Users/elbywan/Programmation/cryomongo
+    github: elbywan/cryomongo
+    branch: master
 
 license: MIT

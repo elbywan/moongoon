@@ -39,11 +39,12 @@ module Moongoon::Traits::Database::Methods::Patch
     # # Rename every person named "John" to "Igor".
     # User.update(query: { name: "John" }, update: { "$set": { name: "Igor" } })
     # ```
-    def self.update(query, update, no_hooks = false, **args) : Nil
+    def self.update(query, update, no_hooks = false, **args) : Mongo::Commands::Common::UpdateResult?
       query, update = BSON.new(query), BSON.new(update)
       self.before_update_static_call(query, update) unless no_hooks
-      self.collection.update_many(query, update, **args)
+      result = self.collection.update_many(query, update, **args)
       self.after_update_static_call(query, update) unless no_hooks
+      result
     end
 
     # Updates one or more documents with the data stored in `self`.
@@ -84,7 +85,7 @@ module Moongoon::Traits::Database::Methods::Patch
     # # Updates the user only if he/she is named John.
     # User.update_by_id(id, query: { name: "John" }, update: { "$set": { name: "Igor" }})
     # ```
-    def self.update_by_id(id, update, query = BSON.new, **args) : Nil
+    def self.update_by_id(id, update, query = BSON.new, **args) : Mongo::Commands::Common::UpdateResult?
       query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, id)
       update(query, update, **args)
     end
@@ -105,7 +106,7 @@ module Moongoon::Traits::Database::Methods::Patch
     # # Updates the users only if they are named John.
     # User.update_by_ids(ids, query: { name: "John" }, update: { "$set": { name: "Igor" }})
     # ```
-    def self.update_by_ids(ids, update, query = BSON.new, **args) : Nil
+    def self.update_by_ids(ids, update, query = BSON.new, **args) : Mongo::Commands::Common::UpdateResult?
       query = ::Moongoon::Traits::Database::Internal.concat_ids_filter(query, ids)
       update(query, update, **args)
     end
