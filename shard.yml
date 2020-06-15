@@ -12,6 +12,6 @@ description: |
 dependencies:
   mongo:
     github: elbywan/mongo.cr
-    version: ~> 0.2.4
+    version: ~> 0.3.0
 
 license: MIT
