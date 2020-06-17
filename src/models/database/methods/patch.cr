@@ -1,6 +1,8 @@
 # :nodoc:
 module Moongoon::Traits::Database::Methods::Patch
   macro included
+    @@default_fields : BSON? = nil
+
     # Updates a document having the same id as this model with the data stored in `self`.
     #
     # Tries to match on `self.id`.
