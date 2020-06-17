@@ -206,7 +206,7 @@ module Moongoon::Traits::Database::Methods::Get
     def self.find_ids(query = BSON.new, order_by = { _id: -1 }, **args) : Array(String)
       ids = [] of String
       cursor = self.collection.find(query, **args, sort: order_by, projection: { _id: 1 })
-      while item = cursor.first
+      while item = cursor.first?
         ids << item["_id"].to_s
       end
       ids
