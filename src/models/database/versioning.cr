@@ -117,6 +117,7 @@ module Moongoon::Traits::Database::Versioning
           bulk.insert_one(updated_model)
         end
         bulk.execute
+        nil
       }
       {% end %}
     end

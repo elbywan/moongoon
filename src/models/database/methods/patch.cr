@@ -43,7 +43,10 @@ module Moongoon::Traits::Database::Methods::Patch
     # ```
     def self.update(query, update, no_hooks = false, **args) : Mongo::Commands::Common::UpdateResult?
       query, update = BSON.new(query), BSON.new(update)
-      self.before_update_static_call(query, update) unless no_hooks
+      unless no_hooks
+        new_update = self.before_update_static_call(query, update)
+        update = new_update if new_update
+      end
       result = self.collection.update_many(query, update, **args)
       self.after_update_static_call(query, update) unless no_hooks
       result
@@ -122,7 +125,10 @@ module Moongoon::Traits::Database::Methods::Patch
     # ```
     def self.find_and_modify(query, update, fields = @@default_fields, no_hooks = false, **args)
       query, update = BSON.new(query), BSON.new(update)
-      self.before_update_static_call(query, update) unless no_hooks
+      unless no_hooks
+        new_update = self.before_update_static_call(query, update)
+        update = new_update if new_update
+      end
       item = self.collection.find_one_and_update(query, update, **args, fields: fields)
       self.after_update_static_call(query, update) unless no_hooks
       self.new item if item
@@ -145,7 +151,10 @@ module Moongoon::Traits::Database::Methods::Patch
     # ```
     def self.find_and_remove(query, fields = @@default_fields, no_hooks = false, **args)
       query = BSON.new(query)
-      self.before_remove_static_call(query) unless no_hooks
+      unless no_hooks
+        new_update = self.before_remove_static_call(query)
+        update = new_update if new_update
+      end
       item = self.collection.find_one_and_delete(query, **args, fields: fields)
       self.after_remove_static_call(query) unless no_hooks
       self.new item if item
