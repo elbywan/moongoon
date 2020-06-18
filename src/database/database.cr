@@ -89,7 +89,7 @@ module Moongoon::Database
     @@database_name = database_name
     @@before_connect_blocks.each &.call
 
-    ::Moongoon::Log.info { "Connecting to MongoDB @ #{database_url}." }
+    ::Moongoon::Log.info { "Connecting to MongoDB @ #{database_url}" }
 
     client = Mongo::Client.new(database_url)
     @@client = client
