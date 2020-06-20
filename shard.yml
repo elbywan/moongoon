@@ -1,17 +1,16 @@
 name: moongoon
-version: 0.3.1
+version: 0.4.0
 
 authors:
   - elbywan <elbywan@hotmail.com>
 
-crystal: 0.34.0
+crystal: 0.35.0
 
 description: |
   An object-document mapper (ODM) for MongoDB.
 
 dependencies:
-  mongo:
-    github: elbywan/mongo.cr
-    version: ~> 0.3.0
+  cryomongo:
+    github: elbywan/cryomongo
 
 license: MIT

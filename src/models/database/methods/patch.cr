@@ -1,6 +1,8 @@
 # :nodoc:
 module Moongoon::Traits::Database::Methods::Patch
   macro included
+    @@default_fields : BSON? = nil
+
     # Updates a document having the same id as this model with the data stored in `self`.
     #
     # Tries to match on `self.id`.
@@ -25,8 +27,8 @@ module Moongoon::Traits::Database::Methods::Patch
     # ```
     def update(query = BSON.new, **args) : self
       id_check!
-      full_query = query.to_bson.clone.concat(::Moongoon::Traits::Database::Internal.build_id_filter id.not_nil!)
-      self.update_query(full_query, **args)
+      query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, id)
+      self.update_query(query, **args)
     end
 
     # Updates one or more documents in the underlying collection.
@@ -39,13 +41,15 @@ module Moongoon::Traits::Database::Methods::Patch
     # # Rename every person named "John" to "Igor".
     # User.update(query: { name: "John" }, update: { "$set": { name: "Igor" } })
     # ```
-    def self.update(query, update, flags : LibMongoC::UpdateFlags = LibMongoC::UpdateFlags::MULTI_UPDATE, no_hooks = false, **args) : Nil
-      bson_query, update_query = query.to_bson, update.to_bson
-      self.before_update_static_call(bson_query, update_query) unless no_hooks
-      ::Moongoon.connection { |db|
-        db[@@collection].update(bson_query, update_query, flags, **args)
-      }
-      self.after_update_static_call(bson_query, update_query) unless no_hooks
+    def self.update(query, update, no_hooks = false, **args) : Mongo::Commands::Common::UpdateResult?
+      query, update = BSON.new(query), BSON.new(update)
+      unless no_hooks
+        new_update = self.before_update_static_call(query, update)
+        update = new_update if new_update
+      end
+      result = self.collection.update_many(query, update, **args)
+      self.after_update_static_call(query, update) unless no_hooks
+      result
     end
 
     # Updates one or more documents with the data stored in `self`.
@@ -60,16 +64,13 @@ module Moongoon::Traits::Database::Methods::Patch
     # # Updates both documents
     # user.update_query({ name: {"$in": ["John", "Jane"]} })
     # ```
-    def update_query(query, flags : LibMongoC::UpdateFlags = LibMongoC::UpdateFlags::MULTI_UPDATE, no_hooks = false, **args) : self
+    def update_query(query, no_hooks = false, **args) : self
       self.class.before_update_call(self) unless no_hooks
-      ::Moongoon.connection { |db|
-        db[@@collection].update(
-          query.to_bson,
-          **args,
-          update: {"$set" => self.to_bson}.to_bson,
-          flags: flags
-        )
-      }
+      self.class.collection.update_many(
+        query,
+        **args,
+        update: {"$set": self.to_bson}
+      )
       self.class.after_update_call(self) unless no_hooks
       self
     end
@@ -89,9 +90,9 @@ module Moongoon::Traits::Database::Methods::Patch
     # # Updates the user only if he/she is named John.
     # User.update_by_id(id, query: { name: "John" }, update: { "$set": { name: "Igor" }})
     # ```
-    def self.update_by_id(id, update, query = BSON.new, **args) : Nil
-      full_query = query.to_bson.clone.concat(::Moongoon::Traits::Database::Internal.build_id_filter id)
-      update(full_query, update, **args)
+    def self.update_by_id(id, update, query = BSON.new, **args) : Mongo::Commands::Common::UpdateResult?
+      query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, id)
+      update(query, update, **args)
     end
 
     # Updates one or multiple documents by their ids.
@@ -110,9 +111,9 @@ module Moongoon::Traits::Database::Methods::Patch
     # # Updates the users only if they are named John.
     # User.update_by_ids(ids, query: { name: "John" }, update: { "$set": { name: "Igor" }})
     # ```
-    def self.update_by_ids(ids, update, query = BSON.new, **args) : Nil
-      full_query = query.to_bson.clone.concat(::Moongoon::Traits::Database::Internal.build_ids_filter ids)
-      update(full_query, update, **args)
+    def self.update_by_ids(ids, update, query = BSON.new, **args) : Mongo::Commands::Common::UpdateResult?
+      query = ::Moongoon::Traits::Database::Internal.concat_ids_filter(query, ids)
+      update(query, update, **args)
     end
 
     # Modifies and returns a single document.
@@ -122,15 +123,14 @@ module Moongoon::Traits::Database::Methods::Patch
     # ```
     # User.find_and_modify({ name: "John" }, { "$set": { "name": "Igor" }})
     # ```
-    def self.find_and_modify(query = BSON.new, update = nil, fields = BSON.new, no_hooks = false, remove = false, **args)
-      bson_query, update_query = query.to_bson, update.to_bson
-      self.before_update_static_call(bson_query, update_query) if update_query unless no_hooks
-      self.before_remove_static_call(bson_query) if remove unless no_hooks
-      item = ::Moongoon.connection { |db|
-        db[@@collection].find_and_modify(bson_query, update_query, **args, remove: remove, fields: fields.to_bson)
-      }
-      self.after_update_static_call(bson_query, update_query) if update_query unless no_hooks
-      self.after_remove_static_call(bson_query) if remove unless no_hooks
+    def self.find_and_modify(query, update, fields = @@default_fields, no_hooks = false, **args)
+      query, update = BSON.new(query), BSON.new(update)
+      unless no_hooks
+        new_update = self.before_update_static_call(query, update)
+        update = new_update if new_update
+      end
+      item = self.collection.find_one_and_update(query, update, **args, fields: fields)
+      self.after_update_static_call(query, update) unless no_hooks
       self.new item if item
     end
 
@@ -138,8 +138,34 @@ module Moongoon::Traits::Database::Methods::Patch
     #
     # Similar to `self.find_and_modify`, except that a matching on the `_id` field will be added to the *query* argument.
     def self.find_and_modify_by_id(id, update, query = BSON.new, no_hooks = false, **args)
-      full_query = query.to_bson.clone.concat(::Moongoon::Traits::Database::Internal.build_id_filter id)
-      find_and_modify(full_query, update, **args)
+      query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, id)
+      find_and_modify(query, update, **args)
+    end
+
+    # Removes and returns a single document.
+    #
+    # See the [official documentation](https://docs.mongodb.com/v3.6/reference/command/findAndModify/).
+    #
+    # ```
+    # User.find_and_remove({ name: "John" })
+    # ```
+    def self.find_and_remove(query, fields = @@default_fields, no_hooks = false, **args)
+      query = BSON.new(query)
+      unless no_hooks
+        new_update = self.before_remove_static_call(query)
+        update = new_update if new_update
+      end
+      item = self.collection.find_one_and_delete(query, **args, fields: fields)
+      self.after_remove_static_call(query) unless no_hooks
+      self.new item if item
+    end
+
+    # Removes and returns a single document.
+    #
+    # Similar to `self.find_and_remove`, except that a matching on the `_id` field will be added to the *query* argument.
+    def self.find_and_remove_by_id(id, query = BSON.new, no_hooks = false, **args)
+      query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, id)
+      find_and_remove(query, update, **args)
     end
   end
 end

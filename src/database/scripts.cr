@@ -17,12 +17,11 @@ module Moongoon::Database::Scripts
   #
   #   def process(db : Mongo::Database)
   #     # Dummy code that will add a ban flag for users that are called 'John'.
-  #     # This code uses the `mongo.cr` driver shard syntax, but Models could
+  #     # This code uses the `cryomongo` syntax, but Models could
   #     # be used for convenience despite a performance overhead.
-  #     db["users"].update(
-  #       selector: {name: "John"},
+  #     db["users"].update_many(
+  #       filter: {name: "John"},
   #       update: {"$set": {"banned": true}},
-  #       flags: LibMongoC::UpdateFlags::MULTI_UPDATE
   #     )
   #   end
   # end
@@ -38,7 +37,6 @@ module Moongoon::Database::Scripts
   # If multiple instances of the server are started simultaneously they will wait until all the scripts
   # are processed before resuming execution.
   abstract class Base
-
     # The order in which the scripts are run.
     class_property order : Int64 = 1
     # The action to perform on failure.
@@ -75,25 +73,26 @@ module Moongoon::Database::Scripts
         end
 
         # Process a registered script.
-        def self.process(db : Mongo::Database)
+        def self.process(db : Mongo::Database) : Nil
           script_class_name = {{ @type.stringify }}
 
-          script = db["scripts"].find_one({ name: script_class_name }.to_bson, fields: { retry: 1 }.to_bson)
+          script = db["scripts"].find_one({ name: script_class_name }, projection: { retry: 1 }, read_concern: Mongo::ReadConcern.new("majority"))
           if script
             return unless script.try &.["retry"]?
-            db["scripts"].remove({ name: script_class_name }.to_bson)
+            db["scripts"].delete_one({ name: script_class_name }, write_concern: Mongo::WriteConcern.new(w: "majority"))
           end
 
           ::Moongoon::Log.info { "Running script '#{script_class_name}'" }
 
-          db["scripts"].insert({ name: script_class_name, date: Time.utc.to_rfc3339, status: "running" }.to_bson)
+          db["scripts"].insert_one({ name: script_class_name, date: Time.utc.to_rfc3339, status: "running" }, write_concern: Mongo::WriteConcern.new(w: "majority"))
           {{ @type }}.new.process(db)
-          db["scripts"].update({ name: script_class_name }.to_bson, { "$set": { status: "done", retry: @@on_success == Action::Retry } }.to_bson)
+          db["scripts"].update_one({ name: script_class_name }, { "$set": { status: "done", retry: @@on_success.retry? } }, write_concern: Mongo::WriteConcern.new(w: "majority"))
         rescue e
           ::Moongoon::Log.error { "Error while running script '#{script_class_name}'\n#{e.message.to_s}" }
-          db["scripts"].update(
-            { name: script_class_name }.to_bson,
-            { "$set": { status: "error", error: e.message.to_s, retry: @@on_error == Action::Retry }}.to_bson
+          db["scripts"].update_one(
+            { name: script_class_name },
+            { "$set": { status: "error", error: e.message.to_s, retry: @@on_error.retry? }},
+            write_concern: Mongo::WriteConcern.new(w: "majority")
           )
         end
       {% end %}
@@ -117,7 +116,7 @@ module Moongoon::Database::Scripts
     {% end %}
     callbacks.sort! { |a, b| a[0] <=> b[0] }
     callbacks.each { |_, cb|
-      ::Moongoon.connection_with_lock "scripts" { |db|
+      ::Moongoon.connection_with_lock "scripts" { |_, db|
         cb.call(db)
       }
     }

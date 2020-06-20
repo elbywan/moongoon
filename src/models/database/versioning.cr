@@ -14,8 +14,8 @@ module Moongoon::Traits::Database::Versioning
     #
     # **Arguments**
     #
-    # - *id_field*: The name of the back reference field. By default, the name
-    # of the Class in pascal_case and with an "_id" suffix appended.
+    # - *ref_field*: The name of the reference field that will point to the original document.
+    # Defaults to the name of the Class in pascal_case with an "_id" suffix appended.
     # - *auto*: if the auto flag is true, every insertion and update will be recorded.
     # Without the auto flag, a version will only be created programatically when calling
     # the `create_version` methods.
@@ -29,83 +29,95 @@ module Moongoon::Traits::Database::Versioning
     #   versioning auto: true
     # end
     # ```
-    macro versioning(id_field = nil, auto = false, &transform)
-      {% if id_field %}
-        @@versioning_id_field = {{id_field.stringify}}
+    macro versioning(ref_field = nil, auto = false, &transform)
+      {% if ref_field %}
+        @@versioning_id_field = {{ref_field.id.stringify}}
       {% end %}
 
       {% if transform %}
         @@versioning_transform = Proc(BSON, BSON, BSON).new {{transform}}
       {% end %}
 
+      def self.history_collection
+        self.database["#{self.collection_name}_history"]
+      end
+
       {% if auto %}
       # After an insertion, copy the document in the history collection.
       after_insert { |model|
-        data = ::Moongoon.connection { |db|
-          db[@@collection].find_one({_id: model._id.not_nil!}.to_bson)
-        }
+        db = {{@type}}.database
+        collection = {{@type}}.collection
+        history_collection = {{@type}}.history_collection
+
+        data = collection.find_one({_id: model._id })
+
         if data
           updated_data = BSON.new
-          data.each_key { |k|
+          data.each { |k, v|
             if k == "_id"
               updated_data[k] = BSON::ObjectId.new
             else
-              updated_data[k] = data[k]
+              updated_data[k] = v
             end
           }
-          @@versioning_transform.try { |cb| updated_data = cb.call(updated_data, data) }
-          updated_data[@@versioning_id_field] = data["_id"].to_s
-          ::Moongoon.connection { |db|
-            db["#{@@collection}_history"].insert(updated_data)
+          @@versioning_transform.try { |cb|
+            updated_data = cb.call(updated_data, data)
           }
+          updated_data[@@versioning_id_field] = data["_id"].to_s
+          history_collection.insert_one(updated_data)
         end
       }
 
       # After an update, copy the updated document in the history collection.
       after_update { |model|
-        data = ::Moongoon.connection { |db|
-         db[@@collection].find_one({_id: model._id.not_nil!}.to_bson)
-        }
+        db = {{@type}}.database
+        collection = {{@type}}.collection
+        history_collection = {{@type}}.history_collection
+
+        data = collection.find_one({_id: model._id })
+
         if data
           updated_data = BSON.new
-          data.each_key { |k|
+          data.each { |k, v|
             if k == "_id"
               updated_data[k] = BSON::ObjectId.new
             else
-              updated_data[k] = data[k]
+              updated_data[k] = v
             end
           }
-          @@versioning_transform.try { |cb| cb.call(updated_data, data) }
-          updated_data[@@versioning_id_field] = data["_id"].to_s
-          ::Moongoon.connection { |db|
-            db["#{@@collection}_history"].insert(updated_data)
+          @@versioning_transform.try { |cb|
+            updated_data = cb.call(updated_data, data)
           }
+          updated_data[@@versioning_id_field] = data["_id"].to_s
+          history_collection.insert_one(updated_data)
         end
       }
 
       # After a static update, copy the document(s) in the history collection.
       after_update_static { |query, _|
-        ::Moongoon.connection { |db|
-          collection = db["#{@@collection}_history"]
-          data = db[@@collection].find query
-          bo = collection.create_bulk_operation
-          empty_data = true
-          data.each do |datum|
-            updated_datum = BSON.new
-            datum.each_key { |k|
-              empty_data = false
-              if k == "_id"
-                updated_datum[k] = BSON::ObjectId.new
-              else
-                updated_datum[k] = datum[k]
-              end
-            }
-            @@versioning_transform.try { |cb| cb.call(updated_datum, data) }
-            updated_datum[@@versioning_id_field] = datum["_id"].to_s
-            bo.insert(updated_datum)
-          end
-          bo.execute unless empty_data
-        }
+        db = {{@type}}.database
+        collection = {{@type}}.collection
+        history_collection = {{@type}}.history_collection
+
+        cursor = collection.find(query)
+        bulk = history_collection.bulk(ordered: true)
+        cursor.each do |model|
+          updated_model = BSON.new
+          model.each { |k, v|
+            if k == "_id"
+              updated_model[k] = BSON::ObjectId.new
+            else
+              updated_model[k] = v
+            end
+          }
+          @@versioning_transform.try { |cb|
+            updated_model = cb.call(updated_model, model)
+          }
+          updated_model[@@versioning_id_field] = model["_id"].to_s
+          bulk.insert_one(updated_model)
+        end
+        bulk.execute
+        nil
       }
       {% end %}
     end
@@ -121,7 +133,7 @@ module Moongoon::Traits::Database::Versioning
     # ```
     def find_latest_version(**args) : self?
       id_check!
-      {{ @type }}.find_latest_version_by_id(self.id, **args)
+      self.class.find_latest_version_by_id(self.id, **args)
     end
 
     # Finds all versions of the model and returns an array of `Moongoon::Collection` instances.
@@ -136,7 +148,7 @@ module Moongoon::Traits::Database::Versioning
     # ```
     def find_all_versions(**args) : Array(self)
       id_check!
-      {{@type}}.find_all_versions(self.id)
+      self.class.find_all_versions(self.id, **args)
     end
 
     # Counts the number of versions associated with this model.
@@ -148,7 +160,7 @@ module Moongoon::Traits::Database::Versioning
     # nb_of_versions = User.count_versions user
     # ```
     def count_versions(**args) : Int32 | Int64
-      {{@type}}.count_versions(self.id)
+      self.class.count_versions(self.id, **args)
     end
 
     # Saves a copy of the model in the history collection and returns the id of the copy.
@@ -161,7 +173,7 @@ module Moongoon::Traits::Database::Versioning
     # user.create_version
     # ```
     def create_version : String?
-      {{@type}}.create_version_by_id(self.id!)
+      self.class.create_version_by_id(self.id!)
     end
 
     # Saves a copy with changes of the model in the history collection and
@@ -178,7 +190,7 @@ module Moongoon::Traits::Database::Versioning
     # }
     # ```
     def create_version(&block : self -> self) : String?
-      {{@type}}.create_version_by_id self.id!, &block
+      self.class.create_version_by_id self.id!, &block
     end
 
     module Static
@@ -191,23 +203,18 @@ module Moongoon::Traits::Database::Versioning
       # user_version = user.find_latest_version_by_id "123456"
       # ```
       def find_latest_version_by_id(id, fields = nil, **args) : self?
+        history_collection = self.history_collection
         query = {@@versioning_id_field => id}
         order_by = {_id: -1}
-        if stages = @@aggregation_stages
+
+        item = if stages = @@aggregation_stages
           pipeline = ::Moongoon::Traits::Database::Internal.format_aggregation(query, stages, fields, limit: 1)
-          ::Moongoon.connection { |db|
-            cursor = db["#{@@collection}_history"].aggregate(pipeline.to_bson, **args)
-            cursor.next
-          }
+          cursor = history_collection.aggregate(pipeline, **args)
+          cursor.try &.first?
         else
-          full_query = ::Moongoon::Traits::Database::Internal.format_query(query, order_by)
-          bson_fields = (fields || BSON.new).to_bson
-          item = ::Moongoon.connection { |db|
-            cursor = db["#{@@collection}_history"].find(full_query.to_bson, **args, limit: 1, skip: 0, fields: bson_fields)
-            cursor.next
-          }
+          history_collection.find_one(query, **args, sort: order_by, skip: 0, projection: fields)
         end
-        {{@type}}.new item if item
+        self.new item if item
       end
 
       # Finds a specific version of a model by id and returns an instance of `Moongoon::Collection`.
@@ -219,27 +226,24 @@ module Moongoon::Traits::Database::Versioning
       # user_version = user.find_specific_version "123456"
       # ```
       def find_specific_version(id, query = BSON.new, fields = nil, skip = 0, **args) : self?
-        full_query = query.to_bson.clone.concat({_id: BSON::ObjectId.new id}.to_bson)
-        if stages = @@aggregation_stages
-          pipeline = ::Moongoon::Traits::Database::Internal.format_aggregation(full_query, stages, fields, limit: 1, skip: skip)
-          ::Moongoon.connection { |db|
-            cursor = db["#{@@collection}_history"].aggregate(pipeline.to_bson, **args)
-            cursor.next
-          }
+        history_collection = self.history_collection
+        full_query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, id)
+
+        item = if stages = @@aggregation_stages
+          pipeline = ::Moongoon::Traits::Database::Internal.format_aggregation(full_query, stages, fields, skip: skip)
+          cursor = history_collection.aggregate(pipeline, **args)
+          cursor.try &.first?
         else
-          bson_fields = (fields || BSON.new).to_bson
-          item = ::Moongoon.connection { |db|
-            db["#{@@collection}_history"].find_one(full_query.to_bson, **args, fields: bson_fields, skip: skip)
-          }
+          history_collection.find_one(full_query, **args, projection: fields, skip: skip)
         end
-        {{@type}}.new item if item
+        self.new item if item
       end
 
       # NOTE: Similar to `self.find_specific_version` but will raise if the version is not found.
       def find_specific_version!(id, **args) : self
         item = find_specific_version(id, **args)
         unless item
-          ::Moongoon::Log.info { "[mongo][find_specific_version](#{@@collection}) Failed to fetch resource with id #{id}." }
+          ::Moongoon::Log.info { "[mongo][find_specific_version](#{self.collection_name}) Failed to fetch resource with id #{id}." }
           raise ::Moongoon::Error::NotFound.new
         end
         item
@@ -259,28 +263,20 @@ module Moongoon::Traits::Database::Versioning
       # # Contains one version for both models.
       # versions = User.find_specific_versions ids
       # ```
-      def find_specific_versions(ids, query = BSON.new, fields = nil, skip = 0, limit = 0, **args) : Array(self)
+      def find_specific_versions(ids, query = BSON.new, fields = nil, skip = 0, limit = 0,  order_by = {_id: -1}, **args) : Array(self)
         items = [] of self
-        query = query.to_bson.clone.concat(::Moongoon::Traits::Database::Internal.build_ids_filter ids)
-        order_by = {_id: -1}
+        history_collection = self.history_collection
+        query = ::Moongoon::Traits::Database::Internal.concat_ids_filter(query, ids)
+
         if stages = @@aggregation_stages
           pipeline = ::Moongoon::Traits::Database::Internal.format_aggregation(query, stages, fields, order_by, skip, limit)
-          ::Moongoon.connection { |db|
-            cursor = db["#{@@collection}_history"].aggregate(pipeline.to_bson, **args)
-            while item = cursor.next
-              items << {{@type}}.new item
-            end
-          }
+          cursor = history_collection.aggregate(pipeline, **args)
+          cursor.try { |c| items = c.map{|b| self.from_bson b}.to_a }
         else
-          full_query = ::Moongoon::Traits::Database::Internal.format_query(query, order_by)
-          bson_fields = (fields || BSON.new).to_bson
-          ::Moongoon.connection { |db|
-            cursor = db["#{@@collection}_history"].find(full_query.to_bson, **args, fields: bson_fields)
-            while item = cursor.next
-              items << {{@type}}.new item
-            end
-          }
+          cursor = history_collection.find(query, **args, sort: order_by, projection: fields)
+          items = cursor.map{|b| self.from_bson b}.to_a
         end
+
         items
       end
 
@@ -292,28 +288,20 @@ module Moongoon::Traits::Database::Versioning
       # user_id = "123456"
       # versions = User.find_all_versions user_id
       # ```
-      def find_all_versions(id, query = BSON.new, fields = nil, skip = 0, limit = 0, **args) : Array(self)
+      def find_all_versions(id, query = BSON.new, fields = nil, skip = 0, limit = 0, order_by = {_id: -1}, **args) : Array(self)
         items = [] of self
-        query = query.to_bson.clone.concat({@@versioning_id_field => id}.to_bson)
-        order_by = {_id: -1}
+        history_collection = self.history_collection
+        query = BSON.new({@@versioning_id_field => id}).append(BSON.new(query))
+
         if stages = @@aggregation_stages
           pipeline = ::Moongoon::Traits::Database::Internal.format_aggregation(query, stages, fields, order_by, skip, limit)
-          ::Moongoon.connection { |db|
-            cursor = db["#{@@collection}_history"].aggregate(pipeline.to_bson, **args)
-            while item = cursor.next
-              items << {{@type}}.new item
-            end
-          }
+          cursor = history_collection.aggregate(pipeline, **args)
+          cursor.try { |c| items = c.map{|b| self.from_bson b}.to_a }
         else
-          full_query = ::Moongoon::Traits::Database::Internal.format_query(query, order_by)
-          bson_fields = (fields || BSON.new).to_bson
-          ::Moongoon.connection { |db|
-            cursor = db["#{@@collection}_history"].find(full_query.to_bson, **args, fields: bson_fields)
-            while item = cursor.next
-              items << {{@type}}.new item
-            end
-          }
+          cursor = history_collection.find(query, **args, sort: order_by, projection: fields)
+          items = cursor.map{|b| self.from_bson b}.to_a
         end
+
         items
       end
 
@@ -324,13 +312,9 @@ module Moongoon::Traits::Database::Versioning
       # User.count_versions user_id
       # ```
       def count_versions(id, query = BSON.new, **args) : Int32 | Int64
-        count = 0
-        ::Moongoon.connection { |db|
-          query = query.to_bson.clone.concat({@@versioning_id_field => id}.to_bson)
-          count = db["#{@@collection}_history"].count(query.to_bson, **args)
-          nil
-        }
-        count
+        history_collection = self.history_collection
+        query = BSON.new({@@versioning_id_field => id}).append(BSON.new(query))
+        history_collection.count_documents(query, **args)
       end
 
       # Clears the history collection.
@@ -339,9 +323,7 @@ module Moongoon::Traits::Database::Versioning
       #
       # Will remove all the versions in the history collection.
       def clear_history : Nil
-        ::Moongoon.connection { |db|
-          db["#{@@collection}_history"].remove(({} of String => BSON).to_bson)
-        }
+        self.history_collection.delete_many(BSON.new)
       end
 
       # Saves a copy of a document matching the *id* argument in the history
@@ -359,6 +341,7 @@ module Moongoon::Traits::Database::Versioning
       def create_version_by_id(id, &block : self -> self) : String?
         version_id : String? = nil
         original = self.find_by_id id
+        history_collection = self.history_collection
 
         if original
           oid = BSON::ObjectId.new
@@ -368,11 +351,9 @@ module Moongoon::Traits::Database::Versioning
           original._id = oid
           original = yield original
           version_bson = original.to_bson
-          @@versioning_transform.try { |cb| version_bson = cb.call(version_bson, original_bson) }
+          updated_model = @@versioning_transform.try { |cb| version_bson = cb.call(version_bson, original_bson) }
           version_bson[@@versioning_id_field] = original_oid.to_s
-          ::Moongoon.connection { |db|
-            db["#{@@collection}_history"].insert(version_bson)
-          }
+          history_collection.insert_one(version_bson)
         end
 
         version_id

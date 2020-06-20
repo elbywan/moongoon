@@ -1,22 +1,26 @@
 # moongoon | [![Build Status](https://travis-ci.org/elbywan/moongoon.svg?branch=master)](https://travis-ci.org/elbywan/moongoon)
 
-A MongoDB object-document mapper (ODM) library written in crystal which makes interacting with MongoDB or DocumentDB a breeze.
+An object-document mapper (ODM) library written in Crystal which makes interacting with MongoDB a breeze.
 
-Uses the [`mongo.cr`](https://github.com/elbywan/mongo.cr) library under the hood that relies on the official [`MongoDB C Driver`](http://mongoc.org).
+This library relies on:
+- [`cryomongo`](https://github.com/elbywan/cryomongo) as the underlying MongoDB driver.
+- [`bson.cr`](https://github.com/elbywan/bson.cr) as the BSON implementation.
+
+*For the moongoon version relying on the [`mongo.cr`](https://github.com/elbywan/mongo.cr) driver, please check the [mongo.cr](https://github.com/elbywan/moongoon/tree/mongo.cr) branch.*
 
 ## Installation
 
 1. Add the dependency to your `shard.yml`:
 
-   ```yaml
-   dependencies:
-     moongoon:
-       github: elbywan/moongoon
-   ```
+```yaml
+dependencies:
+  moongoon:
+    github: elbywan/moongoon
+```
 
-2. **Important:** Install the official [`MongoDB C Driver`](http://mongoc.org/libmongoc/current/installing.html) shared library *(>= 1.15.1)*.
+2. Run `shards install`
 
-3. Run `shards install`
+3. Profit! 💰
 
 ## Usage
 
@@ -76,9 +80,9 @@ user.remove
 
 [**API documentation**](https://elbywan.github.io/moongoon/Moongoon/Database.html)
 
-- [Initial connection](https://elbywan.github.io/moongoon/Moongoon/Database.html#connect(database_url%3AString%3D%26quot%3Bmongodb%3A%2F%2Flocalhost%3A27017%26quot%3B%2Cdatabase_name%3AString%3D%26quot%3Bdatabase%26quot%3B%2C*%2Cmax_pool_size%3D100%2Creconnection_delay%3D5.seconds)-instance-method)
+- [Initial connection](https://elbywan.github.io/moongoon/Moongoon/Database.html#connect(database_url:String="mongodb://localhost:27017",database_name:String="database",*,reconnection_delay=5.seconds)-instance-method)
 - [Hooks](https://elbywan.github.io/moongoon/Moongoon/Database.html#after_connect(&block:Proc(Nil))-instance-method)
-- [Low-level](https://elbywan.github.io/moongoon/Moongoon/Database.html#connection(&block:Proc(Mongo::Database,DatabaseResponse?)):BSON?-instance-method)
+- [Low-level](https://elbywan.github.io/moongoon/Moongoon.html#client:Mongo::Client-class-method)
 
 ```crystal
 require "moongoon"
@@ -97,33 +101,30 @@ Moongoon.connect(
   database_name: "my_database"
 )
 
-# In case you need to perform a low level query:
-Moongoon.connection { |db|
-  # "db" is a raw Mongo::Database instance.
-  # Check `mongo.cr` code for more details:
-  # https://github.com/elbywan/mongo.cr/blob/master/src/mongo/database.cr
-  # https://github.com/elbywan/mongo.cr/blob/master/src/mongo/collection.cr
-  cursor = db["my_collection"].find_indexes
-  while index = cursor.next
-    pp index
-  end
-}
+# In case you need to perform a low level query, use `Moongoon.client` or `Moongoon.database`.
+# Here, *db* is a `cryomongo` Mongo::Database. (For more details, check the `cryomongo` documentation)
+db = Moongoon.database
+cursor = db["my_collection"].list_indexes
+puts cursor.to_a.to_json
 ```
 
 ### Models
 
 [**API documentation**](https://elbywan.github.io/moongoon/Moongoon/Collection.html)
 
-- [Indexes](https://elbywan.github.io/moongoon/Moongoon/Collection.html#index(keys:Hash(String,BSON::ValueType),collection:String=@@collection,options=Hash(String,BSON::ValueType).new,index_name:String?=nil):Nil-class-method)
-- [Relationships](https://elbywan.github.io/moongoon/Moongoon/Collection.html#reference(field,*,model,many=false,delete_cascade=false,removal_sync=false,back_reference=nil)-macro)
+- [Indexes](https://elbywan.github.io/moongoon/Moongoon/Collection.html#index(collection:String?=nil,database:String?=nil,options=NamedTuple.new,name:String?=nil,**keys):Nil-class-method)
+- [Relationships](https://elbywan.github.io/moongoon/Moongoon/Collection.html#reference(field,*,model,many=false,delete_cascade=false,clear_reference=false,back_reference=nil)-macro)
 - [Aggregations](https://elbywan.github.io/moongoon/Moongoon/Collection.html#aggregation_pipeline(*args)-class-method)
-- [Versioning](https://elbywan.github.io/moongoon/Moongoon/Collection/Versioning.html#versioning(id_field=nil,auto=false)-macro)
+- [Versioning](https://elbywan.github.io/moongoon/Moongoon/Collection/Versioning.html#versioning(ref_field=nil,auto=false,&transform)-macro)
 
 ```crystal
 require "moongoon"
 
 class MyModel < Moongoon::Collection
   collection "models"
+
+  # Note: the database can be changed - if different from the default one
+  # database "database_name"
 
   # Define indexes
   index name: 1
@@ -189,12 +190,11 @@ class Moongoon::Database::Scripts::Test < Moongoon::Database::Scripts::Base
 
   def process(db : Mongo::Database)
     # Dummy code that will add a ban flag for users that are called 'John'.
-    # This code uses the `mongo.cr` driver shard syntax, but Models could
+    # This code uses the `cryomongo` syntax, but Models could
     # be used for convenience despite a small performance overhead.
-    db["users"].update(
-      selector: {name: "John"},
-      update: {"$set": {"banned": true}},
-      flags: LibMongoC::UpdateFlags::MULTI_UPDATE
+    db["users"].update_many(
+      filter: {name: "John"},
+      update: {"$set": {"banned": true}}
     )
   end
 end
@@ -202,7 +202,7 @@ end
 
 ## Contributing
 
-1. Fork it (<https://github.com/your-github-user/moongoon/fork>)
+1. Fork it (<https://github.com/elbywan/moongoon/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
@@ -210,4 +210,4 @@ end
 
 ## Contributors
 
-- [elbywan](https://github.com/your-github-user) - creator and maintainer
+- [elbywan](https://github.com/elbywan) - creator and maintainer

@@ -66,9 +66,29 @@ module Moongoon
   # :nodoc:
   abstract class MongoBase < Document
     macro inherited
-      # Sets the underlying MongoDB collection name.
+      class_getter database_name : String do
+        Moongoon.database_name
+      end
+
+      class_getter database : Mongo::Database do
+        if @@database_name == Moongoon.database_name
+          Moongoon.database
+        else
+          Moongoon.client[database_name]
+        end
+      end
+      class_getter collection : Mongo::Collection do
+        self.database[collection_name]
+      end
+
+      # Sets the MongoDB database name.
+      private macro database(value)
+        @@database_name = \{{ value }}
+      end
+
+      # Sets the MongoDB collection name.
       private macro collection(value)
-        class_property collection : String = \{{ value }}
+        class_getter collection_name : String = \{{ value }}
       end
 
       # The MongoDB internal id representation.
@@ -88,7 +108,7 @@ module Moongoon
       #
       # Will raise if _id is nil.
       def id!
-        self._id.to_s.not_nil!
+        self.id.not_nil!
       end
     end
   end
@@ -125,7 +145,7 @@ module Moongoon
 
         index({
           @@versioning_id_field => 1
-        }, "#{@@collection}_history")
+        }, "#{@@collection_name}_history")
       end
     end
   end

@@ -13,9 +13,7 @@ module Moongoon::Traits::Database::Methods::Post
     def insert(no_hooks = false, **args) : self
       self._id = BSON::ObjectId.new
       self.class.before_insert_call(self) unless no_hooks
-      ::Moongoon.connection { |db|
-        db[@@collection].insert(self.to_bson, **args)
-      }
+      self.class.collection.insert_one(self.to_bson, **args)
       self.class.after_insert_call(self) unless no_hooks
       self
     end
@@ -30,21 +28,18 @@ module Moongoon::Traits::Database::Methods::Post
     # User.bulk_insert [john, jane]
     # ```
     def self.bulk_insert(self_array : Indexable(self), no_hooks = false, **args) : Indexable(self)
-      ::Moongoon.connection { |db|
-        collection = db[@@collection]
-        bo = collection.create_bulk_operation(**args)
-        self_array.each { |model|
-          model._id = BSON::ObjectId.new
-          self.before_insert_call(model) unless no_hooks
-          bo.insert(model.to_bson)
-        }
-        bo.execute
-        unless no_hooks
-          self_array.each { |model|
-            self.after_insert_call(model)
-          }
-        end
+      bulk = self.collection.bulk(**args)
+      self_array.each { |model|
+        model._id = BSON::ObjectId.new
+        self.before_insert_call(model) unless no_hooks
+        bulk.insert_one(model.to_bson)
       }
+      bulk.execute
+      unless no_hooks
+        self_array.each { |model|
+          self.after_insert_call(model)
+        }
+      end
       self_array
     end
   end

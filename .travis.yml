@@ -1,18 +1,20 @@
-os: osx
-
 language: crystal
-crystal:
-  - latest
 
-addons:
-  homebrew:
-    taps: mongodb/brew
-    packages:
-    - mongo-c
-    - mongodb-community
+env:
+  matrix:
+    - MONGODB=3.6.18
+    - MONGODB=4.0.18
+    - MONGODB=4.2.7
+
+install:
+  - wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-${MONGODB}.tgz
+  - tar xzf mongodb-linux-x86_64-ubuntu1604-${MONGODB}.tgz
+  - ${PWD}/mongodb-linux-x86_64-ubuntu1604-${MONGODB}/bin/mongod --version
 
 before_script:
-  - brew services start mongodb-community
-  - sleep 1
+  - shards install
+  - mkdir ${PWD}/mongodb-linux-x86_64-ubuntu1604-${MONGODB}/data
+  - ${PWD}/mongodb-linux-x86_64-ubuntu1604-${MONGODB}/bin/mongod --dbpath ${PWD}/mongodb-linux-x86_64-ubuntu1604-${MONGODB}/data --logpath ${PWD}/mongodb-linux-x86_64-ubuntu1604-${MONGODB}/mongodb.log --fork
+
 script:
   - crystal spec

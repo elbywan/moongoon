@@ -9,7 +9,7 @@ module Moongoon::Traits::Database::Hooks
     # :nodoc:
     alias ClassCallback = Proc(BSON, Nil)
     # :nodoc:
-    alias ClassUpdateCallback = Proc(BSON, BSON, Nil)
+    alias ClassUpdateCallback = Proc(BSON, BSON, BSON?)
 
     {% events = %w(insert update remove) %}
     {% prefixes = %w(before after) %}
@@ -40,11 +40,19 @@ module Moongoon::Traits::Database::Hooks
             {{ identifier.upcase.id }}.unshift cb
           end
 
-          protected def self.{{identifier.id}}_call(*args)
-            {{ identifier.upcase.id }}.each { |cb|
-              cb.call(*args)
-            }
-          end
+          {% if callback_type == "ClassUpdateCallback" %}
+            protected def self.{{identifier.id}}_call(query, update)
+              {{ identifier.upcase.id }}.reduce(update) { |update, cb|
+                cb.call(query, update) || update
+              }
+            end
+          {% else %}
+            protected def self.{{identifier.id}}_call(*args)
+              {{ identifier.upcase.id }}.each { |cb|
+                cb.call(*args)
+              }
+            end
+          {% end %}
         {% end %}
       {% end %}
     {% end %}

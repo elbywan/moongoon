@@ -3,41 +3,39 @@ require "./scripts"
 # Used to connect to a MongoDB database instance.
 module Moongoon::Database
   macro extended
-    # Either a BSON response or an Exception that is returned from a database request through the libmongoc driver.
-    alias DatabaseResponse = BSON | Exception
-
     @@before_connect_blocks : Array(Proc(Nil)) = [] of Proc(Nil)
     @@after_connect_blocks : Array(Proc(Nil)) = [] of Proc(Nil)
     @@after_scripts_blocks : Array(Proc(Nil)) = [] of Proc(Nil)
-    @@pool : Mongo::ClientPool?
 
-    @@database_name : String = "database"
-    @@pool_size_lock : Channel(Nil) = Channel(Nil).new
+    # Retrieves the mongodb driver client that can be used to perform low level queries
+    #
+    # See: [https://github.com/elbywan/cryomongo](https://github.com/elbywan/cryomongo)
+    #
+    # ```
+    # cursor = Moongoon.client["database"]["collection"].find({ "key": value })
+    # puts cursor.to_a
+    # ```
+    class_getter! client : Mongo::Client
+
+    # The name of the default database.
+    class_getter! database_name : String
+
+    # The default database instance that can be used to perform low level queries.
+    #
+    # See: [https://github.com/elbywan/cryomongo](https://github.com/elbywan/cryomongo)
+    #
+    # ```
+    # db = Moongoon.database
+    # collection = db["some_collection"]
+    # data = collection.find query
+    # pp data
+    # ```
+    class_getter database : Mongo::Database do
+      client[database_name]
+    end
   end
 
-  # Retrieves a dabatase object that owns one of the connections in the pool.
-  #
-  # ```
-  # Moongoon.connection { |db|
-  #   collection = db["some_collection"]
-  #   data = collection.find query
-  #   pp data
-  # }
-  # ```
-  def connection(&block : Proc(Mongo::Database, DatabaseResponse?)) : BSON?
-    @@pool.try { |pool|
-      @@pool_size_lock.send(nil)
-      client = pool.pop
-      client.setup_stream
-      result = yield client[@@database_name]
-      pool.push client
-      @@pool_size_lock.receive
-      raise result if result.is_a? Exception
-      result
-    }
-  end
-
-  # NOTE: Similar to `self.connection` but also acquires a lock.
+  # Acquires a database lock and yields the client and database objects.
   #
   # Will acquire a lock named *lock_name*, polling the DB every *delay* to check the lock status.
   # If *abort_if_locked* is true the block will not be executed and this method will return if the lock is acquired already.
@@ -45,23 +43,22 @@ module Moongoon::Database
   # ```
   # # If another connection uses the "query" lock, it will wait
   # # until this block has completed before perfoming its own work.
-  # Moongoon.connection_with_lock "query" {
+  # Moongoon.connection_with_lock "query" { |client, db|
   #   collection = db["some_collection"]
   #   data = collection.find query
   #   pp data
   # }
   # ```
-  def connection_with_lock(lock_name : String, *, delay = 0.5.seconds, abort_if_locked = false, &block : Proc(Mongo::Database, DatabaseResponse?))
+  def connection_with_lock(lock_name : String, *, delay = 0.5.seconds, abort_if_locked = false, &block : Proc(Mongo::Client, Mongo::Database, Nil))
     loop do
       begin
         # Acquire lock
-        lock = connection { |db|
-          db["_locks"].find_and_modify(
-            {_id: lock_name}.to_bson,
-            {"$setOnInsert": {date: Time.utc}}.to_bson,
-            upsert: true
-          )
-        }
+        lock = database["_locks"].find_one_and_update(
+          filter: {_id: lock_name},
+          update: {"$setOnInsert": {date: Time.utc}},
+          upsert: true,
+          write_concern: Mongo::WriteConcern.new(w: "majority")
+        )
         return if abort_if_locked && lock
         break unless lock
       rescue
@@ -72,51 +69,45 @@ module Moongoon::Database
     end
     begin
       # Perform the operation
-      connection { |db| block.call(db) }
+      block.call(client, database)
     ensure
       # Unlock
-      connection { |db|
-        db["_locks"].remove({_id: lock_name}.to_bson)
-      }
+      database["_locks"].delete_one(
+        {_id: lock_name},
+        write_concern: Mongo::WriteConcern.new(w: "majority")
+      )
     end
   end
 
-  # Connects to a MongoDB database.
-  #
-  # Moongoon handles a pool of *max_pool_size* connections and will reconnect if the connection is lost after *reconnection_delay*.
+  # Connects to MongoDB.
   #
   # ```
-  # # Arguments are all optional, their default values are the ones below:
-  # Moongoon.connect("mongodb://localhost:27017", "database", max_pool_size: 100, reconnection_delay: 5.seconds)
+  # # Arguments are all optional, their default values are the ones defined below:
+  # Moongoon.connect("mongodb://localhost:27017", "database", reconnection_delay: 5.seconds)
   # ```
-  def connect(database_url : String = "mongodb://localhost:27017", database_name : String = "database", *, max_pool_size = 100, reconnection_delay = 5.seconds)
+  def connect(database_url : String = "mongodb://localhost:27017", database_name : String = "database", *, reconnection_delay = 5.seconds)
     @@database_name = database_name
-    @@pool_size_lock = Channel(Nil).new(max_pool_size)
-
     @@before_connect_blocks.each &.call
 
     ::Moongoon::Log.info { "Connecting to MongoDB @ #{database_url}" }
 
-    pool = Mongo::ClientPool.new database_url
-    @@pool = pool
+    client = Mongo::Client.new(database_url)
+    @@client = client
 
-    client = pool.pop
-    client.setup_stream
-
-    ::Moongoon::Log.info { "Using database #{database_name}" }
+    ::Moongoon::Log.info { "Using database #{database_name} as default." }
     loop do
       begin
-        status = client.server_status
-        uptime = Time::Span.new seconds: status["uptime"].as(Float64).to_i32, nanoseconds: 0
-        ::Moongoon::Log.info { "Connected to MongoDB. Server version: #{status["version"]}, uptime: #{uptime}" }
+        client.command(Mongo::Commands::Ping)
+        # status = client.server_status
+        # uptime = Time::Span.new seconds: status["uptime"].as(Float64).to_i32, nanoseconds: 0
+        # ::Moongoon::Log.info { "Connected to MongoDB. Server version: #{status["version"]}, uptime: #{uptime}" }
+        ::Moongoon::Log.info { "Connected to MongoDB." }
         break
       rescue error
         ::Moongoon::Log.error { "#{error}\nCould not connect to MongoDB, retrying in #{reconnection_delay} second(s)." }
         sleep reconnection_delay
       end
     end
-
-    pool.push client
 
     @@after_connect_blocks.each &.call
     Scripts.process

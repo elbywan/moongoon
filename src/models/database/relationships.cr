@@ -1,46 +1,7 @@
-require "../../errors"
-
 # :nodoc:
-# A collection of helper methods and macros.
-module Moongoon::Traits::Database::Helpers
-  module Indexes
-    extend self
-
-    @@indexes = Hash(String, Array(BSON)).new
-    @@index_keys = Hash(String, Set(String)).new
-
-    # :nodoc:
-    def add_index(collection, index_name, index)
-      unless @@indexes[collection]?
-        @@indexes[collection] = [] of BSON
-        @@index_keys[collection] = Set(String).new
-      end
-      unless @@index_keys[collection].includes? index_name
-        @@index_keys[collection].add index_name
-        @@indexes[collection] << index
-      end
-    end
-
-    ::Moongoon.after_connect do
-      @@indexes.each { |collection, indexes|
-        begin
-          ::Moongoon.connection_with_lock "indexes_#{collection}", abort_if_locked: true { |db|
-            ::Moongoon::Log.info { "Creating indexes for collection #{collection}." }
-            db[collection].command_simple({
-              createIndexes: collection,
-              indexes:       indexes,
-            })
-          }
-        rescue e
-          ::Moongoon::Log.error { "Error while creating indexes for collection #{collection}.\n#{e}\n#{indexes}" }
-        end
-      }
-    end
-  end
-
+module Moongoon::Traits::Database::Relationships
   macro included
-  {% verbatim do %}
-
+    {% verbatim do %}
     # References one or more documents belonging to another collection.
     #
     # Creates a model field that will reference either one or multiple
@@ -68,7 +29,7 @@ module Moongoon::Traits::Database::Helpers
     # - *model*: The referenced model class.
     # - *many*: Set to true to reference multiple documents.
     # - *delete_cascade*: If true, removes the referenced document(s) when this model is removed.
-    # - *removal_sync*: If true, sets the reference to nil (if referencing a single document), or removes the id from the
+    # - *clear_reference*: If true, sets the reference to nil (if referencing a single document), or removes the id from the
     # reference array (if referencing multiple documents) when the referenced document(s) are removed.
     # - *back_reference*: The name of the refence, if it exists, in the referenced model that back-references this model.
     # If set, when a referenced document gets inserted, this reference will be updated to add the newly created id.
@@ -88,7 +49,7 @@ module Moongoon::Traits::Database::Helpers
     #
     #   # Whenever a Pet is removed the reference will get updated and the
     #   # id of the Pet will be removed from the array.
-    #   reference pet_id, model: Pet, many: true, removal_sync: true
+    #   reference pet_id, model: Pet, many: true, clear_reference: true
     # end
     # ```
     macro reference(
@@ -98,7 +59,7 @@ module Moongoon::Traits::Database::Helpers
       model,
       many = false,
       delete_cascade = false,
-      removal_sync = false,
+      clear_reference = false,
       # Set with the target collection field name (back-reference) to update when the referenced model gets inserted.
       # Field name must be equal to the instance variable referencing this model from the target model.
       back_reference = nil
@@ -112,15 +73,16 @@ module Moongoon::Traits::Database::Helpers
 
         {% if delete_cascade %}
           # Cascades on deletion
-          BEFORE_REMOVE << ->(model : self) {
-            model = find_by_id model.id!
+
+          self.before_remove { |model|
+            model = model.fetch
             ids_to_remove = model.try &.{{ field_key }}
             if ids_to_remove.try(&.size) || 0 > 0
               {{ model_class }}.remove_by_ids ids_to_remove.not_nil!
             end
           }
 
-          BEFORE_REMOVE_STATIC << ->(query : BSON) {
+          self.before_remove_static { |query|
             models = find query
             ids_to_remove = [] of String
             models.each { |model|
@@ -140,21 +102,22 @@ module Moongoon::Traits::Database::Helpers
 
         {% if delete_cascade %}
           # Cascades on deletion
-          BEFORE_REMOVE << ->(model : self) {
-            model = find_by_id model.id!
+
+          self.before_remove { |model|
+            model = model.fetch
             link = model.try &.{{ field_key }}
             if link
               {{ model_class }}.remove_by_id link
             end
           }
 
-          BEFORE_REMOVE_STATIC << ->(query : BSON) {
+          self.before_remove_static { |query|
             models = find query
             ids_to_remove = [] of String
             models.each { |model|
               if id_to_remove = model.{{ field_key }}
                 ids_to_remove <<  id_to_remove
-              }
+              end
             }
             if ids_to_remove.size > 0
               {{ model_class }}.remove_by_ids ids_to_remove
@@ -164,7 +127,7 @@ module Moongoon::Traits::Database::Helpers
 
       {% end %}
 
-      {% if removal_sync %}
+      {% if clear_reference %}
         # Updates the reference when the target gets deleted.
         {% if many %}
           {% mongo_op = "$pull" %}
@@ -217,62 +180,15 @@ module Moongoon::Traits::Database::Helpers
                   {{ field_key }}: inserted_model.id
                 }
               {% else %}
-                {{ field_key }}: inserted_model.id
+                "$set": {
+                  {{ field_key }}: inserted_model.id
+                }
               {% end %}
             })
           end
         }
       {% end %}
     end
-
-    # Defines an index that will be applied to this Model's underlying mongo collection.
-    #
-    # **Note that the order of fields do matter.**
-    #
-    # The name of the index is generated automatically from the collection and keys name
-    # to avoid conflicts.
-    #
-    # Please have a look at the [MongoDB documentation](https://docs.mongodb.com/v3.6/reference/command/createIndexes/)
-    # for more details about index creation and the list of available index options.
-    #
-    # ```
-    # # Specify one or more fields with a type (ascending or descending order, text indexing…)
-    # index field1: 1, field2: -1
-    # # Set the unique argument to create a unique index.
-    # index field: 1, options: {unique: true}
-    # ```
-    def self.index(
-      collection : String = @@collection,
-      options = NamedTuple.new,
-      index_name : String? = nil,
-      **keys
-    ) : Nil
-      index_name ||= "#{keys.map { |k, _| k }.join("_")}"
-
-      bson = {
-        key:  keys,
-        name: index_name.not_nil!,
-      }.merge(options).to_bson
-
-      ::Moongoon::Traits::Database::Helpers::Indexes.add_index(collection, index_name, bson)
-    end
-
-    # :ditto:
-    def self.index(
-      keys : Hash(String, BSON::ValueType),
-      collection : String = @@collection,
-      options = Hash(String, BSON::ValueType).new,
-      index_name : String? = nil
-    ) : Nil
-      index_name ||= "#{keys.map { |k, _| k }.join("_")}"
-
-      bson = {
-        "key"  => keys,
-        "name" => index_name.not_nil!,
-      }.merge(options).to_bson
-
-      ::Moongoon::Traits::Database::Helpers::Indexes.add_index(collection, index_name, bson)
-    end
-  {% end %}
+    {% end %}
   end
 end

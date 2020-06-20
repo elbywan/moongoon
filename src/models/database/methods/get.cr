@@ -28,7 +28,7 @@ module Moongoon::Traits::Database::Methods::Get
     def self.aggregation_pipeline(*args)
       @@aggregation_stages = [] of BSON
       args.each { |arg|
-        @@aggregation_stages.try { |a| a.<< arg.to_bson }
+        @@aggregation_stages.try { |a| a.<< BSON.new(arg) }
       }
     end
 
@@ -38,7 +38,7 @@ module Moongoon::Traits::Database::Methods::Get
     # default_fields({ ignored_field: 0 })
     # ```
     def self.default_fields(fields)
-      @@default_fields = fields.to_bson
+      @@default_fields = BSON.new(fields)
     end
 
     # Finds one or multiple documents and returns an array of `Moongoon::Collection` instances.
@@ -65,28 +65,20 @@ module Moongoon::Traits::Database::Methods::Get
     # ```
     #
     # NOTE: Other arguments are available but will not be documented here.
-    # For more details check out the underlying [`mongo.cr`](https://github.com/elbywan/mongo.cr)
-    # driver documentation and code.
+    # For more details check out the underlying [`cryomongo`](https://github.com/elbywan/cryomongo) driver documentation and code.
     def self.find(query = BSON.new, order_by = { _id: -1 }, fields = @@default_fields, skip = 0, limit = 0, **args) : Array(self)
       items = [] of self
+
       if stages = @@aggregation_stages
         pipeline = ::Moongoon::Traits::Database::Internal.format_aggregation(query, stages, fields, order_by, skip, limit)
-        ::Moongoon.connection { |db|
-          cursor = db[@@collection].aggregate(pipeline.to_bson, **args)
-          while item = cursor.next
-            items << self.new item
-          end
+        self.collection.aggregate(pipeline, **args).try { |c|
+          items = c.map{ |elt| self.from_bson(elt) }.to_a
         }
       else
-        full_query = ::Moongoon::Traits::Database::Internal.format_query(query, order_by)
-        bson_fields = (fields || BSON.new).to_bson
-        ::Moongoon.connection { |db|
-          cursor = db[@@collection].find(full_query.to_bson, **args, fields: bson_fields, skip: skip, limit: limit)
-          while item = cursor.next
-            items << self.new item
-          end
-        }
+        cursor = self.collection.find(query, **args, sort: order_by, projection: fields, skip: skip, limit: limit)
+        items = cursor.map{ |elt| self.from_bson(elt) }.to_a
       end
+
       items
     end
 
@@ -102,8 +94,8 @@ module Moongoon::Traits::Database::Methods::Get
     def self.find!(query, **args) : Array(self)
       items = self.find(query, **args)
       unless items.size > 0
-        query_json = query.to_json
-        ::Moongoon::Log.info { "[mongo][find!](#{@@collection}) No matches for query:\n#{query_json}" }
+        query_json = BSON.new(query).to_json
+        ::Moongoon::Log.info { "[mongo][find!](#{self.collection_name}) No matches for query:\n#{query_json}" }
         raise ::Moongoon::Error::NotFound.new
       end
       items
@@ -128,22 +120,14 @@ module Moongoon::Traits::Database::Methods::Get
     # ```
     #
     # NOTE: Other arguments are available but will not be documented here.
-    # For more details check out the underlying [`mongo.cr`](https://github.com/elbywan/mongo.cr)
-    # driver documentation and code.
+    # For more details check out the underlying [`cryomongo`](https://github.com/elbywan/cryomongo) driver documentation and code.
     def self.find_one(query = BSON.new, fields = @@default_fields, order_by = { _id: -1 }, skip = 0, **args) : self?
-      item = uninitialized BSON?
-      if stages = @@aggregation_stages
+      item = if stages = @@aggregation_stages
         pipeline = ::Moongoon::Traits::Database::Internal.format_aggregation(query, stages, fields, order_by, skip)
-        ::Moongoon.connection { |db|
-          cursor = db[@@collection].aggregate(pipeline.to_bson,**args)
-          item = cursor.next
-        }
+        cursor = self.collection.aggregate(pipeline, **args)
+        cursor.try &.first?
       else
-        full_query = Moongoon::Traits::Database::Internal.format_query(query, order_by)
-        bson_fields = (fields || BSON.new).to_bson
-        item = ::Moongoon.connection { |db|
-          db[@@collection].find_one(full_query.to_bson, **args, fields: bson_fields, skip: skip)
-        }
+        self.collection.find_one(query, **args, sort: order_by, projection: fields, skip: skip)
       end
       self.new item if item
     end
@@ -152,8 +136,8 @@ module Moongoon::Traits::Database::Methods::Get
     def self.find_one!(query, **args) : self
       item = self.find_one(query, **args)
       unless item
-        query_json = query.to_json
-        ::Moongoon::Log.info { "[mongo][find_one!](#{@@collection}) No matches for query:\n#{query_json}" }
+        query_json = BSON.new(query).to_json
+        ::Moongoon::Log.info { "[mongo][find_one!](#{self.collection_name}) No matches for query:\n#{query_json}" }
         raise ::Moongoon::Error::NotFound.new
       end
       item
@@ -168,19 +152,13 @@ module Moongoon::Traits::Database::Methods::Get
     # ```
     def self.find_by_id(id : String, query = BSON.new, order_by = { _id: -1 }, fields = @@default_fields, **args) : self?
       item = uninitialized BSON?
-      query = query.to_bson.clone.concat(::Moongoon::Traits::Database::Internal.build_id_filter id)
-      if stages = @@aggregation_stages
+      query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, id)
+      item = if stages = @@aggregation_stages
         pipeline = ::Moongoon::Traits::Database::Internal.format_aggregation(query, stages, fields, order_by)
-        ::Moongoon.connection { |db|
-          cursor = db[@@collection].aggregate(pipeline.to_bson, **args)
-          item = cursor.next
-        }
+        cursor = self.collection.aggregate(pipeline, **args)
+        cursor.try &.first?
       else
-        full_query = ::Moongoon::Traits::Database::Internal.format_query(query, order_by)
-        bson_fields = (fields || BSON.new).to_bson
-        item = ::Moongoon.connection { |db|
-          db[@@collection].find_one(full_query.to_bson, **args, fields: bson_fields, skip: 0)
-        }
+        self.collection.find_one(query, **args, sort: order_by, projection: fields, skip: 0)
       end
       self.new item if item
     end
@@ -189,7 +167,7 @@ module Moongoon::Traits::Database::Methods::Get
     def self.find_by_id!(id, **args) : self
       item = self.find_by_id(id, **args)
       unless item
-        ::Moongoon::Log.info { "[mongo][find_by_id!](#{@@collection}) Failed to fetch resource with id #{id}." }
+        ::Moongoon::Log.info { "[mongo][find_by_id!](#{self.collection_name}) Failed to fetch resource with id #{id}." }
         raise ::Moongoon::Error::NotFound.new
       end
       item.not_nil!
@@ -204,7 +182,7 @@ module Moongoon::Traits::Database::Methods::Get
     # users = User.find_by_ids(ids)
     # ```
     def self.find_by_ids(ids, query = BSON.new, order_by = { _id: -1 }, **args) : Array(self)?
-      query = query.to_bson.clone.concat(::Moongoon::Traits::Database::Internal.build_ids_filter ids)
+      query = ::Moongoon::Traits::Database::Internal.concat_ids_filter(query, ids)
       self.find(query, order_by, **args)
     end
 
@@ -212,7 +190,7 @@ module Moongoon::Traits::Database::Methods::Get
     def self.find_by_ids!(ids, **args) : Array(self)?
       items = self.find_by_ids(ids, **args)
       unless items.size > 0
-        ::Moongoon::Log.info { "[mongo][exists!](#{@@collection}) No matches for ids #{ids.to_json}." }
+        ::Moongoon::Log.info { "[mongo][exists!](#{self.collection_name}) No matches for ids #{ids.to_json}." }
         raise ::Moongoon::Error::NotFound.new
       end
       items
@@ -227,13 +205,10 @@ module Moongoon::Traits::Database::Methods::Get
     # ```
     def self.find_ids(query = BSON.new, order_by = { _id: -1 }, **args) : Array(String)
       ids = [] of String
-      full_query = ::Moongoon::Traits::Database::Internal.format_query(query, order_by)
-      ::Moongoon.connection { |db|
-        cursor = db[@@collection].find(full_query.to_bson, **args, fields: { _id: 1 }.to_bson)
-        while item = cursor.next
-          ids << item["_id"].as(BSON::ObjectId).to_s
-        end
-      }
+      cursor = self.collection.find(query, **args, sort: order_by, projection: { _id: 1 })
+      while item = cursor.first?
+        ids << item["_id"].to_s
+      end
       ids
     end
 
@@ -242,13 +217,8 @@ module Moongoon::Traits::Database::Methods::Get
     # ```
     # count = User.count({ name: "Julien" })
     # ```
-    def self.count(query = BSON.new, **args) : Int32 | Int64
-      count = 0
-      ::Moongoon.connection { |db|
-        count = db[@@collection].count(query.to_bson, **args)
-        nil
-      }
-      count
+    def self.count(query = BSON.new, **args) : Int32
+      self.collection.count_documents(query, **args)
     end
 
     # Ensures that at least one document matches the query.
@@ -264,8 +234,8 @@ module Moongoon::Traits::Database::Methods::Get
     def self.exist!(query = BSON.new, **args) : Bool
       count = self.count query, **args
       unless count > 0
-        query_json = query.to_json
-        ::Moongoon::Log.info { "[mongo][exists!](#{@@collection}) No matches for query:\n#{query_json}" }
+        query_json = BSON.new(query).to_json
+        ::Moongoon::Log.info { "[mongo][exists!](#{self.collection_name}) No matches for query:\n#{query_json}" }
         raise ::Moongoon::Error::NotFound.new
       end
       count > 0
@@ -281,8 +251,23 @@ module Moongoon::Traits::Database::Methods::Get
     # end
     # ```
     def self.exist_by_id!(id, query = BSON.new, **args) : Bool
-      query = query.to_bson.clone.concat(Moongoon::Traits::Database::Internal.build_id_filter id)
+      query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, id)
       self.exist! query, **args
+    end
+
+    # Returns a fresh copy of this object that is fetched from the database.
+    #
+    # ```
+    # user = User.new(name: "John", age: 10)
+    # User.update({ name: "John", age: 11 })
+    # puts user.age
+    # # => 10
+    # puts user.fetch.age
+    # # => 11
+    # ```
+    def fetch
+      id_check!
+      fresh_model = self.class.find_by_id! id!
     end
   end
 end
