@@ -1,6 +1,15 @@
-# moongoon | [![Build Status](https://travis-ci.org/elbywan/moongoon.svg?branch=master)](https://travis-ci.org/elbywan/moongoon)
+<div align="center">
+	<img src="icon.svg" width="128" height="128" />
+	<h1>moongoon</h1>
+  <h3>A MongoDB ODM written in Crystal.</h3>
+  <a href="https://travis-ci.org/elbywan/moongoon"><img alt="travis-badge" src="https://travis-ci.org/elbywan/moongoon.svg?branch=master"></a>
+  <a href="https://github.com/elbywan/moongoon/tags"><img alt="GitHub tag (latest SemVer)" src="https://img.shields.io/github/v/tag/elbywan/moongoon"></a>
+  <a href="https://github.com/elbywan/moongoon/blob/master/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/elbywan/moongoon"></a>
+</div>
 
-An object-document mapper (ODM) library written in Crystal which makes interacting with MongoDB a breeze.
+<hr/>
+
+#### An object-document mapper (ODM) library written in Crystal which makes interacting with MongoDB a breeze.
 
 This library relies on:
 - [`cryomongo`](https://github.com/elbywan/cryomongo) as the underlying MongoDB driver.
@@ -211,3 +220,7 @@ end
 ## Contributors
 
 - [elbywan](https://github.com/elbywan) - creator and maintainer
+
+## Credit
+
+- Icon made by [Smashicons](https://www.flaticon.com/authors/smashicons) from [www.flaticon.com](www.flaticon.com).
