@@ -6,6 +6,8 @@ This library relies on:
 - [`cryomongo`](https://github.com/elbywan/cryomongo) as the underlying MongoDB driver.
 - [`bson.cr`](https://github.com/elbywan/bson.cr) as the BSON implementation.
 
+*For the moongoon version relying on the [`mongo.cr`](https://github.com/elbywan/mongo.cr) driver, please check the [mongo.cr](https://github.com/elbywan/moongoon/tree/mongo.cr) branch.*
+
 ## Installation
 
 1. Add the dependency to your `shard.yml`:

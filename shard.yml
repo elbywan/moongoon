@@ -12,6 +12,5 @@ description: |
 dependencies:
   cryomongo:
     github: elbywan/cryomongo
-    branch: master
 
 license: MIT
