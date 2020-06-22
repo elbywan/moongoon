@@ -16,6 +16,7 @@ module Moongoon::Traits::Database::Versioning
     #
     # - *ref_field*: The name of the reference field that will point to the original document.
     # Defaults to the name of the Class in pascal_case with an "_id" suffix appended.
+    # - *create_index*: if set to true, will create an index on the reference field in the history collection.
     # - *auto*: if the auto flag is true, every insertion and update will be recorded.
     # Without the auto flag, a version will only be created programatically when calling
     # the `create_version` methods.
@@ -29,7 +30,7 @@ module Moongoon::Traits::Database::Versioning
     #   versioning auto: true
     # end
     # ```
-    macro versioning(ref_field = nil, auto = false, &transform)
+    macro versioning(*, ref_field = nil, auto = false, create_index = false, &transform)
       {% if ref_field %}
         @@versioning_id_field = {{ref_field.id.stringify}}
       {% end %}
@@ -38,9 +39,11 @@ module Moongoon::Traits::Database::Versioning
         @@versioning_transform = Proc(BSON, BSON, BSON).new {{transform}}
       {% end %}
 
-      def self.history_collection
-        self.database["#{self.collection_name}_history"]
-      end
+      {% if create_index %}
+        index({
+          @@versioning_id_field => 1
+        }, "#{@@collection_name}_history")
+      {% end %}
 
       {% if auto %}
       # After an insertion, copy the document in the history collection.

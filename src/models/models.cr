@@ -143,9 +143,10 @@ module Moongoon
         @@versioning_id_field = {{(base_versioning_name + "_id")}}
         @@versioning_transform : Proc(BSON, BSON, BSON)? = nil
 
-        index({
-          @@versioning_id_field => 1
-        }, "#{@@collection_name}_history")
+        # Get the versioning collection.
+        def self.history_collection
+          self.database["#{self.collection_name}_history"]
+        end
       end
     end
   end
