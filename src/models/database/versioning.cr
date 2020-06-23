@@ -40,9 +40,7 @@ module Moongoon::Traits::Database::Versioning
       {% end %}
 
       {% if create_index %}
-        index({
-          @@versioning_id_field => 1
-        }, "#{@@collection_name}_history")
+        index keys: {@@versioning_id_field => 1}, collection: "#{@@collection_name}_history"
       {% end %}
 
       {% if auto %}

@@ -40,23 +40,23 @@ module Moongoon::Traits::Database::Indexes
     #
     # **Note that the order of fields do matter.**
     #
-    # If not provided the name of the index is generated automatically from the keys names and order.
+    # If not provided the driver will generate the name of the index from the keys names and order.
     #
     # Please have a look at the [MongoDB documentation](https://docs.mongodb.com/manual/reference/command/createIndexes/)
     # for more details about index creation and the list of available index options.
     #
     # ```
     # # Specify one or more fields with a type (ascending or descending order, text indexing…)
-    # index field1: 1, field2: -1
+    # index keys: { field1: 1, field2: -1 }
     # # Set the unique argument to create a unique index.
-    # index field: 1, options: {unique: true}
+    # index keys: { field: 1 }, options: { unique: true }
     # ```
     def self.index(
+      keys : NamedTuple,
       collection : String? = nil,
       database : String? = nil,
       options = NamedTuple.new,
-      name : String? = nil,
-      **keys
+      name : String? = nil
     ) : Nil
       index = BSON.new({
         keys:  keys,

@@ -36,10 +36,10 @@ class IndexModel < Moongoon::Collection
   property a : String
   property b : Int32
 
-  index a: -1, name: "a_desc"
-  index _id: 1, a: 1, options: {unique: true}
-  index ({"_id" => 1, "$**" => "text"})
-  index ({"b" => 1}), name: "index_name", options: {"unique" => true}
+  index keys: {a: -1}, name: "a_desc"
+  index keys: {_id: 1, a: 1}, options: {unique: true}
+  index keys: {"_id" => 1, "$**" => "text"}
+  index keys: {"b" => 1}, name: "index_name", options: {"unique" => true}
 end
 
 ::Moongoon.after_connect_before_scripts {

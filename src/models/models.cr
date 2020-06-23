@@ -123,7 +123,7 @@ module Moongoon
   # class MyModel < Moongoon::Collection
   #   collection "my_models"
   #
-  #   index name: 1, options: {unique: true}
+  #   index keys: {name: 1}, options: {unique: true}
   #
   #   property name : String
   #   property age : Int32

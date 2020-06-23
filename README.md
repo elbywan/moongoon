@@ -42,7 +42,7 @@ require "moongoon"
 class User < Moongoon::Collection
   collection "users"
 
-  index name: 1, age: 1, options: { unique: true }
+  index keys: { name: 1, age: 1 }, options: { unique: true }
 
   property name : String
   property age : Int32
@@ -136,7 +136,7 @@ class MyModel < Moongoon::Collection
   # database "database_name"
 
   # Define indexes
-  index name: 1
+  index keys: { name: 1 }
 
   # Specify agregation pipeline stages that will automatically be used for queries.
   aggregation_pipeline(
