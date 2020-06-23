@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.34.0">
-<meta name="crystal_docs.project_version" content="0.3.1-dev">
+<meta name="crystal_docs.project_version" content="0.5.0-dev">
 <meta name="crystal_docs.project_name" content="moongoon">
 
 
@@ -18,7 +18,7 @@
 </svg>
 
   <meta id="repository-name" content="moongoon">
-  <title>moongoon 0.3.1-dev</title>
+  <title>moongoon 0.5.0-dev</title>
   <script type="text/javascript">
   CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.3.1-dev
+        0.5.0-dev
       </span>
     </div>
   </div>
@@ -158,13 +158,22 @@
 
 
 <div class="main-content">
-<h1><a id="moongoon-build-statushttpstravis-ci.orgelbywanmoongoon.svgbranchmasterhttpstravis-ci.orgelbywanmoongoon" class="anchor" href="#moongoon-build-statushttpstravis-ci.orgelbywanmoongoon.svgbranchmasterhttpstravis-ci.orgelbywanmoongoon">
+<p>&lt;div align="center">
+	&lt;img src="icon.svg" width="128" height="128" />
+	&lt;h1>moongoon&lt;/h1>
+  &lt;h3>A MongoDB ODM written in Crystal.&lt;/h3>
+  &lt;a href="https://travis-ci.org/elbywan/moongoon">&lt;img alt="travis-badge" src="https://travis-ci.org/elbywan/moongoon.svg?branch=master">&lt;/a>
+  &lt;a href="https://github.com/elbywan/moongoon/tags">&lt;img alt="GitHub tag (latest SemVer)" src="https://img.shields.io/github/v/tag/elbywan/moongoon">&lt;/a>
+  &lt;a href="https://github.com/elbywan/moongoon/blob/master/LICENSE">&lt;img alt="GitHub" src="https://img.shields.io/github/license/elbywan/moongoon">&lt;/a>
+&lt;/div></p>
+
+<p>&lt;hr/></p>
+
+<h4><a id="an-object-document-mapper-odm-library-written-in-crystal-which-makes-interacting-with-mongo-db-a-breeze." class="anchor" href="#an-object-document-mapper-odm-library-written-in-crystal-which-makes-interacting-with-mongo-db-a-breeze.">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>moongoon | <a href="https://travis-ci.org/elbywan/moongoon" target="_blank"><img src="https://travis-ci.org/elbywan/moongoon.svg?branch=master" alt="Build Status"/></a></h1>
-
-<p>An object-document mapper (ODM) library written in Crystal which makes interacting with MongoDB a breeze.</p>
+</a>An object-document mapper (ODM) library written in Crystal which makes interacting with MongoDB a breeze.</h4>
 
 <p>This library relies on:</p>
 
@@ -206,7 +215,7 @@
 <span class="k">class</span> <span class="t">User</span> <span class="o">&lt;</span> <span class="t">Moongoon</span><span class="t">::</span><span class="t">Collection</span>
   collection <span class="s">&quot;users&quot;</span>
 
-  index name: <span class="n">1</span>, age: <span class="n">1</span>, options: { unique: <span class="n">true</span> }
+  index keys: { name: <span class="n">1</span>, age: <span class="n">1</span> }, options: { unique: <span class="n">true</span> }
 
   property name : <span class="t">String</span>
   property age : <span class="t">Int32</span>
@@ -299,7 +308,7 @@ puts cursor.to_a.to_json</code></pre>
   <span class="c"># database &quot;database_name&quot;</span>
 
   <span class="c"># Define indexes</span>
-  index name: <span class="n">1</span>
+  index keys: { name: <span class="n">1</span> }
 
   <span class="c"># Specify agregation pipeline stages that will automatically be used for queries.</span>
   aggregation_pipeline(
@@ -388,6 +397,14 @@ puts <span class="t">MyModel</span>.count
 </a>Contributors</h2>
 
 <ul><li><a href="https://github.com/elbywan" target="_blank">elbywan</a> - creator and maintainer</li></ul>
+
+<h2><a id="credit" class="anchor" href="#credit">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Credit</h2>
+
+<ul><li>Icon made by <a href="https://www.flaticon.com/authors/smashicons" target="_blank">Smashicons</a> from <a href="www.flaticon.com" target="_blank">www.flaticon.com</a>.</li></ul>
 </div>
 </body>
 </html>

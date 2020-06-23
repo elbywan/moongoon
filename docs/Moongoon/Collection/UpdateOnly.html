@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.34.0">
-<meta name="crystal_docs.project_version" content="0.3.1-dev">
+<meta name="crystal_docs.project_version" content="0.5.0-dev">
 <meta name="crystal_docs.project_name" content="moongoon">
 
 
@@ -18,7 +18,7 @@
 </svg>
 
   <meta id="repository-name" content="moongoon">
-  <title>Moongoon::Collection::UpdateOnly - moongoon 0.3.1-dev</title>
+  <title>Moongoon::Collection::UpdateOnly - moongoon 0.5.0-dev</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.3.1-dev
+        0.5.0-dev
       </span>
     </div>
   </div>
@@ -322,7 +322,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#index(collection:String?=nil,database:String?=nil,options=NamedTuple.new,name:String?=nil,**keys):Nil-class-method" class="signature"><strong>.index</strong>(collection : String? = <span class="n">nil</span>, database : String? = <span class="n">nil</span>, options = <span class="t">NamedTuple</span>.<span class="k">new</span>, name : String? = <span class="n">nil</span>, **keys) : Nil</a>
+        <a href="#index(keys:NamedTuple,collection:String?=nil,database:String?=nil,options=NamedTuple.new,name:String?=nil):Nil-class-method" class="signature"><strong>.index</strong>(keys : NamedTuple, collection : String? = <span class="n">nil</span>, database : String? = <span class="n">nil</span>, options = <span class="t">NamedTuple</span>.<span class="k">new</span>, name : String? = <span class="n">nil</span>) : Nil</a>
         
           <div class="summary"><p>Defines an index that will be applied to this Model's underlying mongo collection.</p></div>
         
@@ -331,7 +331,7 @@
       <li class="entry-summary">
         <a href="#index(keys:Hash(String,BSON::Value),collection:String?=nil,database:String?=nil,options=Hash(String,BSON::Value).new,name:String?=nil):Nil-class-method" class="signature"><strong>.index</strong>(keys : Hash(String, BSON::Value), collection : String? = <span class="n">nil</span>, database : String? = <span class="n">nil</span>, options = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">BSON</span><span class="t">::</span><span class="t">Value</span>).<span class="k">new</span>, name : String? = <span class="n">nil</span>) : Nil</a>
         
-          <div class="summary"><p>Same as <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#index(collection:String?=nil,database:String?=nil,options=NamedTuple.new,name:String?=nil,**keys):Nil-class-method">.index</a></code> but with hash arguments.</p></div>
+          <div class="summary"><p>Same as <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#index(keys:NamedTuple,collection:String?=nil,database:String?=nil,options=NamedTuple.new,name:String?=nil):Nil-class-method">.index</a></code> but with hash arguments.</p></div>
         
       </li>
     
@@ -822,12 +822,12 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="index(collection:String?=nil,database:String?=nil,options=NamedTuple.new,name:String?=nil,**keys):Nil-class-method">
+    <div class="entry-detail" id="index(keys:NamedTuple,collection:String?=nil,database:String?=nil,options=NamedTuple.new,name:String?=nil):Nil-class-method">
       <div class="signature">
         
-        def self.<strong>index</strong>(collection : String? = <span class="n">nil</span>, database : String? = <span class="n">nil</span>, options = <span class="t">NamedTuple</span>.<span class="k">new</span>, name : String? = <span class="n">nil</span>, **keys) : Nil
+        def self.<strong>index</strong>(keys : NamedTuple, collection : String? = <span class="n">nil</span>, database : String? = <span class="n">nil</span>, options = <span class="t">NamedTuple</span>.<span class="k">new</span>, name : String? = <span class="n">nil</span>) : Nil
 
-        <a class="method-permalink" href="#index(collection:String?=nil,database:String?=nil,options=NamedTuple.new,name:String?=nil,**keys):Nil-class-method">#</a>
+        <a class="method-permalink" href="#index(keys:NamedTuple,collection:String?=nil,database:String?=nil,options=NamedTuple.new,name:String?=nil):Nil-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -836,15 +836,15 @@
 
 <p><strong>Note that the order of fields do matter.</strong></p>
 
-<p>If not provided the name of the index is generated automatically from the keys names and order.</p>
+<p>If not provided the driver will generate the name of the index from the keys names and order.</p>
 
 <p>Please have a look at the <a href="https://docs.mongodb.com/manual/reference/command/createIndexes/" target="_blank">MongoDB documentation</a>
 for more details about index creation and the list of available index options.</p>
 
 <pre><code><span class="c"># Specify one or more fields with a type (ascending or descending order, text indexing…)</span>
-index field1: <span class="n">1</span>, field2: <span class="n">-1</span>
+index keys: { field1: <span class="n">1</span>, field2: <span class="n">-1</span> }
 <span class="c"># Set the unique argument to create a unique index.</span>
-index field: <span class="n">1</span>, options: {unique: <span class="n">true</span>}</code></pre>
+index keys: { field: <span class="n">1</span> }, options: { unique: <span class="n">true</span> }</code></pre>
         </div>
       
       <br/>
@@ -863,7 +863,7 @@ index field: <span class="n">1</span>, options: {unique: <span class="n">true</s
       
         <div class="doc">
           
-          <p>Same as <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#index(collection:String?=nil,database:String?=nil,options=NamedTuple.new,name:String?=nil,**keys):Nil-class-method">.index</a></code> but with hash arguments.</p>
+          <p>Same as <code>self<a href="../../Moongoon/Collection/UpdateOnly.html#index(keys:NamedTuple,collection:String?=nil,database:String?=nil,options=NamedTuple.new,name:String?=nil):Nil-class-method">.index</a></code> but with hash arguments.</p>
 
 <pre><code>index ({ <span class="s">&quot;a&quot;</span> => <span class="n">1</span> }), name: <span class="s">&quot;index_name&quot;</span>, options: { <span class="s">&quot;unique&quot;</span> => <span class="n">true</span> }</code></pre>
         </div>

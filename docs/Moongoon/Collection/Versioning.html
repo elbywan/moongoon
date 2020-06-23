@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.34.0">
-<meta name="crystal_docs.project_version" content="0.3.1-dev">
+<meta name="crystal_docs.project_version" content="0.5.0-dev">
 <meta name="crystal_docs.project_name" content="moongoon">
 
 
@@ -18,7 +18,7 @@
 </svg>
 
   <meta id="repository-name" content="moongoon">
-  <title>Moongoon::Collection::Versioning - moongoon 0.3.1-dev</title>
+  <title>Moongoon::Collection::Versioning - moongoon 0.5.0-dev</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.3.1-dev
+        0.5.0-dev
       </span>
     </div>
   </div>
@@ -284,7 +284,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#versioning(ref_field=nil,auto=false,&transform)-macro" class="signature"><strong>versioning</strong>(ref_field = <span class="n">nil</span>, auto = <span class="n">false</span>, &transform)</a>
+        <a href="#versioning(*,ref_field=nil,auto=false,create_index=false,&transform)-macro" class="signature"><strong>versioning</strong>(*, ref_field = <span class="n">nil</span>, auto = <span class="n">false</span>, create_index = <span class="n">false</span>, &transform)</a>
         
           <div class="summary"><p>Enable versioning for this collection.</p></div>
         
@@ -463,12 +463,12 @@ user_version <span class="o">=</span> user.find_latest_version</code></pre>
     Macro Detail
   </h2>
   
-    <div class="entry-detail" id="versioning(ref_field=nil,auto=false,&amp;transform)-macro">
+    <div class="entry-detail" id="versioning(*,ref_field=nil,auto=false,create_index=false,&amp;transform)-macro">
       <div class="signature">
         
-        macro <strong>versioning</strong>(ref_field = <span class="n">nil</span>, auto = <span class="n">false</span>, &transform)
+        macro <strong>versioning</strong>(*, ref_field = <span class="n">nil</span>, auto = <span class="n">false</span>, create_index = <span class="n">false</span>, &transform)
 
-        <a class="method-permalink" href="#versioning(ref_field=nil,auto=false,&transform)-macro">#</a>
+        <a class="method-permalink" href="#versioning(*,ref_field=nil,auto=false,create_index=false,&transform)-macro">#</a>
       </div>
       
         <div class="doc">
@@ -486,7 +486,7 @@ reference to the base document id.</p>
 <p><strong>Arguments</strong></p>
 
 <ul><li><em>ref_field</em>: The name of the reference field that will point to the original document.
-Defaults to the name of the Class in pascal_case with an "_id" suffix appended.</li><li><em>auto</em>: if the auto flag is true, every insertion and update will be recorded.
+Defaults to the name of the Class in pascal_case with an "_id" suffix appended.</li><li><em>create_index</em>: if set to true, will create an index on the reference field in the history collection.</li><li><em>auto</em>: if the auto flag is true, every insertion and update will be recorded.
 Without the auto flag, a version will only be created programatically when calling
 the <code><a href="../../Moongoon/Collection/Versioning.html#create_version:String?-instance-method">#create_version</a></code> methods.</li><li><em>transform</em>: a block that will be executed to transform the BSON document before insertion.</li></ul>
 
