@@ -81,18 +81,32 @@ module Moongoon::Database
 
   # Connects to MongoDB.
   #
+  # Use an instance of `Mongo::Options` as the *options* argument to customize the `Mongo::Client` instance.
+  #
+  # Will retry up to *max_retries* times to connect to the database.
+  # If *max_retries* is nil, will retry infinitely.
+  #
+  # Will sleep for *reconnection_delay* between attempts.
+  #
   # ```
   # # Arguments are all optional, their default values are the ones defined below:
-  # Moongoon.connect("mongodb://localhost:27017", "database", reconnection_delay: 5.seconds)
+  # Moongoon.connect("mongodb://localhost:27017", "database", options = nil, max_retries: nil, reconnection_delay: 5.seconds)
   # ```
-  def connect(database_url : String = "mongodb://localhost:27017", database_name : String = "database", *, reconnection_delay = 5.seconds)
+  def connect(database_url : String = "mongodb://localhost:27017", database_name : String = "database", *, options : Mongo::Options? = nil, max_retries = nil, reconnection_delay = 5.seconds)
     @@database_name = database_name
     @@before_connect_blocks.each &.call
 
     ::Moongoon::Log.info { "Connecting to MongoDB @ #{database_url}" }
 
-    client = Mongo::Client.new(database_url)
+    client = if options
+      Mongo::Client.new(database_url, options: options)
+    else
+      Mongo::Client.new(database_url)
+    end
+
     @@client = client
+
+    retries = 0
 
     ::Moongoon::Log.info { "Using database #{database_name} as default." }
     loop do
@@ -104,8 +118,17 @@ module Moongoon::Database
         ::Moongoon::Log.info { "Connected to MongoDB." }
         break
       rescue error
-        ::Moongoon::Log.error { "#{error}\nCould not connect to MongoDB, retrying in #{reconnection_delay} second(s)." }
-        sleep reconnection_delay
+        if max_retries.nil? || retries < max_retries
+          retries += 1
+          ::Moongoon::Log.error { "#{error}\nCould not connect to MongoDB, retrying in #{reconnection_delay} second(s)." }
+          sleep reconnection_delay
+        elsif max_retries && retries >= max_retries
+          ::Moongoon::Log.error { "#{error}\nCould not connect to MongoDB, maximum number of retries exceeded (#{max_retries})." }
+          raise error
+        else
+          ::Moongoon::Log.error { "#{error}\nCould not connect to MongoDB." }
+          raise error
+        end
       end
     end
 
