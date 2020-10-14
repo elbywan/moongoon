@@ -66,7 +66,7 @@ module Moongoon::Traits::Database::Methods::Get
     #
     # NOTE: Other arguments are available but will not be documented here.
     # For more details check out the underlying [`cryomongo`](https://github.com/elbywan/cryomongo) driver documentation and code.
-    def self.find(query = BSON.new, order_by = { _id: -1 }, fields = @@default_fields, skip = 0, limit = 0, **args) : Array(self)
+    def self.find(query = BSON.new, order_by : NamedTuple = { _id: -1 }, fields = @@default_fields, skip = 0, limit = 0, **args) : Array(self)
       items = [] of self
 
       if stages = @@aggregation_stages
@@ -150,7 +150,7 @@ module Moongoon::Traits::Database::Methods::Get
     # ```
     # user = User.find_by_id(123456)
     # ```
-    def self.find_by_id(id : String, query = BSON.new, order_by = { _id: -1 }, fields = @@default_fields, **args) : self?
+    def self.find_by_id(id : BSON::ObjectId | String, query = BSON.new, order_by = { _id: -1 }, fields = @@default_fields, **args) : self?
       item = uninitialized BSON?
       query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, id)
       item = if stages = @@aggregation_stages

@@ -2,6 +2,19 @@
 module Moongoon::Traits::Database::Internal
   extend self
 
+  # Utilities #
+
+  def bson_id(id : String | BSON::ObjectId | Nil)
+    case id
+    when String
+      BSON::ObjectId.new id
+    when BSON::ObjectId
+      id
+    when Nil
+      BSON::ObjectId.new ""
+    end
+  end
+
   # Query builders #
 
   protected def self.format_aggregation(query, stages, fields = nil, order_by = nil, skip = 0, limit = 0)
@@ -16,6 +29,7 @@ module Moongoon::Traits::Database::Internal
       pipeline << BSON.new({"$project": BSON.new(fields)})
     end
     if order_by
+      {{ debug() }}
       pipeline << BSON.new({"$sort": BSON.new(order_by)})
     end
     if skip > 0
@@ -27,16 +41,16 @@ module Moongoon::Traits::Database::Internal
     pipeline
   end
 
-  protected def self.concat_id_filter(query, id)
-    BSON.new({"_id": BSON::ObjectId.new(id.not_nil!)}).append(BSON.new(query))
+  protected def self.concat_id_filter(query, id : BSON::ObjectId | String | Nil)
+    BSON.new({"_id": self.bson_id(id)}).append(BSON.new(query))
   end
 
-  protected def self.concat_ids_filter(query, ids)
+  protected def self.concat_ids_filter(query, ids : Array(BSON::ObjectId?) | Array(String?))
     BSON.new({
       "_id" => {
         "$in" => ids.map { |id|
-          BSON::ObjectId.new id
-        },
+          self.bson_id(id)
+        }.compact,
       },
     }).append(BSON.new(query))
   end

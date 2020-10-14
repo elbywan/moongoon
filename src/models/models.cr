@@ -18,6 +18,10 @@ module Moongoon
     include JSON::Serializable
     include BSON::Serializable
 
+    @[JSON::Field(ignore: true)]
+    @[BSON::Field(ignore: true)]
+    getter? removed = false
+
     # Creates a new instance of the class from variadic arguments.
     #
     # ```
@@ -25,21 +29,61 @@ module Moongoon
     # ```
     def self.new(**args)
       instance = self.allocate
-      {% for ivar in @type.instance_vars %}
-        {% default_value = ivar.default_value %}
-        {% if ivar.type.nilable? %}
-          instance.{{ivar.id}} = args["{{ivar.id}}"]? {% if ivar.has_default_value? %}|| {{ default_value }}{% end %}
-        {% else %}
-          if value = args["{{ivar.id}}"]?
-            instance.{{ivar.id}} = value
-          {% if ivar.has_default_value? %}
-          else
-            instance.{{ivar.id}} = {{ default_value }}
+      {% begin %}
+        {% for ivar in @type.instance_vars %}
+          {% ann = ivar.annotation(::BSON::Field) %}
+          {% unless (ann && ann[:ignore]) %}
+            {% default_value = ivar.default_value %}
+            {% if ivar.type.nilable? %}
+              instance.{{ivar.id}} = args["{{ivar.id}}"]? {% if ivar.has_default_value? %}|| {{ default_value }}{% end %}
+            {% else %}
+              if value = args["{{ivar.id}}"]?
+                instance.{{ivar.id}} = value
+              {% if ivar.has_default_value? %}
+              else
+                instance.{{ivar.id}} = {{ default_value }}
+              {% end %}
+              end
+            {% end %}
           {% end %}
-          end
         {% end %}
       {% end %}
       instance
+    end
+
+    def _id!
+      self._id.not_nil!
+    end
+
+    def id!
+      self.id.not_nil!
+    end
+
+    def self.find_in_batches(query = BSON.new, order_by : NamedTuple = {_id: -1}, batch_size = 100, skip = 0, limit = 0)
+      current_offset = skip
+      total_results = 0
+
+      until total_results >= limit
+        pull_limit = Math.min(limit - total_results, batch_size)
+
+        results = self.find(query: query, order_by: order_by, skip: current_offset, limit: pull_limit)
+        total_results += results.size
+        return if results.empty?
+
+        results.each do |doc|
+          yield doc
+        end
+
+        current_offset += batch_size
+      end
+    end
+
+    def persisted?
+      self.persisted_ever? && !self.removed?
+    end
+
+    def persisted_ever?
+      self._id != nil
     end
 
     # Instantiate a named tuple from the model instance properties.
@@ -56,7 +100,10 @@ module Moongoon
       {% begin %}
       {
       {% for ivar in @type.instance_vars %}
-        "{{ ivar.name }}": self.{{ ivar.name }},
+        {% ann = ivar.annotation(::BSON::Field) %}
+        {% unless ann && ann[:ignore] %}
+          "{{ ivar.name }}": self.{{ ivar.name }},
+        {% end %}
       {% end %}
       }
       {% end %}

@@ -27,7 +27,7 @@ module Moongoon::Traits::Database::Methods::Patch
     # ```
     def update(query = BSON.new, **args) : self
       id_check!
-      query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, id)
+      query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, _id!)
       self.update_query(query, **args)
     end
 
@@ -90,7 +90,7 @@ module Moongoon::Traits::Database::Methods::Patch
     # # Updates the user only if he/she is named John.
     # User.update_by_id(id, query: { name: "John" }, update: { "$set": { name: "Igor" }})
     # ```
-    def self.update_by_id(id, update, query = BSON.new, **args) : Mongo::Commands::Common::UpdateResult?
+    def self.update_by_id(id : BSON::ObjectId | String, update, query = BSON.new, **args) : Mongo::Commands::Common::UpdateResult?
       query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, id)
       update(query, update, **args)
     end
@@ -137,7 +137,7 @@ module Moongoon::Traits::Database::Methods::Patch
     # Modifies and returns a single document.
     #
     # Similar to `self.find_and_modify`, except that a matching on the `_id` field will be added to the *query* argument.
-    def self.find_and_modify_by_id(id, update, query = BSON.new, no_hooks = false, **args)
+    def self.find_and_modify_by_id(id : BSON::ObjectId | String, update, query = BSON.new, no_hooks = false, **args)
       query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, id)
       find_and_modify(query, update, **args)
     end
