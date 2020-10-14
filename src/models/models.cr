@@ -59,25 +59,6 @@ module Moongoon
       self.id.not_nil!
     end
 
-    def self.find_in_batches(query = BSON.new, order_by : NamedTuple = {_id: -1}, batch_size = 100, skip = 0, limit = 0)
-      current_offset = skip
-      total_results = 0
-
-      until total_results >= limit
-        pull_limit = Math.min(limit - total_results, batch_size)
-
-        results = self.find(query: query, order_by: order_by, skip: current_offset, limit: pull_limit)
-        total_results += results.size
-        return if results.empty?
-
-        results.each do |doc|
-          yield doc
-        end
-
-        current_offset += batch_size
-      end
-    end
-
     def persisted?
       self.persisted_ever? && !self.removed?
     end
