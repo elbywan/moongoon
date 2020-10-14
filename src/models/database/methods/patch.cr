@@ -69,7 +69,10 @@ module Moongoon::Traits::Database::Methods::Patch
       self.class.collection.update_many(
         query,
         **args,
-        update: {"$set": self.to_bson}
+        update: {
+          "$set": self.to_bson,
+          "$unset": self.unsets_to_bson
+        }
       )
       self.class.after_update_call(self) unless no_hooks
       self

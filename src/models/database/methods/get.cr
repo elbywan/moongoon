@@ -66,7 +66,7 @@ module Moongoon::Traits::Database::Methods::Get
     #
     # NOTE: Other arguments are available but will not be documented here.
     # For more details check out the underlying [`cryomongo`](https://github.com/elbywan/cryomongo) driver documentation and code.
-    def self.find(query = BSON.new, order_by : NamedTuple = { _id: -1 }, fields = @@default_fields, skip = 0, limit = 0, **args) : Array(self)
+    def self.find(query = BSON.new, order_by : NamedTuple = { _id: -1 }, fields = @@default_fields, skip = 0, limit : Int32? = nil, **args) : Array(self)
       items = [] of self
 
       if stages = @@aggregation_stages

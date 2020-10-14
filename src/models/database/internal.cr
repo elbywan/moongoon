@@ -4,18 +4,20 @@ module Moongoon::Traits::Database::Internal
 
   # Utilities #
 
-  def bson_id(id : String | BSON::ObjectId)
+  def bson_id(id : String | BSON::ObjectId | Nil)
     case id
     when String
       BSON::ObjectId.new id
     when BSON::ObjectId
       id
+    when Nil
+      nil
     end
   end
 
   # Query builders #
 
-  protected def self.format_aggregation(query, stages, fields = nil, order_by = nil, skip = 0, limit = 0)
+  protected def self.format_aggregation(query, stages, fields = nil, order_by = nil, skip = 0, limit : Int32? = 0)
     pipeline = query && !query.empty? ? [
       BSON.new({"$match": BSON.new(query)}),
     ] : [] of BSON
@@ -33,17 +35,17 @@ module Moongoon::Traits::Database::Internal
     if skip > 0
       pipeline << BSON.new({"$skip": skip.to_i32})
     end
-    if limit > 0
-      pipeline << BSON.new({"$limit": limit.to_i32})
+    if (limit_i32 = limit) && limit_i32 > 0
+      pipeline << BSON.new({"$limit": limit_i32})
     end
     pipeline
   end
 
-  protected def self.concat_id_filter(query, id : BSON::ObjectId | String)
+  protected def self.concat_id_filter(query, id : BSON::ObjectId | String | Nil)
     BSON.new({"_id": self.bson_id(id)}).append(BSON.new(query))
   end
 
-  protected def self.concat_ids_filter(query, ids : Array(BSON::ObjectId) | Array(String))
+  protected def self.concat_ids_filter(query, ids : Array(BSON::ObjectId?) | Array(String?))
     BSON.new({
       "_id" => {
         "$in" => ids.map { |id|

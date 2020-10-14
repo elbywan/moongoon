@@ -67,6 +67,28 @@ module Moongoon
       self._id != nil
     end
 
+    # Copying and hacking BSON::Serializable for now - but ideally we'd just add more flexibility there? (options[force_emit_nil: true] or something?)
+    def unsets_to_bson(bson = BSON.new)
+      {% begin %}
+      {% global_options = @type.annotations(BSON::Options) %}
+      {% camelize = global_options.reduce(false) { |_, a| a[:camelize] } %}
+      {% for ivar in @type.instance_vars %}
+        {% ann = ivar.annotation(BSON::Field) %}
+        {% typ = ivar.type.union_types.select { |t| t != Nil }[0] %}
+        {% key = ivar.name %}
+        {% bson_key = ann ? ann[:key].id : camelize ? ivar.name.camelcase(lower: camelize == "lower") : ivar.name %}
+        {% unless ann && ann[:ignore] %}
+          {% unless ann && ann[:emit_null] %} #confusing, but it will be picked up by normal to_bson so we don't need it here
+            if self.{{ key }}.nil?
+              bson["{{ bson_key }}"] = nil
+            end
+          {% end %}
+        {% end %}
+      {% end %}
+      {% end %}
+      bson
+    end
+
     # Instantiate a named tuple from the model instance properties.
     #
     # ```
