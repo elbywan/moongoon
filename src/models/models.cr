@@ -60,10 +60,10 @@ module Moongoon
     end
 
     def persisted?
-      self.persisted_ever? && !self.removed?
+      self.inserted? && !self.removed?
     end
 
-    def persisted_ever?
+    def inserted?
       self._id != nil
     end
 
