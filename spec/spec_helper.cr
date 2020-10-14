@@ -45,6 +45,8 @@ end
 ::Moongoon.after_connect_before_scripts {
   ::Moongoon.database.command(Mongo::Commands::DropDatabase)
 }
+
 ::Moongoon.connect(
+  ENV.fetch("MONGO_URL", "mongodb://localhost:27017"),
   database_name: "moongoon_test"
 )
