@@ -68,7 +68,8 @@ module Moongoon
     end
 
     # Copying and hacking BSON::Serializable for now - but ideally we'd just add more flexibility there? (options[force_emit_nil: true] or something?)
-    def unsets_to_bson(bson = BSON.new)
+    def unsets_to_bson : BSON?
+      bson = BSON.new
       {% begin %}
       {% global_options = @type.annotations(BSON::Options) %}
       {% camelize = global_options.reduce(false) { |_, a| a[:camelize] } %}
@@ -86,7 +87,7 @@ module Moongoon
         {% end %}
       {% end %}
       {% end %}
-      bson
+      bson.empty? ? nil : bson
     end
 
     # Instantiate a named tuple from the model instance properties.

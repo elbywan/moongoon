@@ -66,13 +66,16 @@ module Moongoon::Traits::Database::Methods::Patch
     # ```
     def update_query(query, no_hooks = false, **args) : self
       self.class.before_update_call(self) unless no_hooks
+      changes = BSON.new({
+        "$set": self.to_bson
+      })
+      if unsets = self.unsets_to_bson
+        changes["$unset"] = unsets
+      end
       self.class.collection.update_many(
         query,
         **args,
-        update: {
-          "$set": self.to_bson,
-          "$unset": self.unsets_to_bson
-        }
+        update: changes
       )
       self.class.after_update_call(self) unless no_hooks
       self

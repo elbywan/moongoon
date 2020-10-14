@@ -46,7 +46,13 @@ end
   ::Moongoon.database.command(Mongo::Commands::DropDatabase)
 }
 
-::Moongoon.connect(
-  ENV.fetch("MONGO_URL", "mongodb://localhost:27017"),
-  database_name: "moongoon_test"
-)
+if override_url = ENV["MONGO_URL"]?
+  ::Moongoon.connect(
+    override_url,
+    database_name: "moongoon_test"
+  )
+else
+  ::Moongoon.connect(
+    database_name: "moongoon_test"
+  )
+end
