@@ -4,14 +4,12 @@ module Moongoon::Traits::Database::Internal
 
   # Utilities #
 
-  def bson_id(id : String | BSON::ObjectId | Nil)
+  def bson_id(id : String | BSON::ObjectId)
     case id
     when String
       BSON::ObjectId.new id
     when BSON::ObjectId
       id
-    when Nil
-      BSON::ObjectId.new ""
     end
   end
 
@@ -41,11 +39,11 @@ module Moongoon::Traits::Database::Internal
     pipeline
   end
 
-  protected def self.concat_id_filter(query, id : BSON::ObjectId | String | Nil)
+  protected def self.concat_id_filter(query, id : BSON::ObjectId | String)
     BSON.new({"_id": self.bson_id(id)}).append(BSON.new(query))
   end
 
-  protected def self.concat_ids_filter(query, ids : Array(BSON::ObjectId?) | Array(String?))
+  protected def self.concat_ids_filter(query, ids : Array(BSON::ObjectId) | Array(String))
     BSON.new({
       "_id" => {
         "$in" => ids.map { |id|

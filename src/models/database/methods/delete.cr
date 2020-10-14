@@ -53,7 +53,7 @@ module Moongoon::Traits::Database::Methods::Delete
     # User.remove id, query: { name: "John" }
     # ```
     def self.remove_by_id(id, query = BSON.new, **args) : Mongo::Commands::Common::DeleteResult?
-      full_query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, id)
+      full_query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, id!)
       remove(full_query)
     end
 
