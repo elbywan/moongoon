@@ -2,19 +2,6 @@
 module Moongoon::Traits::Database::Internal
   extend self
 
-  # Utilities #
-
-  def bson_id(id : String | BSON::ObjectId | Nil)
-    case id
-    when String
-      BSON::ObjectId.new id
-    when BSON::ObjectId
-      id
-    when Nil
-      nil
-    end
-  end
-
   # Query builders #
 
   protected def self.format_aggregation(query, stages, fields = nil, order_by = nil, skip = 0, limit : Int32? = 0)
@@ -60,5 +47,16 @@ module Moongoon::Traits::Database::Internal
   # Raises if the Model has a nil id field.
   private def id_check!
     raise ::Moongoon::Error::NotFound.new unless self._id
+  end
+
+  protected def self.bson_id(id : String | BSON::ObjectId | Nil)
+    case id
+    when String
+      BSON::ObjectId.new id
+    when BSON::ObjectId
+      id
+    when Nil
+      nil
+    end
   end
 end
