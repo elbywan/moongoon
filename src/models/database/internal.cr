@@ -52,7 +52,7 @@ module Moongoon::Traits::Database::Internal
   protected def self.bson_id(id : String | BSON::ObjectId | Nil)
     case id
     when String
-      BSON::ObjectId.new id
+      id.blank? ? nil : BSON::ObjectId.new(id)
     when BSON::ObjectId
       id
     when Nil
