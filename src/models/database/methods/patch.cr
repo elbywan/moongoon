@@ -69,7 +69,7 @@ module Moongoon::Traits::Database::Methods::Patch
       changes = BSON.new({
         "$set": self.to_bson
       })
-      if unsets = self.unsets_to_bson
+      if ::Moongoon.config.unset_nils && (unsets = self.unsets_to_bson)
         changes["$unset"] = unsets
       end
       self.class.collection.update_many(

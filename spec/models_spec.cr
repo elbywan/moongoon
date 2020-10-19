@@ -23,6 +23,7 @@ describe Moongoon::Collection do
 
   before_each {
     Model.clear
+    Moongoon::Config.reset
   }
 
   describe "Get" do
@@ -149,7 +150,18 @@ describe Moongoon::Collection do
       Model.find_by_id!(model.id!).age.should eq 15
     end
 
-    it "#update (with unsets)" do
+    it "#update skip nils" do
+      models = Model.insert_models raw_models
+      model = models[2]
+      model.humor = nil
+      model = model.update
+      Model.find_by_id!(model.id!).humor.should eq 15
+    end
+
+    it "#update unset nils" do
+      Moongoon.config do |config|
+        config.unset_nils = true
+      end
       models = Model.insert_models raw_models
       model = models[2]
       model.humor = nil
@@ -172,7 +184,18 @@ describe Moongoon::Collection do
       Model.find_by_id!(model.id!).age.should eq 15
     end
 
-    it "#update_query (with unsets)" do
+    it "#update_query (skip nils)" do
+      models = Model.insert_models raw_models
+      model = models[1]
+      model.humor = nil
+      model.update_query({_id: model._id})
+      Model.find_by_id!(model.id!).humor.should eq 0
+    end
+
+    it "#update_query (unset nils)" do
+      Moongoon.config do |config|
+        config.unset_nils = true
+      end
       models = Model.insert_models raw_models
       model = models[1]
       model.humor = nil
