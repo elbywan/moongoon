@@ -16,7 +16,6 @@ module Moongoon::Traits::Database::Internal
       pipeline << BSON.new({"$project": BSON.new(fields)})
     end
     if order_by
-      {{ debug() }}
       pipeline << BSON.new({"$sort": BSON.new(order_by)})
     end
     if skip > 0
