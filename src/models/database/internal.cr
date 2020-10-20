@@ -4,7 +4,7 @@ module Moongoon::Traits::Database::Internal
 
   # Query builders #
 
-  protected def self.format_aggregation(query, stages, fields = nil, order_by = nil, skip = 0, limit : Int32? = 0)
+  protected def self.format_aggregation(query, stages, fields = nil, order_by = nil, skip = 0, limit : Int? = 0)
     pipeline = query && !query.empty? ? [
       BSON.new({"$match": BSON.new(query)}),
     ] : [] of BSON
@@ -21,8 +21,8 @@ module Moongoon::Traits::Database::Internal
     if skip > 0
       pipeline << BSON.new({"$skip": skip.to_i32})
     end
-    if (limit_i32 = limit) && limit_i32 > 0
-      pipeline << BSON.new({"$limit": limit_i32})
+    if (l = limit) && l > 0
+      pipeline << BSON.new({"$limit": l.to_i32})
     end
     pipeline
   end
