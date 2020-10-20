@@ -4,7 +4,7 @@ module Moongoon::Traits::Database::Internal
 
   # Query builders #
 
-  protected def self.format_aggregation(query, stages, fields = nil, order_by = nil, skip = 0, limit : Int? = 0)
+  protected def self.format_aggregation(query, stages, fields = nil, order_by = nil, skip = 0, limit : Int? = nil)
     pipeline = query && !query.empty? ? [
       BSON.new({"$match": BSON.new(query)}),
     ] : [] of BSON
