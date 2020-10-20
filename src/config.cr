@@ -18,7 +18,7 @@ module Moongoon
     end
   end
 
-  def self.config
+  def self.configure
     yield Config.singleton
   end
 
