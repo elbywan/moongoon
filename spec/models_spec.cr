@@ -159,7 +159,7 @@ describe Moongoon::Collection do
     end
 
     it "#update unset nils" do
-      Moongoon.config do |config|
+      Moongoon.configure do |config|
         config.unset_nils = true
       end
       models = Model.insert_models raw_models
@@ -193,7 +193,7 @@ describe Moongoon::Collection do
     end
 
     it "#update_query (unset nils)" do
-      Moongoon.config do |config|
+      Moongoon.configure do |config|
         config.unset_nils = true
       end
       models = Model.insert_models raw_models

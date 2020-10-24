@@ -27,20 +27,17 @@ module Moongoon
       instance = self.allocate
       {% begin %}
         {% for ivar in @type.instance_vars %}
-          {% ann = ivar.annotation(::BSON::Field) %}
-          {% unless (ann && ann[:ignore]) %}
-            {% default_value = ivar.default_value %}
-            {% if ivar.type.nilable? %}
-              instance.{{ivar.id}} = args["{{ivar.id}}"]? {% if ivar.has_default_value? %}|| {{ default_value }}{% end %}
-            {% else %}
-              if value = args["{{ivar.id}}"]?
-                instance.{{ivar.id}} = value
-              {% if ivar.has_default_value? %}
-              else
-                instance.{{ivar.id}} = {{ default_value }}
-              {% end %}
-              end
+          {% default_value = ivar.default_value %}
+          {% if ivar.type.nilable? %}
+            instance.{{ivar.id}} = args["{{ivar.id}}"]? {% if ivar.has_default_value? %}|| {{ default_value }}{% end %}
+          {% else %}
+            if value = args["{{ivar.id}}"]?
+              instance.{{ivar.id}} = value
+            {% if ivar.has_default_value? %}
+            else
+              instance.{{ivar.id}} = {{ default_value }}
             {% end %}
+            end
           {% end %}
         {% end %}
       {% end %}
@@ -61,10 +58,7 @@ module Moongoon
       {% begin %}
       {
       {% for ivar in @type.instance_vars %}
-        {% ann = ivar.annotation(::BSON::Field) %}
-        {% unless ann && ann[:ignore] %}
-          "{{ ivar.name }}": self.{{ ivar.name }},
-        {% end %}
+        "{{ ivar.name }}": self.{{ ivar.name }},
       {% end %}
       }
       {% end %}
@@ -102,7 +96,7 @@ module Moongoon
       # Returns true if the document has been removed from the db
       @[JSON::Field(ignore: true)]
       @[BSON::Field(ignore: true)]
-      getter? removed = false
+      property? removed = false
 
       # Returns true if the document has been inserted and not yet removed
       def persisted?
