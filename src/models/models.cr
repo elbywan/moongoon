@@ -23,14 +23,17 @@ module Moongoon
     # ```
     # User.new first_name: "John", last_name: "Doe"
     # ```
+    #
+    # NOTE: Only instance variables having associated setter methods will be initialized.
     def self.new(**args)
       instance = self.allocate
       {% begin %}
         {% for ivar in @type.instance_vars %}
+          {% has_setter = @type.methods.any? &.name.== ivar.stringify + "=" %}
           {% default_value = ivar.default_value %}
-          {% if ivar.type.nilable? %}
+          {% if has_setter && ivar.type.nilable? %}
             instance.{{ivar.id}} = args["{{ivar.id}}"]? {% if ivar.has_default_value? %}|| {{ default_value }}{% end %}
-          {% else %}
+          {% elsif has_setter %}
             if value = args["{{ivar.id}}"]?
               instance.{{ivar.id}} = value
             {% if ivar.has_default_value? %}
@@ -38,6 +41,8 @@ module Moongoon
               instance.{{ivar.id}} = {{ default_value }}
             {% end %}
             end
+          {% elsif !ivar.has_default_value? %}
+            {% raise "Instance variable '" + ivar.stringify + "' has no setter or default value." %}
           {% end %}
         {% end %}
       {% end %}
@@ -54,11 +59,17 @@ module Moongoon
     # #   last_name: "Doe",
     # # }
     # ```
+    #
+    # NOTE: Only instance variables having associated getter methods will be returned.
     def to_tuple
       {% begin %}
       {
       {% for ivar in @type.instance_vars %}
-        "{{ ivar.name }}": self.{{ ivar.name }},
+        {% if @type.methods.any? &.name.== ivar.stringify + "?" %}
+          "{{ ivar.name }}": self.{{ ivar.name }}?,
+        {% elsif @type.methods.any? &.name.== ivar.stringify %}
+          "{{ ivar.name }}": self.{{ ivar.name }},
+        {% end %}
       {% end %}
       }
       {% end %}
@@ -164,7 +175,6 @@ module Moongoon
       {% camelize = global_options.reduce(false) { |_, a| a[:camelize] } %}
       {% for ivar in @type.instance_vars %}
         {% ann = ivar.annotation(BSON::Field) %}
-        {% typ = ivar.type.union_types.select { |t| t != Nil }[0] %}
         {% key = ivar.name %}
         {% bson_key = ann ? ann[:key].id : camelize ? ivar.name.camelcase(lower: camelize == "lower") : ivar.name %}
         {% unless ann && ann[:ignore] %}
