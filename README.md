@@ -219,7 +219,7 @@ end
 
 ## Contributors
 
-- [elbywan](https://github.com/elbywan) - creator and maintainer
+See the [contributors page](https://github.com/elbywan/moongoon/graphs/contributors).
 
 ## Credit
 
