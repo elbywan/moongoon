@@ -25,18 +25,20 @@ module Moongoon
     # ```
     def self.new(**args)
       instance = self.allocate
-      {% for ivar in @type.instance_vars %}
-        {% default_value = ivar.default_value %}
-        {% if ivar.type.nilable? %}
-          instance.{{ivar.id}} = args["{{ivar.id}}"]? {% if ivar.has_default_value? %}|| {{ default_value }}{% end %}
-        {% else %}
-          if value = args["{{ivar.id}}"]?
-            instance.{{ivar.id}} = value
-          {% if ivar.has_default_value? %}
-          else
-            instance.{{ivar.id}} = {{ default_value }}
+      {% begin %}
+        {% for ivar in @type.instance_vars %}
+          {% default_value = ivar.default_value %}
+          {% if ivar.type.nilable? %}
+            instance.{{ivar.id}} = args["{{ivar.id}}"]? {% if ivar.has_default_value? %}|| {{ default_value }}{% end %}
+          {% else %}
+            if value = args["{{ivar.id}}"]?
+              instance.{{ivar.id}} = value
+            {% if ivar.has_default_value? %}
+            else
+              instance.{{ivar.id}} = {{ default_value }}
+            {% end %}
+            end
           {% end %}
-          end
         {% end %}
       {% end %}
       instance
@@ -91,8 +93,30 @@ module Moongoon
         class_getter collection_name : String = \{{ value }}
       end
 
+      # Returns true if the document has been removed from the db
+      @[JSON::Field(ignore: true)]
+      @[BSON::Field(ignore: true)]
+      property? removed = false
+
+      # Returns true if the document has been inserted and not yet removed
+      def persisted?
+        self.inserted? && !self.removed?
+      end
+
+      # Returns true if the document has been inserted (i.e. has an id)
+      def inserted?
+        self._id != nil
+      end
+
       # The MongoDB internal id representation.
       property _id : BSON::ObjectId?
+
+      # Returns the MongoDB bson _id
+      #
+      # Will raise if _id is nil.
+      def _id!
+        self._id.not_nil!
+      end
 
       # Set a MongoDB bson _id from a String.
       def id=(id : String)
@@ -131,6 +155,29 @@ module Moongoon
   # ```
   abstract class Collection < MongoBase
     include ::Moongoon::Traits::Database::Full
+
+    # Copying and hacking BSON::Serializable for now - but ideally we'd just add more flexibility there? (options[force_emit_nil: true] or something?)
+    def unsets_to_bson : BSON?
+      bson = BSON.new
+      {% begin %}
+      {% global_options = @type.annotations(BSON::Options) %}
+      {% camelize = global_options.reduce(false) { |_, a| a[:camelize] } %}
+      {% for ivar in @type.instance_vars %}
+        {% ann = ivar.annotation(BSON::Field) %}
+        {% typ = ivar.type.union_types.select { |t| t != Nil }[0] %}
+        {% key = ivar.name %}
+        {% bson_key = ann ? ann[:key].id : camelize ? ivar.name.camelcase(lower: camelize == "lower") : ivar.name %}
+        {% unless ann && ann[:ignore] %}
+          {% unless ann && ann[:emit_null] %} #confusing, but it will be picked up by normal to_bson so we don't need it here
+            if self.{{ key }}.nil?
+              bson["{{ bson_key }}"] = nil
+            end
+          {% end %}
+        {% end %}
+      {% end %}
+      {% end %}
+      bson.empty? ? nil : bson
+    end
 
     # Include this module to enable resource versioning.
     module Versioning

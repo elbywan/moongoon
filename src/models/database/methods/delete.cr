@@ -22,6 +22,7 @@ module Moongoon::Traits::Database::Methods::Delete
       full_query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, id!)
       self.class.before_remove_call(self) unless no_hooks
       result = self.class.collection.delete_one(full_query, **args)
+      @removed = true
       self.class.after_remove_call(self) unless no_hooks
       result
     end

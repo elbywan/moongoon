@@ -5,6 +5,7 @@ private class Model < Moongoon::Collection
 
   property name : String
   property age : Int32
+  property humor : Int32?
 
   def self.insert_models(models)
     models.map { |model|
@@ -15,13 +16,14 @@ end
 
 describe Moongoon::Collection do
   raw_models = [
-    {name: "one", age: 10},
-    {name: "two", age: 10},
-    {name: "three", age: 20},
+    {name: "one", age: 10, humor: nil},
+    {name: "two", age: 10, humor: 0},
+    {name: "three", age: 20, humor: 15},
   ]
 
   before_each {
     Model.clear
+    Moongoon::Config.reset
   }
 
   describe "Get" do
@@ -148,6 +150,25 @@ describe Moongoon::Collection do
       Model.find_by_id!(model.id!).age.should eq 15
     end
 
+    it "#update skip nils" do
+      models = Model.insert_models raw_models
+      model = models[2]
+      model.humor = nil
+      model = model.update
+      Model.find_by_id!(model.id!).humor.should eq 15
+    end
+
+    it "#update unset nils" do
+      Moongoon.configure do |config|
+        config.unset_nils = true
+      end
+      models = Model.insert_models raw_models
+      model = models[2]
+      model.humor = nil
+      model = model.update
+      Model.find_by_id!(model.id!).humor.should eq nil
+    end
+
     it "#self.update" do
       models = Model.insert_models raw_models
       model = models[1]
@@ -161,6 +182,25 @@ describe Moongoon::Collection do
       model.age = 15
       model.update_query({_id: model._id})
       Model.find_by_id!(model.id!).age.should eq 15
+    end
+
+    it "#update_query (skip nils)" do
+      models = Model.insert_models raw_models
+      model = models[1]
+      model.humor = nil
+      model.update_query({_id: model._id})
+      Model.find_by_id!(model.id!).humor.should eq 0
+    end
+
+    it "#update_query (unset nils)" do
+      Moongoon.configure do |config|
+        config.unset_nils = true
+      end
+      models = Model.insert_models raw_models
+      model = models[1]
+      model.humor = nil
+      model.update_query({_id: model._id})
+      Model.find_by_id!(model.id!).humor.should eq nil
     end
 
     it "#self.update_by_id" do

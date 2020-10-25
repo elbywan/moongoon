@@ -4,7 +4,7 @@ module Moongoon::Traits::Database::Internal
 
   # Query builders #
 
-  protected def self.format_aggregation(query, stages, fields = nil, order_by = nil, skip = 0, limit = 0)
+  protected def self.format_aggregation(query, stages, fields = nil, order_by = nil, skip = 0, limit : Int? = nil)
     pipeline = query && !query.empty? ? [
       BSON.new({"$match": BSON.new(query)}),
     ] : [] of BSON
@@ -21,22 +21,22 @@ module Moongoon::Traits::Database::Internal
     if skip > 0
       pipeline << BSON.new({"$skip": skip.to_i32})
     end
-    if limit > 0
-      pipeline << BSON.new({"$limit": limit.to_i32})
+    if (l = limit) && l > 0
+      pipeline << BSON.new({"$limit": l.to_i32})
     end
     pipeline
   end
 
-  protected def self.concat_id_filter(query, id)
-    BSON.new({"_id": BSON::ObjectId.new(id.not_nil!)}).append(BSON.new(query))
+  protected def self.concat_id_filter(query, id : BSON::ObjectId | String | Nil)
+    BSON.new({"_id": self.bson_id(id)}).append(BSON.new(query))
   end
 
-  protected def self.concat_ids_filter(query, ids)
+  protected def self.concat_ids_filter(query, ids : Array(BSON::ObjectId?) | Array(String?))
     BSON.new({
       "_id" => {
         "$in" => ids.map { |id|
-          BSON::ObjectId.new id
-        },
+          self.bson_id(id)
+        }.compact,
       },
     }).append(BSON.new(query))
   end
@@ -46,5 +46,16 @@ module Moongoon::Traits::Database::Internal
   # Raises if the Model has a nil id field.
   private def id_check!
     raise ::Moongoon::Error::NotFound.new unless self._id
+  end
+
+  protected def self.bson_id(id : String | BSON::ObjectId | Nil)
+    case id
+    when String
+      id.blank? ? nil : BSON::ObjectId.new(id)
+    when BSON::ObjectId
+      id
+    when Nil
+      nil
+    end
   end
 end

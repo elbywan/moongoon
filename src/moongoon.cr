@@ -1,6 +1,7 @@
 require "log"
 require "cryomongo"
 
+require "./config"
 require "./errors"
 require "./database"
 require "./models"
