@@ -25,7 +25,7 @@ module Moongoon
     # ```
     #
     # NOTE: Only instance variables having associated setter methods will be initialized.
-    def self.new(**args)
+    def self.new(**args : **T) forall T
       instance = self.allocate
       {% begin %}
         {% for ivar in @type.instance_vars %}
@@ -39,6 +39,8 @@ module Moongoon
             {% if ivar.has_default_value? %}
             else
               instance.{{ivar.id}} = {{ default_value }}
+            {% elsif !T[ivar.id] %}
+              {% raise "Instance variable '" + ivar.stringify + "' cannot be initialized from " + T.stringify + "." %}
             {% end %}
             end
           {% elsif !ivar.has_default_value? %}
@@ -107,7 +109,7 @@ module Moongoon
       # Returns true if the document has been removed from the db
       @[JSON::Field(ignore: true)]
       @[BSON::Field(ignore: true)]
-      property? removed = false
+      getter? removed = false
 
       # Returns true if the document has been inserted and not yet removed
       def persisted?
