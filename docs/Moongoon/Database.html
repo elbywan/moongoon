@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.34.0">
-<meta name="crystal_docs.project_version" content="0.5.0-dev">
+<meta name="crystal_docs.project_version" content="to_tuple_and_constructor_improvements-dev">
 <meta name="crystal_docs.project_name" content="moongoon">
 
 
@@ -18,7 +18,7 @@
 </svg>
 
   <meta id="repository-name" content="moongoon">
-  <title>Moongoon::Database - moongoon 0.5.0-dev</title>
+  <title>Moongoon::Database - moongoon to_tuple_and_constructor_improvements-dev</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.5.0-dev
+        to_tuple_and_constructor_improvements-dev
       </span>
     </div>
   </div>
@@ -88,6 +88,11 @@
   
 </ul>
 
+      
+    </li>
+  
+  <li class=" " data-id="moongoon/Moongoon/Config" data-name="moongoon::config">
+      <a href="../Moongoon/Config.html">Config</a>
       
     </li>
   
@@ -242,7 +247,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#connect(database_url:String=&quot;mongodb://localhost:27017&quot;,database_name:String=&quot;database&quot;,*,reconnection_delay=5.seconds)-instance-method" class="signature"><strong>#connect</strong>(database_url : String = <span class="s">&quot;mongodb://localhost:27017&quot;</span>, database_name : String = <span class="s">&quot;database&quot;</span>, *, reconnection_delay = <span class="n">5</span>.seconds)</a>
+        <a href="#connect(database_url:String=&quot;mongodb://localhost:27017&quot;,database_name:String=&quot;database&quot;,*,options:Mongo::Options?=nil,max_retries=nil,reconnection_delay=5.seconds)-instance-method" class="signature"><strong>#connect</strong>(database_url : String = <span class="s">&quot;mongodb://localhost:27017&quot;</span>, database_name : String = <span class="s">&quot;database&quot;</span>, *, options : Mongo::Options? = <span class="n">nil</span>, max_retries = <span class="n">nil</span>, reconnection_delay = <span class="n">5</span>.seconds)</a>
         
           <div class="summary"><p>Connects to MongoDB.</p></div>
         
@@ -348,20 +353,27 @@
       </div>
     </div>
   
-    <div class="entry-detail" id="connect(database_url:String=&quot;mongodb://localhost:27017&quot;,database_name:String=&quot;database&quot;,*,reconnection_delay=5.seconds)-instance-method">
+    <div class="entry-detail" id="connect(database_url:String=&quot;mongodb://localhost:27017&quot;,database_name:String=&quot;database&quot;,*,options:Mongo::Options?=nil,max_retries=nil,reconnection_delay=5.seconds)-instance-method">
       <div class="signature">
         
-        def <strong>connect</strong>(database_url : String = <span class="s">&quot;mongodb://localhost:27017&quot;</span>, database_name : String = <span class="s">&quot;database&quot;</span>, *, reconnection_delay = <span class="n">5</span>.seconds)
+        def <strong>connect</strong>(database_url : String = <span class="s">&quot;mongodb://localhost:27017&quot;</span>, database_name : String = <span class="s">&quot;database&quot;</span>, *, options : Mongo::Options? = <span class="n">nil</span>, max_retries = <span class="n">nil</span>, reconnection_delay = <span class="n">5</span>.seconds)
 
-        <a class="method-permalink" href="#connect(database_url:String=&quot;mongodb://localhost:27017&quot;,database_name:String=&quot;database&quot;,*,reconnection_delay=5.seconds)-instance-method">#</a>
+        <a class="method-permalink" href="#connect(database_url:String=&quot;mongodb://localhost:27017&quot;,database_name:String=&quot;database&quot;,*,options:Mongo::Options?=nil,max_retries=nil,reconnection_delay=5.seconds)-instance-method">#</a>
       </div>
       
         <div class="doc">
           
           <p>Connects to MongoDB.</p>
 
+<p>Use an instance of <code>Mongo::Options</code> as the <em>options</em> argument to customize the <code>Mongo::Client</code> instance.</p>
+
+<p>Will retry up to <em>max_retries</em> times to connect to the database.
+If <em>max_retries</em> is nil, will retry infinitely.</p>
+
+<p>Will sleep for <em>reconnection_delay</em> between attempts.</p>
+
 <pre><code><span class="c"># Arguments are all optional, their default values are the ones defined below:</span>
-<span class="t">Moongoon</span>.connect(<span class="s">&quot;mongodb://localhost:27017&quot;</span>, <span class="s">&quot;database&quot;</span>, reconnection_delay: <span class="n">5</span>.seconds)</code></pre>
+<span class="t">Moongoon</span>.connect(<span class="s">&quot;mongodb://localhost:27017&quot;</span>, <span class="s">&quot;database&quot;</span>, options <span class="o">=</span> <span class="n">nil</span>, max_retries: <span class="n">nil</span>, reconnection_delay: <span class="n">5</span>.seconds)</code></pre>
         </div>
       
       <br/>
