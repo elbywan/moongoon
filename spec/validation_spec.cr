@@ -110,7 +110,7 @@ private class ComplexValidatorCustomProblemsModel < ValidationsModel
   end
 
   validate do |model, problems|
-    if model.humor > 50
+    if (model.humor || 0) > 50
       problems << MySpecialError.new("You are too funny to run for President")
     end
     nil
@@ -261,12 +261,16 @@ describe Moongoon::Validation do
     it "allow custom errors and warnings" do
       NormalModel.insert_models raw_models
 
-      model = ComplexValidatorWarningModel.find_one!({name: "two"})
+      model = ComplexValidatorCustomProblemsModel.find_one!({name: "two"})
       model.save.should be_false
 
       model.validation_error_messages.size.should eq 1
-      model.validation_warning_messages.first.should eq "You are too young to run for President"
+      model.validation_error_messages.first.should eq "You are too young to run for President"
       model.validation_errors.first.should be_a(MySpecialError)
+
+      model.age = 31
+
+      model.save.should be_true
 
       model.validation_warning_messages.size.should eq 1
       model.validation_warning_messages.first.should eq "WARNING: You have almost no sense of humor"
