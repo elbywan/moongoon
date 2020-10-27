@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.34.0">
-<meta name="crystal_docs.project_version" content="0.5.0-dev">
+<meta name="crystal_docs.project_version" content="to_tuple_and_constructor_improvements-dev">
 <meta name="crystal_docs.project_name" content="moongoon">
 
 
@@ -18,7 +18,7 @@
 </svg>
 
   <meta id="repository-name" content="moongoon">
-  <title>Moongoon::Collection - moongoon 0.5.0-dev</title>
+  <title>Moongoon::Collection - moongoon to_tuple_and_constructor_improvements-dev</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.5.0-dev
+        to_tuple_and_constructor_improvements-dev
       </span>
     </div>
   </div>
@@ -88,6 +88,11 @@
   
 </ul>
 
+      
+    </li>
+  
+  <li class=" " data-id="moongoon/Moongoon/Config" data-name="moongoon::config">
+      <a href="../Moongoon/Config.html">Config</a>
       
     </li>
   
@@ -262,7 +267,7 @@ underlying MongoDB collection.</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#find_by_id(id:String,query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,**args):self?-class-method" class="signature"><strong>.find_by_id</strong>(id : String, query = <span class="t">BSON</span>.<span class="k">new</span>, order_by = {_id: <span class="n">-1</span>}, fields = @@default_fields, **args) : <span class="k">self</span>?</a>
+        <a href="#find_by_id(id:BSON::ObjectId%7CString,query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,**args):self?-class-method" class="signature"><strong>.find_by_id</strong>(id : BSON::ObjectId | String, query = <span class="t">BSON</span>.<span class="k">new</span>, order_by = {_id: <span class="n">-1</span>}, fields = @@default_fields, **args) : <span class="k">self</span>?</a>
         
           <div class="summary"><p>Finds a single document by id and returns a <code><a href="../Moongoon/Collection.html">Moongoon::Collection</a></code> instance.</p></div>
         
@@ -271,7 +276,7 @@ underlying MongoDB collection.</p>
       <li class="entry-summary">
         <a href="#find_by_id!(id,**args):self-class-method" class="signature"><strong>.find_by_id!</strong>(id, **args) : <span class="k">self</span></a>
         
-          <div class="summary"><p><span class="flag purple">NOTE</span>  Similar to <code>self<a href="../Moongoon/Collection.html#find_by_id(id:String,query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,**args):self?-class-method">.find_by_id</a></code>, but raises when the document was not found.</p></div>
+          <div class="summary"><p><span class="flag purple">NOTE</span>  Similar to <code>self<a href="../Moongoon/Collection.html#find_by_id(id:BSON::ObjectId%7CString,query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,**args):self?-class-method">.find_by_id</a></code>, but raises when the document was not found.</p></div>
         
       </li>
     
@@ -362,7 +367,7 @@ underlying MongoDB collection.</p>
       <li class="entry-summary">
         <a href="#default_fields(fields)-class-method" class="signature"><strong>.default_fields</strong>(fields)</a>
         
-          <div class="summary"><p>Set the <code>fields</code> value to use by default when calling <code><a href="../Moongoon/Collection.html#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit=0,**args):Array(self)-class-method">.find</a></code> methods.</p></div>
+          <div class="summary"><p>Set the <code>fields</code> value to use by default when calling <code><a href="../Moongoon/Collection.html#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit:Int?=nil,**args):Array(self)-class-method">.find</a></code> methods.</p></div>
         
       </li>
     
@@ -381,7 +386,7 @@ underlying MongoDB collection.</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit=0,**args):Array(self)-class-method" class="signature"><strong>.find</strong>(query = <span class="t">BSON</span>.<span class="k">new</span>, order_by = {_id: <span class="n">-1</span>}, fields = @@default_fields, skip = <span class="n">0</span>, limit = <span class="n">0</span>, **args) : Array(<span class="k">self</span>)</a>
+        <a href="#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit:Int?=nil,**args):Array(self)-class-method" class="signature"><strong>.find</strong>(query = <span class="t">BSON</span>.<span class="k">new</span>, order_by = {_id: <span class="n">-1</span>}, fields = @@default_fields, skip = <span class="n">0</span>, limit : Int? = <span class="n">nil</span>, **args) : Array(<span class="k">self</span>)</a>
         
           <div class="summary"><p>Finds one or multiple documents and returns an array of <code><a href="../Moongoon/Collection.html">Moongoon::Collection</a></code> instances.</p></div>
         
@@ -390,7 +395,7 @@ underlying MongoDB collection.</p>
       <li class="entry-summary">
         <a href="#find!(query,**args):Array(self)-class-method" class="signature"><strong>.find!</strong>(query, **args) : Array(<span class="k">self</span>)</a>
         
-          <div class="summary"><p><span class="flag purple">NOTE</span>  Similar to <code>self<a href="../Moongoon/Collection.html#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit=0,**args):Array(self)-class-method">.find</a></code>, but raises when no documents are found.</p></div>
+          <div class="summary"><p><span class="flag purple">NOTE</span>  Similar to <code>self<a href="../Moongoon/Collection.html#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit:Int?=nil,**args):Array(self)-class-method">.find</a></code>, but raises when no documents are found.</p></div>
         
       </li>
     
@@ -402,7 +407,7 @@ underlying MongoDB collection.</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#find_and_modify_by_id(id,update,query=BSON.new,no_hooks=false,**args)-class-method" class="signature"><strong>.find_and_modify_by_id</strong>(id, update, query = <span class="t">BSON</span>.<span class="k">new</span>, no_hooks = <span class="n">false</span>, **args)</a>
+        <a href="#find_and_modify_by_id(id:BSON::ObjectId%7CString,update,query=BSON.new,no_hooks=false,**args)-class-method" class="signature"><strong>.find_and_modify_by_id</strong>(id : BSON::ObjectId | String, update, query = <span class="t">BSON</span>.<span class="k">new</span>, no_hooks = <span class="n">false</span>, **args)</a>
         
           <div class="summary"><p>Modifies and returns a single document.</p></div>
         
@@ -486,7 +491,7 @@ underlying MongoDB collection.</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#update_by_id(id,update,query=BSON.new,**args):Mongo::Commands::Common::UpdateResult?-class-method" class="signature"><strong>.update_by_id</strong>(id, update, query = <span class="t">BSON</span>.<span class="k">new</span>, **args) : Mongo::Commands::Common::UpdateResult?</a>
+        <a href="#update_by_id(id:BSON::ObjectId%7CString,update,query=BSON.new,**args):Mongo::Commands::Common::UpdateResult?-class-method" class="signature"><strong>.update_by_id</strong>(id : BSON::ObjectId | String, update, query = <span class="t">BSON</span>.<span class="k">new</span>, **args) : Mongo::Commands::Common::UpdateResult?</a>
         
           <div class="summary"><p>Updates one document by id.</p></div>
         
@@ -517,6 +522,13 @@ underlying MongoDB collection.</p>
         <a href="#_id:BSON::ObjectId?-instance-method" class="signature"><strong>#_id</strong> : BSON::ObjectId?</a>
         
           <div class="summary"><p>The MongoDB internal id representation.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#_id!-instance-method" class="signature"><strong>#_id!</strong></a>
+        
+          <div class="summary"><p>Returns the MongoDB bson _id</p></div>
         
       </li>
     
@@ -563,9 +575,37 @@ underlying MongoDB collection.</p>
       </li>
     
       <li class="entry-summary">
+        <a href="#inserted?-instance-method" class="signature"><strong>#inserted?</strong></a>
+        
+          <div class="summary"><p>Returns true if the document has been inserted (i.e.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#persisted?-instance-method" class="signature"><strong>#persisted?</strong></a>
+        
+          <div class="summary"><p>Returns true if the document has been inserted and not yet removed</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#remove(query=BSON.new,no_hooks=false,**args):Mongo::Commands::Common::DeleteResult?-instance-method" class="signature"><strong>#remove</strong>(query = <span class="t">BSON</span>.<span class="k">new</span>, no_hooks = <span class="n">false</span>, **args) : Mongo::Commands::Common::DeleteResult?</a>
         
           <div class="summary"><p>Removes one document having the same id as this model.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#removed?:Bool-instance-method" class="signature"><strong>#removed?</strong> : Bool</a>
+        
+          <div class="summary"><p>Base model class for interacting with a MongoDB collection.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#unsets_to_bson:BSON?-instance-method" class="signature"><strong>#unsets_to_bson</strong> : BSON?</a>
+        
+          <div class="summary"><p>Copying and hacking BSON::Serializable for now - but ideally we'd just add more flexibility there? (options[force_emit_nil: true] or something?)</p></div>
         
       </li>
     
@@ -733,7 +773,7 @@ underlying MongoDB collection.</p>
   
   
     <a href="../Moongoon/Document.html#new(pull:JSON::PullParser)-class-method" class="tooltip">
-      <span>new(pull : JSON::PullParser)<br/>new(bson : BSON)<br/>new(**args)</span>
+      <span>new(pull : JSON::PullParser)<br/>new(bson : BSON)<br/>new(**args : **T) forall T</span>
     new</a>
     
   
@@ -804,12 +844,12 @@ underlying MongoDB collection.</p>
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="find_by_id(id:String,query=BSON.new,order_by={_id:-1},fields=@@default_fields,**args):self?-class-method">
+    <div class="entry-detail" id="find_by_id(id:BSON::ObjectId|String,query=BSON.new,order_by={_id:-1},fields=@@default_fields,**args):self?-class-method">
       <div class="signature">
         
-        def self.<strong>find_by_id</strong>(id : String, query = <span class="t">BSON</span>.<span class="k">new</span>, order_by = {_id: <span class="n">-1</span>}, fields = @@default_fields, **args) : <span class="k">self</span>?
+        def self.<strong>find_by_id</strong>(id : BSON::ObjectId | String, query = <span class="t">BSON</span>.<span class="k">new</span>, order_by = {_id: <span class="n">-1</span>}, fields = @@default_fields, **args) : <span class="k">self</span>?
 
-        <a class="method-permalink" href="#find_by_id(id:String,query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,**args):self?-class-method">#</a>
+        <a class="method-permalink" href="#find_by_id(id:BSON::ObjectId%7CString,query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,**args):self?-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -837,7 +877,7 @@ underlying MongoDB collection.</p>
       
         <div class="doc">
           
-          <p><span class="flag purple">NOTE</span>  Similar to <code>self<a href="../Moongoon/Collection.html#find_by_id(id:String,query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,**args):self?-class-method">.find_by_id</a></code>, but raises when the document was not found.</p>
+          <p><span class="flag purple">NOTE</span>  Similar to <code>self<a href="../Moongoon/Collection.html#find_by_id(id:BSON::ObjectId%7CString,query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,**args):self?-class-method">.find_by_id</a></code>, but raises when the document was not found.</p>
         </div>
       
       <br/>
@@ -1155,7 +1195,7 @@ underlying MongoDB collection.</p>
       
         <div class="doc">
           
-          <p>Set the <code>fields</code> value to use by default when calling <code><a href="../Moongoon/Collection.html#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit=0,**args):Array(self)-class-method">.find</a></code> methods.</p>
+          <p>Set the <code>fields</code> value to use by default when calling <code><a href="../Moongoon/Collection.html#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit:Int?=nil,**args):Array(self)-class-method">.find</a></code> methods.</p>
 
 <pre><code>default_fields({ ignored_field: <span class="n">0</span> })</code></pre>
         </div>
@@ -1217,12 +1257,12 @@ Will raise when there is no match.</p>
       </div>
     </div>
   
-    <div class="entry-detail" id="find(query=BSON.new,order_by={_id:-1},fields=@@default_fields,skip=0,limit=0,**args):Array(self)-class-method">
+    <div class="entry-detail" id="find(query=BSON.new,order_by={_id:-1},fields=@@default_fields,skip=0,limit:Int?=nil,**args):Array(self)-class-method">
       <div class="signature">
         
-        def self.<strong>find</strong>(query = <span class="t">BSON</span>.<span class="k">new</span>, order_by = {_id: <span class="n">-1</span>}, fields = @@default_fields, skip = <span class="n">0</span>, limit = <span class="n">0</span>, **args) : Array(<span class="k">self</span>)
+        def self.<strong>find</strong>(query = <span class="t">BSON</span>.<span class="k">new</span>, order_by = {_id: <span class="n">-1</span>}, fields = @@default_fields, skip = <span class="n">0</span>, limit : Int? = <span class="n">nil</span>, **args) : Array(<span class="k">self</span>)
 
-        <a class="method-permalink" href="#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit=0,**args):Array(self)-class-method">#</a>
+        <a class="method-permalink" href="#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit:Int?=nil,**args):Array(self)-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -1266,7 +1306,7 @@ For more details check out the underlying <a href="https://github.com/elbywan/cr
       
         <div class="doc">
           
-          <p><span class="flag purple">NOTE</span>  Similar to <code>self<a href="../Moongoon/Collection.html#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit=0,**args):Array(self)-class-method">.find</a></code>, but raises when no documents are found.</p>
+          <p><span class="flag purple">NOTE</span>  Similar to <code>self<a href="../Moongoon/Collection.html#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit:Int?=nil,**args):Array(self)-class-method">.find</a></code>, but raises when no documents are found.</p>
 
 <pre><code><span class="k">begin</span>
   users <span class="o">=</span> <span class="t">User</span>.find!({ name: <span class="s">&quot;Julien&quot;</span> })
@@ -1304,12 +1344,12 @@ For more details check out the underlying <a href="https://github.com/elbywan/cr
       </div>
     </div>
   
-    <div class="entry-detail" id="find_and_modify_by_id(id,update,query=BSON.new,no_hooks=false,**args)-class-method">
+    <div class="entry-detail" id="find_and_modify_by_id(id:BSON::ObjectId|String,update,query=BSON.new,no_hooks=false,**args)-class-method">
       <div class="signature">
         
-        def self.<strong>find_and_modify_by_id</strong>(id, update, query = <span class="t">BSON</span>.<span class="k">new</span>, no_hooks = <span class="n">false</span>, **args)
+        def self.<strong>find_and_modify_by_id</strong>(id : BSON::ObjectId | String, update, query = <span class="t">BSON</span>.<span class="k">new</span>, no_hooks = <span class="n">false</span>, **args)
 
-        <a class="method-permalink" href="#find_and_modify_by_id(id,update,query=BSON.new,no_hooks=false,**args)-class-method">#</a>
+        <a class="method-permalink" href="#find_and_modify_by_id(id:BSON::ObjectId%7CString,update,query=BSON.new,no_hooks=false,**args)-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -1381,7 +1421,7 @@ For more details check out the underlying <a href="https://github.com/elbywan/cr
           
           <p>Finds one or multiple documents by their ids and returns an array of <code><a href="../Moongoon/Collection.html">Moongoon::Collection</a></code> instances.</p>
 
-<p>Syntax is similar to <code>self<a href="../Moongoon/Collection.html#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit=0,**args):Array(self)-class-method">.find</a></code>.</p>
+<p>Syntax is similar to <code>self<a href="../Moongoon/Collection.html#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit:Int?=nil,**args):Array(self)-class-method">.find</a></code>.</p>
 
 <pre><code>ids <span class="o">=</span> [<span class="s">&quot;1&quot;</span>, <span class="s">&quot;2&quot;</span>, <span class="s">&quot;3&quot;</span>]
 users <span class="o">=</span> <span class="t">User</span>.find_by_ids(ids)</code></pre>
@@ -1424,7 +1464,7 @@ users <span class="o">=</span> <span class="t">User</span>.find_by_ids(ids)</cod
           
           <p>Finds ids for documents matching the <em>query</em> argument and returns them an array of strings.</p>
 
-<p>Syntax is similar to <code>self<a href="../Moongoon/Collection.html#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit=0,**args):Array(self)-class-method">.find</a></code>.</p>
+<p>Syntax is similar to <code>self<a href="../Moongoon/Collection.html#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit:Int?=nil,**args):Array(self)-class-method">.find</a></code>.</p>
 
 <pre><code>jane_ids <span class="o">=</span> <span class="t">User</span>.find_ids({ name: <span class="s">&quot;Jane&quot;</span> })</code></pre>
         </div>
@@ -1588,12 +1628,12 @@ for more information about the syntax.</p>
       </div>
     </div>
   
-    <div class="entry-detail" id="update_by_id(id,update,query=BSON.new,**args):Mongo::Commands::Common::UpdateResult?-class-method">
+    <div class="entry-detail" id="update_by_id(id:BSON::ObjectId|String,update,query=BSON.new,**args):Mongo::Commands::Common::UpdateResult?-class-method">
       <div class="signature">
         
-        def self.<strong>update_by_id</strong>(id, update, query = <span class="t">BSON</span>.<span class="k">new</span>, **args) : Mongo::Commands::Common::UpdateResult?
+        def self.<strong>update_by_id</strong>(id : BSON::ObjectId | String, update, query = <span class="t">BSON</span>.<span class="k">new</span>, **args) : Mongo::Commands::Common::UpdateResult?
 
-        <a class="method-permalink" href="#update_by_id(id,update,query=BSON.new,**args):Mongo::Commands::Common::UpdateResult?-class-method">#</a>
+        <a class="method-permalink" href="#update_by_id(id:BSON::ObjectId%7CString,update,query=BSON.new,**args):Mongo::Commands::Common::UpdateResult?-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -1670,6 +1710,27 @@ fields will be added to the <em>query</em> argument.</p>
         <div class="doc">
           
           <p>The MongoDB internal id representation.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="_id!-instance-method">
+      <div class="signature">
+        
+        def <strong>_id!</strong>
+
+        <a class="method-permalink" href="#_id!-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the MongoDB bson _id</p>
+
+<p>Will raise if _id is nil.</p>
         </div>
       
       <br/>
@@ -1806,6 +1867,44 @@ user.insert</code></pre>
       </div>
     </div>
   
+    <div class="entry-detail" id="inserted?-instance-method">
+      <div class="signature">
+        
+        def <strong>inserted?</strong>
+
+        <a class="method-permalink" href="#inserted?-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns true if the document has been inserted (i.e. has an id)</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="persisted?-instance-method">
+      <div class="signature">
+        
+        def <strong>persisted?</strong>
+
+        <a class="method-permalink" href="#persisted?-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns true if the document has been inserted and not yet removed</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="remove(query=BSON.new,no_hooks=false,**args):Mongo::Commands::Common::DeleteResult?-instance-method">
       <div class="signature">
         
@@ -1827,6 +1926,57 @@ user.remove</code></pre>
 
 <pre><code><span class="c"># Remove the user only if he/she is named John</span>
 user.remove({ name: <span class="s">&quot;John&quot;</span> })</code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="removed?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>removed?</strong> : Bool
+
+        <a class="method-permalink" href="#removed?:Bool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Base model class for interacting with a MongoDB collection.</p>
+
+<p>This abstract class extends the <code>Moongoon::Base</code> class and enhances it with
+utility methods and macros used to query, update and configure an
+underlying MongoDB collection.</p>
+
+<pre><code><span class="k">class</span> <span class="t">MyModel</span> <span class="o">&lt;</span> <span class="t">Moongoon</span><span class="t">::</span><span class="t">Collection</span>
+  collection <span class="s">&quot;my_models&quot;</span>
+
+  index keys: {name: <span class="n">1</span>}, options: {unique: <span class="n">true</span>}
+
+  property name : <span class="t">String</span>
+  property age : <span class="t">Int32</span>
+<span class="k">end</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="unsets_to_bson:BSON?-instance-method">
+      <div class="signature">
+        
+        def <strong>unsets_to_bson</strong> : BSON?
+
+        <a class="method-permalink" href="#unsets_to_bson:BSON?-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Copying and hacking BSON::Serializable for now - but ideally we'd just add more flexibility there? (options[force_emit_nil: true] or something?)</p>
         </div>
       
       <br/>

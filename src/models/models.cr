@@ -23,21 +23,28 @@ module Moongoon
     # ```
     # User.new first_name: "John", last_name: "Doe"
     # ```
-    def self.new(**args)
+    #
+    # NOTE: Only instance variables having associated setter methods will be initialized.
+    def self.new(**args : **T) forall T
       instance = self.allocate
       {% begin %}
         {% for ivar in @type.instance_vars %}
+          {% has_setter = @type.has_method? ivar.stringify + "=" %}
           {% default_value = ivar.default_value %}
-          {% if ivar.type.nilable? %}
+          {% if has_setter && ivar.type.nilable? %}
             instance.{{ivar.id}} = args["{{ivar.id}}"]? {% if ivar.has_default_value? %}|| {{ default_value }}{% end %}
-          {% else %}
+          {% elsif has_setter %}
             if value = args["{{ivar.id}}"]?
               instance.{{ivar.id}} = value
             {% if ivar.has_default_value? %}
             else
               instance.{{ivar.id}} = {{ default_value }}
+            {% elsif !T[ivar.id] %}
+              {% raise "Instance variable '" + ivar.stringify + "' cannot be initialized from " + T.stringify + "." %}
             {% end %}
             end
+          {% elsif !ivar.has_default_value? %}
+            {% raise "Instance variable '" + ivar.stringify + "' has no setter or default value." %}
           {% end %}
         {% end %}
       {% end %}
@@ -54,11 +61,17 @@ module Moongoon
     # #   last_name: "Doe",
     # # }
     # ```
+    #
+    # NOTE: Only instance variables having associated getter methods will be returned.
     def to_tuple
       {% begin %}
       {
       {% for ivar in @type.instance_vars %}
-        "{{ ivar.name }}": self.{{ ivar.name }},
+        {% if @type.has_method? ivar.stringify + "?" %}
+          "{{ ivar.name }}": self.{{ ivar.name }}?,
+        {% elsif @type.has_method? ivar.stringify %}
+          "{{ ivar.name }}": self.{{ ivar.name }},
+        {% end %}
       {% end %}
       }
       {% end %}
@@ -96,7 +109,7 @@ module Moongoon
       # Returns true if the document has been removed from the db
       @[JSON::Field(ignore: true)]
       @[BSON::Field(ignore: true)]
-      property? removed = false
+      getter? removed = false
 
       # Returns true if the document has been inserted and not yet removed
       def persisted?
@@ -164,7 +177,6 @@ module Moongoon
       {% camelize = global_options.reduce(false) { |_, a| a[:camelize] } %}
       {% for ivar in @type.instance_vars %}
         {% ann = ivar.annotation(BSON::Field) %}
-        {% typ = ivar.type.union_types.select { |t| t != Nil }[0] %}
         {% key = ivar.name %}
         {% bson_key = ann ? ann[:key].id : camelize ? ivar.name.camelcase(lower: camelize == "lower") : ivar.name %}
         {% unless ann && ann[:ignore] %}

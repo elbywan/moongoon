@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.34.0">
-<meta name="crystal_docs.project_version" content="0.5.0-dev">
+<meta name="crystal_docs.project_version" content="to_tuple_and_constructor_improvements-dev">
 <meta name="crystal_docs.project_name" content="moongoon">
 
 
@@ -18,7 +18,7 @@
 </svg>
 
   <meta id="repository-name" content="moongoon">
-  <title>Moongoon::Collection::Versioning::Static - moongoon 0.5.0-dev</title>
+  <title>Moongoon::Collection::Versioning::Static - moongoon to_tuple_and_constructor_improvements-dev</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.5.0-dev
+        to_tuple_and_constructor_improvements-dev
       </span>
     </div>
   </div>
@@ -88,6 +88,11 @@
   
 </ul>
 
+      
+    </li>
+  
+  <li class=" " data-id="moongoon/Moongoon/Config" data-name="moongoon::config">
+      <a href="../../../Moongoon/Config.html">Config</a>
       
     </li>
   
@@ -421,7 +426,7 @@ versions <span class="o">=</span> <span class="t">User</span>.find_all_versions 
           
           <p>Finds the latest version of a model by id and returns an instance of <code><a href="../../../Moongoon/Collection.html">Moongoon::Collection</a></code>.</p>
 
-<p>Same syntax as <code><a href="../../../Moongoon/Collection.html#find_by_id(id:String,query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,**args):self?-class-method">Moongoon::Collection.find_by_id</a></code>.</p>
+<p>Same syntax as <code><a href="../../../Moongoon/Collection.html#find_by_id(id:BSON::ObjectId%7CString,query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,**args):self?-class-method">Moongoon::Collection.find_by_id</a></code>.</p>
 
 <pre><code><span class="c"># &quot;123456&quot; is an _id in the original collection.</span>
 user_version <span class="o">=</span> user.find_latest_version_by_id <span class="s">&quot;123456&quot;</span></code></pre>
@@ -445,7 +450,7 @@ user_version <span class="o">=</span> user.find_latest_version_by_id <span class
           
           <p>Finds a specific version of a model by id and returns an instance of <code><a href="../../../Moongoon/Collection.html">Moongoon::Collection</a></code>.</p>
 
-<p>Same syntax as <code><a href="../../../Moongoon/Collection.html#find_by_id(id:String,query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,**args):self?-class-method">Moongoon::Collection.find_by_id</a></code>.</p>
+<p>Same syntax as <code><a href="../../../Moongoon/Collection.html#find_by_id(id:BSON::ObjectId%7CString,query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,**args):self?-class-method">Moongoon::Collection.find_by_id</a></code>.</p>
 
 <pre><code><span class="c"># &quot;123456&quot; is an _id in the history collection.</span>
 user_version <span class="o">=</span> user.find_specific_version <span class="s">&quot;123456&quot;</span></code></pre>
