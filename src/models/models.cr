@@ -29,7 +29,7 @@ module Moongoon
       instance = self.allocate
       {% begin %}
         {% for ivar in @type.instance_vars %}
-          {% has_setter = @type.methods.any? &.name.== ivar.stringify + "=" %}
+          {% has_setter = @type.has_method? ivar.stringify + "=" %}
           {% default_value = ivar.default_value %}
           {% if has_setter && ivar.type.nilable? %}
             instance.{{ivar.id}} = args["{{ivar.id}}"]? {% if ivar.has_default_value? %}|| {{ default_value }}{% end %}
@@ -67,9 +67,9 @@ module Moongoon
       {% begin %}
       {
       {% for ivar in @type.instance_vars %}
-        {% if @type.methods.any? &.name.== ivar.stringify + "?" %}
+        {% if @type.has_method? ivar.stringify + "?" %}
           "{{ ivar.name }}": self.{{ ivar.name }}?,
-        {% elsif @type.methods.any? &.name.== ivar.stringify %}
+        {% elsif @type.has_method? ivar.stringify %}
           "{{ ivar.name }}": self.{{ ivar.name }},
         {% end %}
       {% end %}
