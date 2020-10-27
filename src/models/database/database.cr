@@ -15,6 +15,7 @@ module Moongoon::Traits::Database::Full
     include ::Moongoon::Traits::Database::Methods::Post
     include ::Moongoon::Traits::Database::Methods::Patch
     include ::Moongoon::Traits::Database::Methods::Delete
+    include ::Moongoon::Traits::Database::Validators
     include ::Moongoon::Traits::Database::Internal
   end
 end
@@ -26,6 +27,7 @@ module Moongoon::Traits::Database::Update
     include ::Moongoon::Traits::Database::Relationships
     include ::Moongoon::Traits::Database::Indexes
     include ::Moongoon::Traits::Database::Methods::Patch
+    include ::Moongoon::Traits::Database::Validators
     include ::Moongoon::Traits::Database::Internal
   end
 end
