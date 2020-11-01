@@ -80,6 +80,12 @@ module Moongoon
 
   # :nodoc:
   abstract class MongoBase < Document
+    module Validation
+      macro included
+        include Moongoon::Traits::Database::Validators
+      end
+    end
+
     macro inherited
       class_getter database_name : String do
         Moongoon.database_name
