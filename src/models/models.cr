@@ -86,94 +86,73 @@ module Moongoon
       end
     end
 
-    macro inherited
-      class_getter database_name : String do
-        Moongoon.database_name
-      end
+    class_getter database_name : String do
+      Moongoon.database_name
+    end
 
-      class_getter database : Mongo::Database do
-        if @@database_name == Moongoon.database_name
-          Moongoon.database
-        else
-          Moongoon.client[database_name]
-        end
-      end
-      class_getter collection : Mongo::Collection do
-        self.database[collection_name]
-      end
-
-      # Sets the MongoDB database name.
-      private macro database(value)
-        @@database_name = \{{ value }}
-      end
-
-      # Sets the MongoDB collection name.
-      private macro collection(value)
-        class_getter collection_name : String = \{{ value }}
-      end
-
-      # Returns true if the document has been removed from the db
-      @[JSON::Field(ignore: true)]
-      @[BSON::Field(ignore: true)]
-      getter? removed = false
-
-      # Returns true if the document has been inserted and not yet removed
-      def persisted?
-        self.inserted? && !self.removed?
-      end
-
-      # Returns true if the document has been inserted (i.e. has an id)
-      def inserted?
-        self._id != nil
-      end
-
-      # The MongoDB internal id representation.
-      property _id : BSON::ObjectId?
-
-      # Returns the MongoDB bson _id
-      #
-      # Will raise if _id is nil.
-      def _id!
-        self._id.not_nil!
-      end
-
-      # Set a MongoDB bson _id from a String.
-      def id=(id : String)
-        self._id = BSON::ObjectId.new id
-      end
-
-      # Converts the MongoDB bson _id to a String representation.
-      def id
-        self._id.to_s if self._id
-      end
-
-      # Converts the MongoDB bson _id to a String representation.
-      #
-      # Will raise if _id is nil.
-      def id!
-        self.id.not_nil!
+    class_getter database : Mongo::Database do
+      if @@database_name == Moongoon.database_name
+        Moongoon.database
+      else
+        Moongoon.client[database_name]
       end
     end
-  end
 
-  # Base model class for interacting with a MongoDB collection.
-  #
-  # This abstract class extends the `Moongoon::Base` class and enhances it with
-  # utility methods and macros used to query, update and configure an
-  # underlying MongoDB collection.
-  #
-  # ```
-  # class MyModel < Moongoon::Collection
-  #   collection "my_models"
-  #
-  #   index keys: {name: 1}, options: {unique: true}
-  #
-  #   property name : String
-  #   property age : Int32
-  # end
-  # ```
-  abstract class Collection < MongoBase
-    include ::Moongoon::Traits::Database::Full
+    class_getter collection : Mongo::Collection do
+      self.database[collection_name]
+    end
+
+    # Sets the MongoDB database name.
+    private macro database(value)
+      @@database_name = {{ value }}
+    end
+
+    # Sets the MongoDB collection name.
+    private macro collection(value)
+      class_getter collection_name : String = {{ value }}
+    end
+
+    # Returns true if the document has been removed from the db
+    @[JSON::Field(ignore: true)]
+    @[BSON::Field(ignore: true)]
+    getter? removed = false
+
+    # Returns true if the document has been inserted and not yet removed
+    def persisted?
+      self.inserted? && !self.removed?
+    end
+
+    # Returns true if the document has been inserted (i.e. has an id)
+    def inserted?
+      self._id != nil
+    end
+
+    # The MongoDB internal id representation.
+    property _id : BSON::ObjectId?
+
+    # Returns the MongoDB bson _id
+    #
+    # Will raise if _id is nil.
+    def _id!
+      self._id.not_nil!
+    end
+
+    # Set a MongoDB bson _id from a String.
+    def id=(id : String)
+      self._id = BSON::ObjectId.new id
+    end
+
+    # Converts the MongoDB bson _id to a String representation.
+    def id
+      self._id.to_s if self._id
+    end
+
+    # Converts the MongoDB bson _id to a String representation.
+    #
+    # Will raise if _id is nil.
+    def id!
+      self.id.not_nil!
+    end
 
     # Copying and hacking BSON::Serializable for now - but ideally we'd just add more flexibility there? (options[force_emit_nil: true] or something?)
     def unsets_to_bson : BSON?
@@ -196,6 +175,26 @@ module Moongoon
       {% end %}
       bson.empty? ? nil : bson
     end
+  end
+
+  # Base model class for interacting with a MongoDB collection.
+  #
+  # This abstract class extends the `Moongoon::Base` class and enhances it with
+  # utility methods and macros used to query, update and configure an
+  # underlying MongoDB collection.
+  #
+  # ```
+  # class MyModel < Moongoon::Collection
+  #   collection "my_models"
+  #
+  #   index keys: {name: 1}, options: {unique: true}
+  #
+  #   property name : String
+  #   property age : Int32
+  # end
+  # ```
+  abstract class Collection < MongoBase
+    include ::Moongoon::Traits::Database::Full
 
     # Include this module to enable resource versioning.
     module Versioning
