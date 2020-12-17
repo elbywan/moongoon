@@ -1,6 +1,8 @@
 require "./spec_helper"
 
-private abstract class ValidationsModel < Moongoon::Collection
+private class ValidationsModel < Moongoon::Collection
+  include Validation
+
   collection "models"
 
   property name : String
@@ -49,14 +51,14 @@ end
 private class ComplexValidatorModel < ValidationsModel
   validate do |model, problems|
     unless (80...90).includes?(model.age)
-      problems << Moongoon::Validation::BasicError.new("You must be an octogenarian to use this feature")
+      problems << Moongoon::Validation::Error.new("You must be an octogenarian to use this feature")
       false
     end
   end
 
   validate do |model, problems|
     unless model.humor == 10
-      problems << Moongoon::Validation::BasicError.new("I say, chaps, humor must be a 10")
+      problems << Moongoon::Validation::Error.new("I say, chaps, humor must be a 10")
       false
     end
   end
@@ -65,14 +67,14 @@ end
 private class ComplexValidatorMultipleModel < ValidationsModel
   validate do |model, problems|
     unless (80...90).includes?(model.age)
-      problems << Moongoon::Validation::BasicError.new("You must be an octogenarian to use this feature")
+      problems << Moongoon::Validation::Error.new("You must be an octogenarian to use this feature")
     end
     nil
   end
 
   validate do |model, problems|
     unless model.humor == 2
-      problems << Moongoon::Validation::BasicError.new("I say, chaps, humor must be a 2")
+      problems << Moongoon::Validation::Error.new("I say, chaps, humor must be a 2")
     end
     nil
   end
@@ -81,21 +83,21 @@ end
 private class ComplexValidatorWarningModel < ValidationsModel
   validate do |model, problems|
     unless (80...90).includes?(model.age)
-      problems << Moongoon::Validation::BasicError.new("You must be an octogenarian to use this feature")
+      problems << Moongoon::Validation::Error.new("You must be an octogenarian to use this feature")
     end
     nil
   end
 
   validate do |model, problems|
     unless model.humor == 2
-      problems << Moongoon::Validation::BasicError.new("I say, chaps, humor must be a 2")
+      problems << Moongoon::Validation::Error.new("I say, chaps, humor must be a 2")
     end
     nil
   end
 
   validate do |model, problems|
     if (model.humor || 0) < 5
-      problems << Moongoon::Validation::BasicWarning.new("This person has very little sense of humor... save but send their mom an email")
+      problems << Moongoon::Validation::Warning.new("This person has very little sense of humor... save but send their mom an email")
     end
     nil
   end
@@ -124,10 +126,10 @@ private class ComplexValidatorCustomProblemsModel < ValidationsModel
   end
 end
 
-struct MySpecialError < Moongoon::Validation::Error
+struct MySpecialError < Moongoon::Validation::BaseError
 end
 
-struct MySpecialWarning < Moongoon::Validation::Warning
+struct MySpecialWarning < Moongoon::Validation::BaseWarning
 end
 
 describe Moongoon::Validation do
