@@ -41,6 +41,16 @@ module Moongoon::Traits::Database::Internal
     }).append(BSON.new(query))
   end
 
+  protected def self.filter_bson(bson : BSON, fields)
+    filtered_bson = BSON.new
+    bson.each { |key, value|
+      if key.in?(fields.to_s)
+        filtered_bson[key] = value
+      end
+    }
+    filtered_bson
+  end
+
   # Validation helpers #
 
   # Raises if the Model has a nil id field.

@@ -150,7 +150,7 @@ describe Moongoon::Collection do
       Model.find_by_id!(model.id!).age.should eq 15
     end
 
-    it "#update skip nils" do
+    it "#update (skip nils)" do
       models = Model.insert_models raw_models
       model = models[2]
       model.humor = nil
@@ -158,7 +158,29 @@ describe Moongoon::Collection do
       Model.find_by_id!(model.id!).humor.should eq 15
     end
 
-    it "#update unset nils" do
+    it "#update (specific fields)" do
+      models = Model.insert_models raw_models
+      model = models[2]
+
+      model.age = 1
+      model = model.update(fields: {:name})
+      Model.find_by_id!(model.id!).age.should eq 20
+      model = model.update(fields: {:age})
+      Model.find_by_id!(model.id!).age.should eq 1
+
+      Moongoon.configure do |config|
+        config.unset_nils = true
+      end
+
+      model = models[1]
+      model.humor = nil
+      model = model.update(fields: {:name})
+      Model.find_by_id!(model.id!).humor.should eq 0
+      model = model.update(fields: {:humor})
+      Model.find_by_id!(model.id!).humor.should be_nil
+    end
+
+    it "#update (unset nils)" do
       Moongoon.configure do |config|
         config.unset_nils = true
       end
@@ -167,6 +189,26 @@ describe Moongoon::Collection do
       model.humor = nil
       model = model.update
       Model.find_by_id!(model.id!).humor.should eq nil
+    end
+
+    it "#update_fields" do
+      models = Model.insert_models raw_models
+      model = models[2]
+
+      model.humor = 1
+      model = model.update_fields({age: 1})
+      Model.find_by_id!(model.id!).age.should eq 1
+      Model.find_by_id!(model.id!).humor.should eq 15
+
+      Moongoon.configure do |config|
+        config.unset_nils = true
+      end
+
+      model = models[1]
+      model.age = 20
+      model = model.update_fields({humor: nil})
+      Model.find_by_id!(model.id!).humor.should be_nil
+      Model.find_by_id!(model.id!).age.should eq 10
     end
 
     it "#self.update" do

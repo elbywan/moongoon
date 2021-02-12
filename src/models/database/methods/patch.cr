@@ -14,7 +14,7 @@ module Moongoon::Traits::Database::Methods::Patch
     # user.update
     # ```
     #
-    # It is possible to add query filters to conditionally prevent an update.
+    # It is possible to add *query* filters to conditionally prevent an update.
     #
     # ```
     # user = User.new name: "John", locked: true
@@ -25,10 +25,40 @@ module Moongoon::Traits::Database::Methods::Patch
     # pp User.find_by_id(user.id!).to_json
     # # => { "id": "some id", "name": "John", "locked": true }
     # ```
+    #
+    # The update can be restricted to specific *fields*.
+    #
+    # ```
+    # user = User.new name: "John", age: 25
+    # user.insert
+    # user.age = 26
+    # user.name = "Tom"
+    # # Updates only the age field.
+    # user.update(fields: {:age})
+    # ```
     def update(query = BSON.new, **args) : self
       id_check!
       query = ::Moongoon::Traits::Database::Internal.concat_id_filter(query, _id!)
       self.update_query(query, **args)
+    end
+
+    # Update specific fields both in the model and in database.
+    #
+    # ```
+    # user = User.new name: "John", age: 25
+    # user.insert
+    # # Updates only the age field.
+    # user.update({age: 26})
+    # ```
+    def update_fields(fields : F, **args) : self forall F
+      {% verbatim do %}
+      {% begin %}
+        {% for k in F.keys %}
+          self.{{k}} = fields[{{k.symbolize}}]
+        {% end %}
+        self.update(**args, fields: {{F.keys.map(&.symbolize)}})
+        {% end %}
+      {% end %}
     end
 
     # Updates one or more documents in the underlying collection.
@@ -64,13 +94,21 @@ module Moongoon::Traits::Database::Methods::Patch
     # # Updates both documents
     # user.update_query({ name: {"$in": ["John", "Jane"]} })
     # ```
-    def update_query(query, no_hooks = false, **args) : self
+    def update_query(query, fields = nil, no_hooks = false, **args) : self
       self.class.before_update_call(self) unless no_hooks
-      changes = BSON.new({
-        "$set": self.to_bson
-      })
+      changes = BSON.new
+
+      sets = self.to_bson
+      if fields
+        sets = ::Moongoon::Traits::Database::Internal.filter_bson(sets, fields)
+      end
+      changes["$set"] = sets unless sets.empty?
+
       if ::Moongoon.config.unset_nils && (unsets = self.unsets_to_bson)
-        changes["$unset"] = unsets
+        if fields
+          unsets = ::Moongoon::Traits::Database::Internal.filter_bson(unsets, fields)
+        end
+        changes["$unset"] = unsets unless unsets.empty?
       end
       self.class.collection.update_many(
         query,
