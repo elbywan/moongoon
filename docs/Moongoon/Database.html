@@ -3,28 +3,28 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.34.0">
-<meta name="crystal_docs.project_version" content="to_tuple_and_constructor_improvements-dev">
+<meta name="generator" content="Crystal Docs 0.35.1">
+<meta name="crystal_docs.project_version" content="master-dev">
 <meta name="crystal_docs.project_name" content="moongoon">
+
 
 
 <link href="../css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="../js/doc.js"></script>
 
-<svg class="hidden">
-  <symbol id="octicon-link" viewBox="0 0 16 16">
-    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
-  </symbol>
-</svg>
-
-  <meta id="repository-name" content="moongoon">
-  <title>Moongoon::Database - moongoon to_tuple_and_constructor_improvements-dev</title>
+  <meta name="repository-name" content="moongoon">
+  <title>Moongoon::Database - moongoon master-dev</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
 </head>
 <body>
 
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
 <div class="sidebar">
   <div class="sidebar-header">
     <div class="search-box">
@@ -39,12 +39,12 @@
       </h1>
 
       <span class="project-version">
-        to_tuple_and_constructor_improvements-dev
+        master-dev
       </span>
     </div>
   </div>
 
-  <div class="search-results" class="hidden">
+  <div class="search-results hidden">
     <ul class="search-list"></ul>
   </div>
 
@@ -296,7 +296,7 @@
           
           <p>Pass a block that will get executed after the database has been successfully connected and after the scripts are run.</p>
 
-<pre><code><span class="t">Moongoon</span><span class="t">::</span><span class="t">Database</span>.after_connect {
+<pre><code class="language-crystal"><span class="t">Moongoon</span><span class="t">::</span><span class="t">Database</span>.after_connect {
   <span class="c"># ... #</span>
 }</code></pre>
         </div>
@@ -319,7 +319,7 @@
           
           <p>Pass a block that will get executed after the database has been successfully connected but before the scripts are run.</p>
 
-<pre><code><span class="t">Moongoon</span><span class="t">::</span><span class="t">Database</span>.after_connect_before_scripts {
+<pre><code class="language-crystal"><span class="t">Moongoon</span><span class="t">::</span><span class="t">Database</span>.after_connect_before_scripts {
   <span class="c"># ... #</span>
 }</code></pre>
         </div>
@@ -342,7 +342,7 @@
           
           <p>Pass a block that will get executed before the server tries to connect to the database.</p>
 
-<pre><code><span class="t">Moongoon</span><span class="t">::</span><span class="t">Database</span>.before_connect {
+<pre><code class="language-crystal"><span class="t">Moongoon</span><span class="t">::</span><span class="t">Database</span>.before_connect {
   puts <span class="s">&quot;Before connecting…&quot;</span>
 }</code></pre>
         </div>
@@ -372,7 +372,7 @@ If <em>max_retries</em> is nil, will retry infinitely.</p>
 
 <p>Will sleep for <em>reconnection_delay</em> between attempts.</p>
 
-<pre><code><span class="c"># Arguments are all optional, their default values are the ones defined below:</span>
+<pre><code class="language-crystal"><span class="c"># Arguments are all optional, their default values are the ones defined below:</span>
 <span class="t">Moongoon</span>.connect(<span class="s">&quot;mongodb://localhost:27017&quot;</span>, <span class="s">&quot;database&quot;</span>, options <span class="o">=</span> <span class="n">nil</span>, max_retries: <span class="n">nil</span>, reconnection_delay: <span class="n">5</span>.seconds)</code></pre>
         </div>
       
@@ -397,7 +397,7 @@ If <em>max_retries</em> is nil, will retry infinitely.</p>
 <p>Will acquire a lock named <em>lock_name</em>, polling the DB every <em>delay</em> to check the lock status.
 If <em>abort_if_locked</em> is true the block will not be executed and this method will return if the lock is acquired already.</p>
 
-<pre><code><span class="c"># If another connection uses the &quot;query&quot; lock, it will wait</span>
+<pre><code class="language-crystal"><span class="c"># If another connection uses the &quot;query&quot; lock, it will wait</span>
 <span class="c"># until this block has completed before perfoming its own work.</span>
 <span class="t">Moongoon</span>.connection_with_lock <span class="s">&quot;query&quot;</span> { <span class="o">|</span>client, db<span class="o">|</span>
   collection <span class="o">=</span> db[<span class="s">&quot;some_collection&quot;</span>]
