@@ -1,5 +1,5 @@
 name: moongoon
-version: 0.7.3
+version: 0.7.4
 
 authors:
   - elbywan <elbywan@hotmail.com>
@@ -8,6 +8,10 @@ crystal: ">= 0.35.0, < 2.0.0"
 
 description: |
   An object-document mapper (ODM) for MongoDB.
+
+targets:
+  moongoon:
+    main: src/moongoon.cr
 
 dependencies:
   cryomongo:
