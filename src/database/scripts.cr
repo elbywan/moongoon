@@ -75,25 +75,51 @@ module Moongoon::Database::Scripts
         # Process a registered script.
         def self.process(db : Mongo::Database) : Nil
           script_class_name = {{ @type.stringify }}
+          script_query = { name: script_class_name }
+          majority_read_concern = Mongo::ReadConcern.new("majority")
+          majority_write_concern = Mongo::WriteConcern.new(w: "majority")
 
-          script = db["scripts"].find_one({ name: script_class_name }, projection: { retry: 1 }, read_concern: Mongo::ReadConcern.new("majority"))
+          session = db.client.start_session
+
+          script = db["scripts"].find_one(
+            script_query,
+            projection: { retry: 1 },
+            read_concern: majority_read_concern,
+            session: session
+          )
           if script
             return unless script.try &.["retry"]?
-            db["scripts"].delete_one({ name: script_class_name }, write_concern: Mongo::WriteConcern.new(w: "majority"))
+            db["scripts"].delete_one(
+              script_query,
+              write_concern: majority_write_concern,
+              session: session
+            )
           end
 
           ::Moongoon::Log.info { "Running script '#{script_class_name}'" }
 
-          db["scripts"].insert_one({ name: script_class_name, date: Time.utc.to_rfc3339, status: "running" }, write_concern: Mongo::WriteConcern.new(w: "majority"))
+          db["scripts"].insert_one(
+            { name: script_class_name, date: Time.utc.to_rfc3339, status: "running" },
+            write_concern: majority_write_concern,
+            session: session
+          )
           {{ @type }}.new.process(db)
-          db["scripts"].update_one({ name: script_class_name }, { "$set": { status: "done", retry: @@on_success.retry? } }, write_concern: Mongo::WriteConcern.new(w: "majority"))
+          db["scripts"].update_one(
+            script_query,
+            { "$set": { status: "done", retry: @@on_success.retry? } },
+            write_concern: majority_write_concern,
+            session: session
+          )
         rescue e
           ::Moongoon::Log.error { "Error while running script '#{script_class_name}'\n#{e.message.to_s}" }
           db["scripts"].update_one(
-            { name: script_class_name },
+            script_query,
             { "$set": { status: "error", error: e.message.to_s, retry: @@on_error.retry? }},
-            write_concern: Mongo::WriteConcern.new(w: "majority")
+            write_concern: majority_write_concern,
+            session: session
           )
+        ensure
+          session.try &.end
         end
       {% end %}
     end

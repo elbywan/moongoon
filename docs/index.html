@@ -3,28 +3,28 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.34.0">
-<meta name="crystal_docs.project_version" content="to_tuple_and_constructor_improvements-dev">
+<meta name="generator" content="Crystal Docs 0.35.1">
+<meta name="crystal_docs.project_version" content="master-dev">
 <meta name="crystal_docs.project_name" content="moongoon">
+
 
 
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="js/doc.js"></script>
 
-<svg class="hidden">
-  <symbol id="octicon-link" viewBox="0 0 16 16">
-    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
-  </symbol>
-</svg>
-
-  <meta id="repository-name" content="moongoon">
-  <title>moongoon to_tuple_and_constructor_improvements-dev</title>
+  <meta name="repository-name" content="moongoon">
+  <title>moongoon master-dev</title>
   <script type="text/javascript">
   CrystalDocs.base_path = "";
   </script>
 </head>
 <body>
 
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
 <div class="sidebar">
   <div class="sidebar-header">
     <div class="search-box">
@@ -39,12 +39,12 @@
       </h1>
 
       <span class="project-version">
-        to_tuple_and_constructor_improvements-dev
+        master-dev
       </span>
     </div>
   </div>
 
-  <div class="search-results" class="hidden">
+  <div class="search-results hidden">
     <ul class="search-list"></ul>
   </div>
 
@@ -182,9 +182,9 @@
 
 <p>This library relies on:</p>
 
-<ul><li><a href="https://github.com/elbywan/cryomongo" target="_blank"><code>cryomongo</code></a> as the underlying MongoDB driver.</li><li><a href="https://github.com/elbywan/bson.cr" target="_blank"><code>bson.cr</code></a> as the BSON implementation.</li></ul>
+<ul><li><a href="https://github.com/elbywan/cryomongo"><code>cryomongo</code></a> as the underlying MongoDB driver.</li><li><a href="https://github.com/elbywan/bson.cr"><code>bson.cr</code></a> as the BSON implementation.</li></ul>
 
-<p><em>For the moongoon version relying on the <a href="https://github.com/elbywan/mongo.cr" target="_blank"><code>mongo.cr</code></a> driver, please check the <a href="https://github.com/elbywan/moongoon/tree/mongo.cr" target="_blank">mongo.cr</a> branch.</em></p>
+<p><em>For the moongoon version relying on the <a href="https://github.com/elbywan/mongo.cr"><code>mongo.cr</code></a> driver, please check the <a href="https://github.com/elbywan/moongoon/tree/mongo.cr">mongo.cr</a> branch.</em></p>
 
 <h2><a id="installation" class="anchor" href="#installation">
   <svg class="octicon-link" aria-hidden="true">
@@ -268,9 +268,9 @@ user.remove</code></pre>
   </svg>
 </a>Connecting</h3>
 
-<p><a href="https://elbywan.github.io/moongoon/Moongoon/Database.html" target="_blank"><strong>API documentation</strong></a></p>
+<p><a href="https://elbywan.github.io/moongoon/Moongoon/Database.html"><strong>API documentation</strong></a></p>
 
-<ul><li><a href="https://elbywan.github.io/moongoon/Moongoon/Database.html#connect(database_url:String="mongodb://localhost:27017",database_name:String="database",*,reconnection_delay=5.seconds" target="_blank">Initial connection</a>-instance-method)</li><li><a href="https://elbywan.github.io/moongoon/Moongoon/Database.html#after_connect(&block:Proc(Nil" target="_blank">Hooks</a>)-instance-method)</li><li><a href="https://elbywan.github.io/moongoon/Moongoon.html#client:Mongo::Client-class-method" target="_blank">Low-level</a></li></ul>
+<ul><li><a href="https://elbywan.github.io/moongoon/Moongoon/Database.html#connect(database_url:String="mongodb://localhost:27017",database_name:String="database",*,reconnection_delay=5.seconds">Initial connection</a>-instance-method)</li><li><a href="https://elbywan.github.io/moongoon/Moongoon/Database.html#after_connect(&block:Proc(Nil">Hooks</a>)-instance-method)</li><li><a href="https://elbywan.github.io/moongoon/Moongoon.html#client:Mongo::Client-class-method">Low-level</a></li></ul>
 
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;moongoon&quot;</span>
 
@@ -300,9 +300,9 @@ puts cursor.to_a.to_json</code></pre>
   </svg>
 </a>Models</h3>
 
-<p><a href="https://elbywan.github.io/moongoon/Moongoon/Collection.html" target="_blank"><strong>API documentation</strong></a></p>
+<p><a href="https://elbywan.github.io/moongoon/Moongoon/Collection.html"><strong>API documentation</strong></a></p>
 
-<ul><li><a href="https://elbywan.github.io/moongoon/Moongoon/Collection.html#index(collection:String?=nil,database:String?=nil,options=NamedTuple.new,name:String?=nil,**keys" target="_blank">Indexes</a>:Nil-class-method)</li><li><a href="https://elbywan.github.io/moongoon/Moongoon/Collection.html#reference(field,*,model,many=false,delete_cascade=false,clear_reference=false,back_reference=nil" target="_blank">Relationships</a>-macro)</li><li><a href="https://elbywan.github.io/moongoon/Moongoon/Collection.html#aggregation_pipeline(*args" target="_blank">Aggregations</a>-class-method)</li><li><a href="https://elbywan.github.io/moongoon/Moongoon/Collection/Versioning.html#versioning(ref_field=nil,auto=false,&transform" target="_blank">Versioning</a>-macro)</li></ul>
+<ul><li><a href="https://elbywan.github.io/moongoon/Moongoon/Collection.html#index(collection:String?=nil,database:String?=nil,options=NamedTuple.new,name:String?=nil,**keys">Indexes</a>:Nil-class-method)</li><li><a href="https://elbywan.github.io/moongoon/Moongoon/Collection.html#reference(field,*,model,many=false,delete_cascade=false,clear_reference=false,back_reference=nil">Relationships</a>-macro)</li><li><a href="https://elbywan.github.io/moongoon/Moongoon/Collection.html#aggregation_pipeline(*args">Aggregations</a>-class-method)</li><li><a href="https://elbywan.github.io/moongoon/Moongoon/Collection/Versioning.html#versioning(ref_field=nil,auto=false,&transform">Versioning</a>-macro)</li></ul>
 
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;moongoon&quot;</span>
 
@@ -365,7 +365,7 @@ puts <span class="t">MyModel</span>.count
   </svg>
 </a>Running scripts</h3>
 
-<p><a href="https://elbywan.github.io/moongoon/Moongoon/Database/Scripts/Base.html" target="_blank"><strong>API documentation</strong></a></p>
+<p><a href="https://elbywan.github.io/moongoon/Moongoon/Database/Scripts/Base.html"><strong>API documentation</strong></a></p>
 
 <pre><code class="language-crystal"><span class="c"># A script must inherit from `Moongoon::Database::Scripts::Base`</span>
 <span class="c"># Requiring the script before connecting to the database should be all it takes to register it.</span>
@@ -401,7 +401,7 @@ puts <span class="t">MyModel</span>.count
   </svg>
 </a>Contributors</h2>
 
-<p>See the <a href="https://github.com/elbywan/moongoon/graphs/contributors" target="_blank">contributors page</a>.</p>
+<p>See the <a href="https://github.com/elbywan/moongoon/graphs/contributors">contributors page</a>.</p>
 
 <h2><a id="credit" class="anchor" href="#credit">
   <svg class="octicon-link" aria-hidden="true">
@@ -409,7 +409,7 @@ puts <span class="t">MyModel</span>.count
   </svg>
 </a>Credit</h2>
 
-<ul><li>Icon made by <a href="https://www.flaticon.com/authors/smashicons" target="_blank">Smashicons</a> from <a href="https://www.flaticon.com" target="_blank">www.flaticon.com</a>.</li></ul>
+<ul><li>Icon made by <a href="https://www.flaticon.com/authors/smashicons">Smashicons</a> from <a href="https://www.flaticon.com">www.flaticon.com</a>.</li></ul>
 </div>
 </body>
 </html>

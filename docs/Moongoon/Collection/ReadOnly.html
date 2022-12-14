@@ -3,28 +3,28 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.34.0">
-<meta name="crystal_docs.project_version" content="to_tuple_and_constructor_improvements-dev">
+<meta name="generator" content="Crystal Docs 0.35.1">
+<meta name="crystal_docs.project_version" content="master-dev">
 <meta name="crystal_docs.project_name" content="moongoon">
+
 
 
 <link href="../../css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="../../js/doc.js"></script>
 
-<svg class="hidden">
-  <symbol id="octicon-link" viewBox="0 0 16 16">
-    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
-  </symbol>
-</svg>
-
-  <meta id="repository-name" content="moongoon">
-  <title>Moongoon::Collection::ReadOnly - moongoon to_tuple_and_constructor_improvements-dev</title>
+  <meta name="repository-name" content="moongoon">
+  <title>Moongoon::Collection::ReadOnly - moongoon master-dev</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
 </head>
 <body>
 
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
 <div class="sidebar">
   <div class="sidebar-header">
     <div class="search-box">
@@ -39,12 +39,12 @@
       </h1>
 
       <span class="project-version">
-        to_tuple_and_constructor_improvements-dev
+        master-dev
       </span>
     </div>
   </div>
 
-  <div class="search-results" class="hidden">
+  <div class="search-results hidden">
     <ul class="search-list"></ul>
   </div>
 
@@ -188,7 +188,7 @@
 
 <p><span class="flag purple">NOTE</span>  Similar to <code><a href="../../Moongoon/Collection.html">Moongoon::Collection</a></code> but can only be used to query a MongoDB collection.</p>
 
-<pre><code><span class="k">class</span> <span class="t">ReadOnly</span> <span class="o">&lt;</span> <span class="t">Models</span><span class="t">::</span><span class="t">Collection</span><span class="t">::</span><span class="t">ReadOnly</span>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">ReadOnly</span> <span class="o">&lt;</span> <span class="t">Models</span><span class="t">::</span><span class="t">Collection</span><span class="t">::</span><span class="t">ReadOnly</span>
   collection <span class="s">&quot;my_models&quot;</span>
 
   property name : <span class="t">String</span>?
@@ -308,14 +308,7 @@
       <li class="entry-summary">
         <a href="#aggregation_pipeline(*args)-class-method" class="signature"><strong>.aggregation_pipeline</strong>(*args)</a>
         
-          <div class="summary"><p>Defines an <a href="https://docs.mongodb.com/v3.6/reference/operator/aggregation-pipeline/" target="_blank">aggregation pipeline</a> that will be used instead of a plain find query.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#collection-class-method" class="signature"><strong>.collection</strong></a>
-        
-          <div class="summary"><p>A limited model class for interacting with a MongoDB collection.</p></div>
+          <div class="summary"><p>Defines an <a href="https://docs.mongodb.com/v3.6/reference/operator/aggregation-pipeline/">aggregation pipeline</a> that will be used instead of a plain find query.</p></div>
         
       </li>
     
@@ -323,20 +316,6 @@
         <a href="#count(query=BSON.new,**args):Int32-class-method" class="signature"><strong>.count</strong>(query = <span class="t">BSON</span>.<span class="k">new</span>, **args) : Int32</a>
         
           <div class="summary"><p>Counts the number of documents in the collection for a given query.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#database-class-method" class="signature"><strong>.database</strong></a>
-        
-          <div class="summary"><p>A limited model class for interacting with a MongoDB collection.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#database_name-class-method" class="signature"><strong>.database_name</strong></a>
-        
-          <div class="summary"><p>A limited model class for interacting with a MongoDB collection.</p></div>
         
       </li>
     
@@ -425,72 +404,9 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#_id:BSON::ObjectId?-instance-method" class="signature"><strong>#_id</strong> : BSON::ObjectId?</a>
-        
-          <div class="summary"><p>The MongoDB internal id representation.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#_id!-instance-method" class="signature"><strong>#_id!</strong></a>
-        
-          <div class="summary"><p>Returns the MongoDB bson _id</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#_id=(_id:BSON::ObjectId?)-instance-method" class="signature"><strong>#_id=</strong>(_id : BSON::ObjectId?)</a>
-        
-          <div class="summary"><p>The MongoDB internal id representation.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#fetch-instance-method" class="signature"><strong>#fetch</strong></a>
         
           <div class="summary"><p>Returns a fresh copy of this object that is fetched from the database.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#id-instance-method" class="signature"><strong>#id</strong></a>
-        
-          <div class="summary"><p>Converts the MongoDB bson _id to a String representation.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#id!-instance-method" class="signature"><strong>#id!</strong></a>
-        
-          <div class="summary"><p>Converts the MongoDB bson _id to a String representation.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#id=(id:String)-instance-method" class="signature"><strong>#id=</strong>(id : String)</a>
-        
-          <div class="summary"><p>Set a MongoDB bson _id from a String.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#inserted?-instance-method" class="signature"><strong>#inserted?</strong></a>
-        
-          <div class="summary"><p>Returns true if the document has been inserted (i.e.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#persisted?-instance-method" class="signature"><strong>#persisted?</strong></a>
-        
-          <div class="summary"><p>Returns true if the document has been inserted and not yet removed</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#removed?:Bool-instance-method" class="signature"><strong>#removed?</strong> : Bool</a>
-        
-          <div class="summary"><p>A limited model class for interacting with a MongoDB collection.</p></div>
         
       </li>
     
@@ -583,11 +499,84 @@
   
     
 
+  <h3>Instance methods inherited from class <code>Moongoon::MongoBase</code></h3>
+  
+  
+    <a href="../../Moongoon/MongoBase.html#_id:BSON::ObjectId?-instance-method" class="tooltip">
+      <span>_id : BSON::ObjectId?</span>
+    _id</a>, 
+    
+  
+    <a href="../../Moongoon/MongoBase.html#_id!-instance-method" class="tooltip">
+      <span>_id!</span>
+    _id!</a>, 
+    
+  
+    <a href="../../Moongoon/MongoBase.html#_id=(_id:BSON::ObjectId?)-instance-method" class="tooltip">
+      <span>_id=(_id : BSON::ObjectId?)</span>
+    _id=</a>, 
+    
+  
+    <a href="../../Moongoon/MongoBase.html#id-instance-method" class="tooltip">
+      <span>id</span>
+    id</a>, 
+    
+  
+    <a href="../../Moongoon/MongoBase.html#id!-instance-method" class="tooltip">
+      <span>id!</span>
+    id!</a>, 
+    
+  
+    <a href="../../Moongoon/MongoBase.html#id=(id:String)-instance-method" class="tooltip">
+      <span>id=(id : String)</span>
+    id=</a>, 
+    
+  
+    <a href="../../Moongoon/MongoBase.html#inserted?-instance-method" class="tooltip">
+      <span>inserted?</span>
+    inserted?</a>, 
+    
+  
+    <a href="../../Moongoon/MongoBase.html#persisted?-instance-method" class="tooltip">
+      <span>persisted?</span>
+    persisted?</a>, 
+    
+  
+    <a href="../../Moongoon/MongoBase.html#removed?:Bool-instance-method" class="tooltip">
+      <span>removed? : Bool</span>
+    removed?</a>, 
+    
+  
+    <a href="../../Moongoon/MongoBase.html#unsets_to_bson:BSON?-instance-method" class="tooltip">
+      <span>unsets_to_bson : BSON?</span>
+    unsets_to_bson</a>
+    
+  
+
 
     
 
 
     
+
+  <h3>Class methods inherited from class <code>Moongoon::MongoBase</code></h3>
+  
+  
+    <a href="../../Moongoon/MongoBase.html#collection-class-method" class="tooltip">
+      <span>collection</span>
+    collection</a>, 
+    
+  
+    <a href="../../Moongoon/MongoBase.html#database-class-method" class="tooltip">
+      <span>database</span>
+    database</a>, 
+    
+  
+    <a href="../../Moongoon/MongoBase.html#database_name-class-method" class="tooltip">
+      <span>database_name</span>
+    database_name</a>
+    
+  
 
 
   
@@ -699,7 +688,7 @@
 
 <p>Syntax is similar to <code>self<a href="../../Moongoon/Collection/ReadOnly.html#find_one(query=BSON.new,fields=@@default_fields,order_by=%7B_id:-1%7D,skip=0,**args):self?-class-method">.find_one</a></code>.</p>
 
-<pre><code>user <span class="o">=</span> <span class="t">User</span>.find_by_id(<span class="n">123456</span>)</code></pre>
+<pre><code class="language-crystal">user <span class="o">=</span> <span class="t">User</span>.find_by_id(<span class="n">123456</span>)</code></pre>
         </div>
       
       <br/>
@@ -739,12 +728,12 @@
           
           <p>Finds a single document and returns a <code><a href="../../Moongoon/Collection.html">Moongoon::Collection</a></code> instance.</p>
 
-<pre><code><span class="c"># Retrieve a single user named Julien</span>
+<pre><code class="language-crystal"><span class="c"># Retrieve a single user named Julien</span>
 user <span class="o">=</span> <span class="t">User</span>.find_one({ name: <span class="s">&quot;Julien&quot;</span> })</code></pre>
 
 <p>The following optional arguments are available.</p>
 
-<pre><code><span class="c"># Fetch only specific fields.</span>
+<pre><code class="language-crystal"><span class="c"># Fetch only specific fields.</span>
 <span class="c"># Be extra careful to always fetch mandatory fields.</span>
 user <span class="o">=</span> <span class="t">User</span>.find_one({ name: <span class="s">&quot;Julien&quot;</span> }, fields: { age: <span class="n">1</span>, name: <span class="n">1</span> })
 
@@ -752,7 +741,7 @@ user <span class="o">=</span> <span class="t">User</span>.find_one({ name: <span
 user <span class="o">=</span> <span class="t">User</span>.find_one({ name: <span class="s">&quot;Julien&quot;</span>}, skip: <span class="n">2</span>)</code></pre>
 
 <p><span class="flag purple">NOTE</span>  Other arguments are available but will not be documented here.
-For more details check out the underlying <a href="https://github.com/elbywan/cryomongo" target="_blank"><code>cryomongo</code></a> driver documentation and code.</p>
+For more details check out the underlying <a href="https://github.com/elbywan/cryomongo"><code>cryomongo</code></a> driver documentation and code.</p>
         </div>
       
       <br/>
@@ -794,7 +783,7 @@ For more details check out the underlying <a href="https://github.com/elbywan/cr
 
 <p><span class="flag purple">NOTE</span>  Similar to <code><a href="../../Moongoon/Collection.html">Moongoon::Collection</a></code> but can only be used to query a MongoDB collection.</p>
 
-<pre><code><span class="k">class</span> <span class="t">ReadOnly</span> <span class="o">&lt;</span> <span class="t">Models</span><span class="t">::</span><span class="t">Collection</span><span class="t">::</span><span class="t">ReadOnly</span>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">ReadOnly</span> <span class="o">&lt;</span> <span class="t">Models</span><span class="t">::</span><span class="t">Collection</span><span class="t">::</span><span class="t">ReadOnly</span>
   collection <span class="s">&quot;my_models&quot;</span>
 
   property name : <span class="t">String</span>?
@@ -830,12 +819,12 @@ For more details check out the underlying <a href="https://github.com/elbywan/cr
       
         <div class="doc">
           
-          <p>Defines an <a href="https://docs.mongodb.com/v3.6/reference/operator/aggregation-pipeline/" target="_blank">aggregation pipeline</a> that will be used instead of a plain find query.</p>
+          <p>Defines an <a href="https://docs.mongodb.com/v3.6/reference/operator/aggregation-pipeline/">aggregation pipeline</a> that will be used instead of a plain find query.</p>
 
-<p>If this macro is used, the model will always use the <a href="https://docs.mongodb.com/v3.6/reference/command/aggregate/index.html" target="_blank">aggregate</a>
+<p>If this macro is used, the model will always use the <a href="https://docs.mongodb.com/v3.6/reference/command/aggregate/index.html">aggregate</a>
 method to query documents and will use the stages passed as arguments to aggregate the results.</p>
 
-<pre><code>aggregation_pipeline(
+<pre><code class="language-crystal">aggregation_pipeline(
   {
     <span class="s">&quot;$addFields&quot;</span>: {
       count: {
@@ -857,34 +846,6 @@ method to query documents and will use the stages passed as arguments to aggrega
       </div>
     </div>
   
-    <div class="entry-detail" id="collection-class-method">
-      <div class="signature">
-        
-        def self.<strong>collection</strong>
-
-        <a class="method-permalink" href="#collection-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>A limited model class for interacting with a MongoDB collection.</p>
-
-<p><span class="flag purple">NOTE</span>  Similar to <code><a href="../../Moongoon/Collection.html">Moongoon::Collection</a></code> but can only be used to query a MongoDB collection.</p>
-
-<pre><code><span class="k">class</span> <span class="t">ReadOnly</span> <span class="o">&lt;</span> <span class="t">Models</span><span class="t">::</span><span class="t">Collection</span><span class="t">::</span><span class="t">ReadOnly</span>
-  collection <span class="s">&quot;my_models&quot;</span>
-
-  property name : <span class="t">String</span>?
-  property age : <span class="t">Int32</span>?
-<span class="k">end</span></code></pre>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
     <div class="entry-detail" id="count(query=BSON.new,**args):Int32-class-method">
       <div class="signature">
         
@@ -897,63 +858,7 @@ method to query documents and will use the stages passed as arguments to aggrega
           
           <p>Counts the number of documents in the collection for a given query.</p>
 
-<pre><code>count <span class="o">=</span> <span class="t">User</span>.count({ name: <span class="s">&quot;Julien&quot;</span> })</code></pre>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="database-class-method">
-      <div class="signature">
-        
-        def self.<strong>database</strong>
-
-        <a class="method-permalink" href="#database-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>A limited model class for interacting with a MongoDB collection.</p>
-
-<p><span class="flag purple">NOTE</span>  Similar to <code><a href="../../Moongoon/Collection.html">Moongoon::Collection</a></code> but can only be used to query a MongoDB collection.</p>
-
-<pre><code><span class="k">class</span> <span class="t">ReadOnly</span> <span class="o">&lt;</span> <span class="t">Models</span><span class="t">::</span><span class="t">Collection</span><span class="t">::</span><span class="t">ReadOnly</span>
-  collection <span class="s">&quot;my_models&quot;</span>
-
-  property name : <span class="t">String</span>?
-  property age : <span class="t">Int32</span>?
-<span class="k">end</span></code></pre>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="database_name-class-method">
-      <div class="signature">
-        
-        def self.<strong>database_name</strong>
-
-        <a class="method-permalink" href="#database_name-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>A limited model class for interacting with a MongoDB collection.</p>
-
-<p><span class="flag purple">NOTE</span>  Similar to <code><a href="../../Moongoon/Collection.html">Moongoon::Collection</a></code> but can only be used to query a MongoDB collection.</p>
-
-<pre><code><span class="k">class</span> <span class="t">ReadOnly</span> <span class="o">&lt;</span> <span class="t">Models</span><span class="t">::</span><span class="t">Collection</span><span class="t">::</span><span class="t">ReadOnly</span>
-  collection <span class="s">&quot;my_models&quot;</span>
-
-  property name : <span class="t">String</span>?
-  property age : <span class="t">Int32</span>?
-<span class="k">end</span></code></pre>
+<pre><code class="language-crystal">count <span class="o">=</span> <span class="t">User</span>.count({ name: <span class="s">&quot;Julien&quot;</span> })</code></pre>
         </div>
       
       <br/>
@@ -974,7 +879,7 @@ method to query documents and will use the stages passed as arguments to aggrega
           
           <p>Set the <code>fields</code> value to use by default when calling <code><a href="../../Moongoon/Collection/ReadOnly.html#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit:Int?=nil,**args):Array(self)-class-method">.find</a></code> methods.</p>
 
-<pre><code>default_fields({ ignored_field: <span class="n">0</span> })</code></pre>
+<pre><code class="language-crystal">default_fields({ ignored_field: <span class="n">0</span> })</code></pre>
         </div>
       
       <br/>
@@ -996,7 +901,7 @@ method to query documents and will use the stages passed as arguments to aggrega
           <p>Ensures that at least one document matches the query.
 Will raise when there is no match.</p>
 
-<pre><code><span class="k">begin</span>
+<pre><code class="language-crystal"><span class="k">begin</span>
   <span class="t">User</span>.exist!({ name: <span class="s">&quot;Julien&quot;</span> })
 <span class="k">rescue</span> e : <span class="t">Moongoon</span><span class="t">::</span><span class="t">Error</span><span class="t">::</span><span class="t">NotFound</span>
   <span class="c"># No user named Julien found</span>
@@ -1021,7 +926,7 @@ Will raise when there is no match.</p>
           
           <p>Same as <code>self<a href="../../Moongoon/Collection/ReadOnly.html#exist!(query=BSON.new,**args):Bool-class-method">.exist!</a></code> but for a single document given its id.</p>
 
-<pre><code><span class="k">begin</span>
+<pre><code class="language-crystal"><span class="k">begin</span>
   <span class="t">User</span>.exist_by_id!(<span class="s">&quot;123456&quot;</span>)
 <span class="k">rescue</span> e : <span class="t">Moongoon</span><span class="t">::</span><span class="t">Error</span><span class="t">::</span><span class="t">NotFound</span>
   <span class="c"># No user having _id &quot;123456&quot; found</span>
@@ -1048,12 +953,12 @@ Will raise when there is no match.</p>
 
 <p><span class="flag purple">NOTE</span>  Documents are sorted by creation date in descending order.</p>
 
-<pre><code><span class="c"># Search for persons named Julien</span>
+<pre><code class="language-crystal"><span class="c"># Search for persons named Julien</span>
 users <span class="o">=</span> <span class="t">User</span>.find({ name: <span class="s">&quot;Julien&quot;</span> })</code></pre>
 
 <p>It is possible to use optional arguments to order, paginate and control queries.</p>
 
-<pre><code><span class="c"># Order the results by birth_date</span>
+<pre><code class="language-crystal"><span class="c"># Order the results by birth_date</span>
 users <span class="o">=</span> <span class="t">User</span>.find({ name: <span class="s">&quot;Julien&quot;</span> }, order_by: { birth: <span class="n">1</span> })
 
 <span class="c"># Paginate the results.</span>
@@ -1064,7 +969,7 @@ users <span class="o">=</span> <span class="t">User</span>.find({ name: <span cl
 users <span class="o">=</span> <span class="t">User</span>.find({ name: <span class="s">&quot;Julien&quot;</span> }, fields: { age: <span class="n">1</span>, name: <span class="n">1</span> })</code></pre>
 
 <p><span class="flag purple">NOTE</span>  Other arguments are available but will not be documented here.
-For more details check out the underlying <a href="https://github.com/elbywan/cryomongo" target="_blank"><code>cryomongo</code></a> driver documentation and code.</p>
+For more details check out the underlying <a href="https://github.com/elbywan/cryomongo"><code>cryomongo</code></a> driver documentation and code.</p>
         </div>
       
       <br/>
@@ -1085,7 +990,7 @@ For more details check out the underlying <a href="https://github.com/elbywan/cr
           
           <p><span class="flag purple">NOTE</span>  Similar to <code>self<a href="../../Moongoon/Collection/ReadOnly.html#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit:Int?=nil,**args):Array(self)-class-method">.find</a></code>, but raises when no documents are found.</p>
 
-<pre><code><span class="k">begin</span>
+<pre><code class="language-crystal"><span class="k">begin</span>
   users <span class="o">=</span> <span class="t">User</span>.find!({ name: <span class="s">&quot;Julien&quot;</span> })
 <span class="k">rescue</span>
  raise <span class="s">&quot;No one is named Julien.&quot;</span>
@@ -1112,7 +1017,7 @@ For more details check out the underlying <a href="https://github.com/elbywan/cr
 
 <p>Syntax is similar to <code>self<a href="../../Moongoon/Collection/ReadOnly.html#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit:Int?=nil,**args):Array(self)-class-method">.find</a></code>.</p>
 
-<pre><code>ids <span class="o">=</span> [<span class="s">&quot;1&quot;</span>, <span class="s">&quot;2&quot;</span>, <span class="s">&quot;3&quot;</span>]
+<pre><code class="language-crystal">ids <span class="o">=</span> [<span class="s">&quot;1&quot;</span>, <span class="s">&quot;2&quot;</span>, <span class="s">&quot;3&quot;</span>]
 users <span class="o">=</span> <span class="t">User</span>.find_by_ids(ids)</code></pre>
         </div>
       
@@ -1155,7 +1060,7 @@ users <span class="o">=</span> <span class="t">User</span>.find_by_ids(ids)</cod
 
 <p>Syntax is similar to <code>self<a href="../../Moongoon/Collection/ReadOnly.html#find(query=BSON.new,order_by=%7B_id:-1%7D,fields=@@default_fields,skip=0,limit:Int?=nil,**args):Array(self)-class-method">.find</a></code>.</p>
 
-<pre><code>jane_ids <span class="o">=</span> <span class="t">User</span>.find_ids({ name: <span class="s">&quot;Jane&quot;</span> })</code></pre>
+<pre><code class="language-crystal">jane_ids <span class="o">=</span> <span class="t">User</span>.find_ids({ name: <span class="s">&quot;Jane&quot;</span> })</code></pre>
         </div>
       
       <br/>
@@ -1176,7 +1081,7 @@ users <span class="o">=</span> <span class="t">User</span>.find_by_ids(ids)</cod
           
           <p>Same as <code>self<a href="../../Moongoon/Collection/ReadOnly.html#index(keys:Hash(String,BSON::Value),collection:String?=nil,database:String?=nil,options=Hash(String,BSON::Value).new,name:String?=nil):Nil-class-method">.index</a></code> but with hash arguments.</p>
 
-<pre><code>index ({ <span class="s">&quot;a&quot;</span> => <span class="n">1</span> }), name: <span class="s">&quot;index_name&quot;</span>, options: { <span class="s">&quot;unique&quot;</span> => <span class="n">true</span> }</code></pre>
+<pre><code class="language-crystal">index ({ <span class="s">&quot;a&quot;</span> => <span class="n">1</span> }), name: <span class="s">&quot;index_name&quot;</span>, options: { <span class="s">&quot;unique&quot;</span> => <span class="n">true</span> }</code></pre>
         </div>
       
       <br/>
@@ -1201,10 +1106,10 @@ users <span class="o">=</span> <span class="t">User</span>.find_by_ids(ids)</cod
 
 <p>If not provided the driver will generate the name of the index from the keys names and order.</p>
 
-<p>Please have a look at the <a href="https://docs.mongodb.com/manual/reference/command/createIndexes/" target="_blank">MongoDB documentation</a>
+<p>Please have a look at the <a href="https://docs.mongodb.com/manual/reference/command/createIndexes/">MongoDB documentation</a>
 for more details about index creation and the list of available index options.</p>
 
-<pre><code><span class="c"># Specify one or more fields with a type (ascending or descending order, text indexing…)</span>
+<pre><code class="language-crystal"><span class="c"># Specify one or more fields with a type (ascending or descending order, text indexing…)</span>
 index keys: { field1: <span class="n">1</span>, field2: <span class="n">-1</span> }
 <span class="c"># Set the unique argument to create a unique index.</span>
 index keys: { field: <span class="n">1</span> }, options: { unique: <span class="n">true</span> }</code></pre>
@@ -1228,65 +1133,6 @@ index keys: { field: <span class="n">1</span> }, options: { unique: <span class=
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="_id:BSON::ObjectId?-instance-method">
-      <div class="signature">
-        
-        def <strong>_id</strong> : BSON::ObjectId?
-
-        <a class="method-permalink" href="#_id:BSON::ObjectId?-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>The MongoDB internal id representation.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="_id!-instance-method">
-      <div class="signature">
-        
-        def <strong>_id!</strong>
-
-        <a class="method-permalink" href="#_id!-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns the MongoDB bson _id</p>
-
-<p>Will raise if _id is nil.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="_id=(_id:BSON::ObjectId?)-instance-method">
-      <div class="signature">
-        
-        def <strong>_id=</strong>(_id : BSON::ObjectId?)
-
-        <a class="method-permalink" href="#_id=(_id:BSON::ObjectId?)-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>The MongoDB internal id representation.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
     <div class="entry-detail" id="fetch-instance-method">
       <div class="signature">
         
@@ -1299,137 +1145,12 @@ index keys: { field: <span class="n">1</span> }, options: { unique: <span class=
           
           <p>Returns a fresh copy of this object that is fetched from the database.</p>
 
-<pre><code>user <span class="o">=</span> <span class="t">User</span>.<span class="k">new</span>(name: <span class="s">&quot;John&quot;</span>, age: <span class="n">10</span>)
+<pre><code class="language-crystal">user <span class="o">=</span> <span class="t">User</span>.<span class="k">new</span>(name: <span class="s">&quot;John&quot;</span>, age: <span class="n">10</span>)
 <span class="t">User</span>.update({ name: <span class="s">&quot;John&quot;</span>, age: <span class="n">11</span> })
 puts user.age
 <span class="c"># =&gt; 10</span>
 puts user.fetch.age
 <span class="c"># =&gt; 11</span></code></pre>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="id-instance-method">
-      <div class="signature">
-        
-        def <strong>id</strong>
-
-        <a class="method-permalink" href="#id-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Converts the MongoDB bson _id to a String representation.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="id!-instance-method">
-      <div class="signature">
-        
-        def <strong>id!</strong>
-
-        <a class="method-permalink" href="#id!-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Converts the MongoDB bson _id to a String representation.</p>
-
-<p>Will raise if _id is nil.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="id=(id:String)-instance-method">
-      <div class="signature">
-        
-        def <strong>id=</strong>(id : String)
-
-        <a class="method-permalink" href="#id=(id:String)-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Set a MongoDB bson _id from a String.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="inserted?-instance-method">
-      <div class="signature">
-        
-        def <strong>inserted?</strong>
-
-        <a class="method-permalink" href="#inserted?-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns true if the document has been inserted (i.e. has an id)</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="persisted?-instance-method">
-      <div class="signature">
-        
-        def <strong>persisted?</strong>
-
-        <a class="method-permalink" href="#persisted?-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns true if the document has been inserted and not yet removed</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="removed?:Bool-instance-method">
-      <div class="signature">
-        
-        def <strong>removed?</strong> : Bool
-
-        <a class="method-permalink" href="#removed?:Bool-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>A limited model class for interacting with a MongoDB collection.</p>
-
-<p><span class="flag purple">NOTE</span>  Similar to <code><a href="../../Moongoon/Collection.html">Moongoon::Collection</a></code> but can only be used to query a MongoDB collection.</p>
-
-<pre><code><span class="k">class</span> <span class="t">ReadOnly</span> <span class="o">&lt;</span> <span class="t">Models</span><span class="t">::</span><span class="t">Collection</span><span class="t">::</span><span class="t">ReadOnly</span>
-  collection <span class="s">&quot;my_models&quot;</span>
-
-  property name : <span class="t">String</span>?
-  property age : <span class="t">Int32</span>?
-<span class="k">end</span></code></pre>
         </div>
       
       <br/>
@@ -1468,7 +1189,7 @@ foreign documents depending on the arguments provided.</p>
 <p><span class="flag purple">NOTE</span>  This macro is useful when using named arguments to keep the reference
 in sync when documents are added or removed from the other collection.</p>
 
-<pre><code><span class="k">class</span> <span class="t">MyModel</span> <span class="o">&lt;</span> <span class="t">Moongoon</span><span class="t">::</span><span class="t">Collection</span>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">MyModel</span> <span class="o">&lt;</span> <span class="t">Moongoon</span><span class="t">::</span><span class="t">Collection</span>
   <span class="c"># The following references are not kept in sync because extra named arguments are not used.</span>
 
   <span class="c"># Reference a single user.</span>
@@ -1486,7 +1207,7 @@ in sync when documents are added or removed from the other collection.</p>
 reference array (if referencing multiple documents) when the referenced document(s) are removed.</li><li><em>back_reference</em>: The name of the refence, if it exists, in the referenced model that back-references this model.
 If set, when a referenced document gets inserted, this reference will be updated to add the newly created id.</li></ul>
 
-<pre><code><span class="k">class</span> <span class="t">MyModel</span> <span class="o">&lt;</span> <span class="t">Moongoon</span><span class="t">::</span><span class="t">Collection</span>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">MyModel</span> <span class="o">&lt;</span> <span class="t">Moongoon</span><span class="t">::</span><span class="t">Collection</span>
   <span class="c"># Now some examples that are using extra arguments.</span>
 
   <span class="c"># References a single user from the User model class.</span>
