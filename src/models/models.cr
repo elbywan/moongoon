@@ -34,7 +34,8 @@ module Moongoon
           {% if has_setter && ivar.type.nilable? %}
             instance.{{ivar.id}} = args["{{ivar.id}}"]? {% if ivar.has_default_value? %}|| {{ default_value }}{% end %}
           {% elsif has_setter %}
-            if value = args["{{ivar.id}}"]?
+            value = args["{{ivar.id}}"]?
+            if value != nil
               instance.{{ivar.id}} = value
             {% if ivar.has_default_value? %}
             else
